@@ -7,6 +7,8 @@ import HeroSection3 from "./components/HeroSection3";
 import Navbar from "./components/Navbar";
 import sampleIcon from "./assets/react.svg";
 import FieldContact from "./components/FieldContact";
+import testImage from "./assets/vite.svg";
+import SectionCard from "./components/SectionCard";
 
 function App() {
   return (
@@ -14,30 +16,25 @@ function App() {
       <Navbar />
       <div>
         <section>
-          <HeroSection1 />
+          <HeroSection1
+            hero="Hello Cruel World :)"
+            image={testImage}
+          ></HeroSection1>
 
           <section className="flex p-8 gap-8 justify-between">
-            <CardService />
+            <CardService name="Web Development" />
             <CardService />
             <CardService />
           </section>
 
-          <section className="p-8">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="font-bold text-2xl">Featured Work</h1>
-                <p>lorem ipsum dolor sit amet consectetur adipiscing elit</p>
-              </div>
-              <div className="flex items-center justify-center border p-2">
-                View all
-              </div>
-            </div>
-            <div className="flex py-4 gap-8 justify-between">
-              <CardProject />
-              <CardProject />
-              <CardProject />
-            </div>
-          </section>
+          <SectionCard
+            title="Featured Work"
+            description="Our latest projects"
+          >
+            <CardProject />
+            <CardProject />
+            <CardProject />
+          </SectionCard>
         </section>
 
         <section>
