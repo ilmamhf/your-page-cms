@@ -1,5 +1,5 @@
 import sample from "../assets/image-sample-1.png";
-import CardStats from "./CardStats";
+import CardStats from "../components/CardStats";
 
 interface HeroSection3Props {
   label?: string;

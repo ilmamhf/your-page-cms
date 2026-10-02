@@ -1,6 +1,6 @@
 import reactLogo from "../assets/react.svg";
 
-interface CardServiceProps {
+export interface CardServiceProps {
   icon?: string;
   name?: string;
   description?: string;

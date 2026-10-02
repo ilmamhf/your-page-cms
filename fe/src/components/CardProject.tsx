@@ -1,6 +1,6 @@
 import sample from "../assets/image-sample-1.png";
 
-interface CardProjectProps {
+export interface CardProjectProps {
   img?: string;
   title?: string;
   detail?: string;
