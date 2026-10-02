@@ -1,5 +1,5 @@
 import CardProject, { type CardProjectProps } from "../components/CardProject";
-import imgSample from "../assets/image-sample-1.png";
+import imgSample from "../../assets/image-sample-1.png";
 
 interface GridProjectProps {
   projects?: CardProjectProps[];

@@ -1,4 +1,4 @@
-import sample from "../assets/image-sample-1.png";
+import sample from "../../assets/image-sample-1.png";
 import CardStats from "../components/CardStats";
 
 interface HeroSection3Props {

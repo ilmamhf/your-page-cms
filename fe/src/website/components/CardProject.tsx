@@ -1,4 +1,4 @@
-import sample from "../assets/image-sample-1.png";
+import sample from "../../assets/image-sample-1.png";
 
 export interface CardProjectProps {
   img?: string;

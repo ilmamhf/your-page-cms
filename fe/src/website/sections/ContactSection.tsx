@@ -1,5 +1,5 @@
 import FieldContact from "../components/FieldContact";
-import sampleIcon from "../assets/react.svg";
+import sampleIcon from "../../assets/react.svg";
 
 interface ContactSectionProps {
   email?: string;

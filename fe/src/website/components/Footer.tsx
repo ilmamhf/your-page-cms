@@ -1,4 +1,4 @@
-import sampleIcon from "../assets/react.svg";
+import sampleIcon from "../../assets/react.svg";
 
 interface FooterProps {
   companyName?: string;

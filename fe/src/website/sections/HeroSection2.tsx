@@ -1,6 +1,6 @@
-import sample from "../assets/image-sample-1.png";
+import sample from "../../assets/image-sample-1.png";
 
-interface HeroSection1Props {
+interface HeroSection2Props {
   title?: string;
   description?: string;
   img?: string;
@@ -10,7 +10,7 @@ const HeroSection2 = ({
   title = "Hero Text",
   description = "lorem ipsum dolor sit amet consectetur adipiscing elit et nostrud consequat vero officia officia minim in occaecat laboris dignissimos voluptas molestias nostrud imperdiet iusto non quidem tempor et est exercitation dolore odio in dolore labore eiusmod officia omnis lorem velit est eos culpa dolorem non assumenda ad velit incididunt est",
   img = sample,
-}) => {
+}: HeroSection2Props) => {
   return (
     <section className="relative overflow-hidden p-8">
       <div className="absolute inset-0">
