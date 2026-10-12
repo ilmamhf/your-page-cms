@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             PageSeeder::class,
             SectionSeeder::class,
+            SectionHeroSeeder::class,
         ]);
     }
 }

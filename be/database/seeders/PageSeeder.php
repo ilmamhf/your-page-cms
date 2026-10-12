@@ -13,20 +13,12 @@ class PageSeeder extends Seeder
      */
     public function run(): void
     {
-        Page::create([
-            'name' => 'Home',
-        ]);
-        Page::create([
-            'name' => 'About',
-        ]);
-        Page::create([
-            'name' => 'Services',
-        ]);
-        Page::create([
-            'name' => 'Portofolio',
-        ]);
-        Page::create([
-            'name' => 'Contact',
-        ]);
+        $pages = ['Home', 'About', 'Services', 'Portofolio', 'Contact'];
+
+        foreach ($pages as $page) {
+            Page::create([
+                'name' => $page
+            ]);
+        }
     }
 }

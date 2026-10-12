@@ -21,10 +21,9 @@ class SectionFactory extends Factory
     public function definition(): array
     {
         return [
-            'page_id' => Page::factory(),
             'title' => fake()->sentence(6),
             'subtitle' => fake()->paragraph(3),
-            'section_type' => fake()->randomElement(['hero', 'services', 'portofolios', 'metrics']),
+            'section_type' => fake()->randomElement(['services', 'portofolios', 'metrics']),
             'order' => self::$order++,
             'is_active' => fake()->boolean(50)
         ];
