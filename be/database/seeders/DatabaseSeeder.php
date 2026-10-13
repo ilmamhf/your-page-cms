@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             SectionHeroSeeder::class,
             ServiceSeeder::class,
             PortofolioSeeder::class,
+            MetricSeeder::class,
         ]);
     }
 }
