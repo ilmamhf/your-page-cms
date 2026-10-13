@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             SectionSeeder::class,
             SectionHeroSeeder::class,
             ServiceSeeder::class,
+            PortofolioSeeder::class,
         ]);
     }
 }

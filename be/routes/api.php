@@ -5,6 +5,7 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\SectionHeroController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\PortofolioController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +28,9 @@ Route::get('/section-hero/{id}', [SectionHeroController::class, 'show']);
 Route::get('/services', [ServiceController::class, 'index']);
 Route::get('/service/{id}', [ServiceController::class, 'show']);
 
+Route::get('/portofolios', [PortofolioController::class, 'index']);
+Route::get('/portofolio/{id}', [PortofolioController::class, 'show']);
+
 // endpoint CMS
 Route::middleware('auth:sanctum')->group(function () {
     Route::put('/page/{id}', [PageController::class, 'update']);
@@ -41,4 +45,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/services', [ServiceController::class, 'store']);
     Route::put('/service/{id}', [ServiceController::class, 'update']);
     Route::delete('/service/{id}', [ServiceController::class, 'destroy']);
+
+    Route::post('/portofolios', [PortofolioController::class, 'store']);
+    Route::put('/portofolio/{id}', [PortofolioController::class, 'update']);
+    Route::delete('/portofolio/{id}', [PortofolioController::class, 'destroy']);
 });
