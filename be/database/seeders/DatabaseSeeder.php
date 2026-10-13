@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             PageSeeder::class,
             SectionSeeder::class,
             SectionHeroSeeder::class,
+            ServiceSeeder::class,
         ]);
     }
 }

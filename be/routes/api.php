@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\SectionHeroController;
+use App\Http\Controllers\ServiceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +24,9 @@ Route::get('/section/{id}', [SectionController::class, 'show']);
 Route::get('/section-heroes', [SectionHeroController::class, 'index']);
 Route::get('/section-hero/{id}', [SectionHeroController::class, 'show']);
 
+Route::get('/services', [ServiceController::class, 'index']);
+Route::get('/service/{id}', [ServiceController::class, 'show']);
+
 // endpoint CMS
 Route::middleware('auth:sanctum')->group(function () {
     Route::put('/page/{id}', [PageController::class, 'update']);
@@ -33,4 +37,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/section-heroes', [SectionHeroController::class, 'store']);
     Route::put('/section-hero/{id}', [SectionHeroController::class, 'update']);
     Route::delete('/section-hero/{id}', [SectionHeroController::class, 'destroy']);
+
+    Route::post('/services', [ServiceController::class, 'store']);
+    Route::put('/service/{id}', [ServiceController::class, 'update']);
+    Route::delete('/service/{id}', [ServiceController::class, 'destroy']);
 });
