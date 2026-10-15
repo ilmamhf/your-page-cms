@@ -25,7 +25,7 @@ class ServiceRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'description' => 'string',
-            'icon_url' => 'string',
+            'icon_url' => 'url',
             'order' => 'numeric',
             'is_active' => 'required|boolean'
         ];

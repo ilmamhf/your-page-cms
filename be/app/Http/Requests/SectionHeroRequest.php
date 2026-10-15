@@ -27,7 +27,7 @@ class SectionHeroRequest extends FormRequest
             'eyebrow' => 'string|max:255',
             'hero_text' => 'required|string|max:255',
             'description' => 'string',
-            'image_url' => 'string'
+            'image_url' => 'url'
         ];
     }
 }

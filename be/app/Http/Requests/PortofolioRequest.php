@@ -25,7 +25,7 @@ class PortofolioRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'description' => 'string',
-            'image_url' => 'string',
+            'image_url' => 'url',
             'order' => 'required|numeric',
             'is_active' => 'required|boolean'
         ];
