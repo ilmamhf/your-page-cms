@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\SectionHeroRequest;
 use App\Http\Resources\SectionHeroResource;
 use App\Models\SectionHero;

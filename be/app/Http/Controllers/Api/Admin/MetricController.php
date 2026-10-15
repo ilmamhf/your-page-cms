@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\MetricRequest;
 use App\Http\Resources\MetricResource;
 use App\Models\Metric;

@@ -1,12 +1,12 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\MetricController;
-use App\Http\Controllers\PageController;
-use App\Http\Controllers\SectionController;
-use App\Http\Controllers\SectionHeroController;
-use App\Http\Controllers\ServiceController;
-use App\Http\Controllers\PortofolioController;
+use App\Http\Controllers\Api\Admin\MetricController;
+use App\Http\Controllers\Api\Admin\PageController;
+use App\Http\Controllers\Api\Admin\SectionController;
+use App\Http\Controllers\Api\Admin\SectionHeroController;
+use App\Http\Controllers\Api\Admin\ServiceController;
+use App\Http\Controllers\Api\Admin\PortofolioController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
