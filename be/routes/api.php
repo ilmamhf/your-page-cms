@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\Admin\SectionController;
 use App\Http\Controllers\Api\Admin\SectionHeroController;
 use App\Http\Controllers\Api\Admin\ServiceController;
 use App\Http\Controllers\Api\Admin\PortofolioController;
+use App\Http\Controllers\Api\Public\LandingPageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -35,6 +36,8 @@ Route::get('/portofolio/{id}', [PortofolioController::class, 'show']);
 
 Route::get('/metrics', [MetricController::class, 'index']);
 Route::get('/metric/{id}', [MetricController::class, 'show']);
+
+Route::get('/landing-page', [LandingPageController::class, 'ShowAllPages']);
 
 // endpoint CMS
 Route::middleware('auth:sanctum')->group(function () {

@@ -11,7 +11,7 @@ class Page extends Model
     use HasFactory;
     protected $fillable = ['name'];
 
-    public function section(): HasMany
+    public function sections(): HasMany
     {
         return $this->hasMany(Section::class);
     }
