@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PortofolioRequest;
 use App\Models\Portofolio;
 use Illuminate\Http\Request;
 
@@ -20,17 +21,10 @@ class PortofolioController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(PortofolioRequest $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'string',
-            'image_url' => 'string',
-            'order' => 'required|numeric',
-            'is_active' => 'required|boolean'
-        ]);
 
-        $portofolio = Portofolio::create($validated);
+        $portofolio = Portofolio::create($request->validated());
 
         return response()->json($portofolio);
     }
@@ -48,19 +42,11 @@ class PortofolioController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(PortofolioRequest $request, string $id)
     {
         $portofolio = Portofolio::findOrFail($id);
 
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'string',
-            'image_url' => 'string',
-            'order' => 'required|numeric',
-            'is_active' => 'required|boolean'
-        ]);
-
-        $portofolio->update($validated);
+        $portofolio->update($request->validated());
 
         return response()->json($portofolio);
     }

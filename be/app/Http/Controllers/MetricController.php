@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MetricRequest;
 use App\Models\Metric;
-use Illuminate\Http\Request;
 
 class MetricController extends Controller
 {
@@ -20,19 +20,11 @@ class MetricController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(MetricRequest $request)
     {
-        $validated = $request->validate([
-            'label' => 'required|string|max:20',
-            'value' => 'required|numeric',
-            'suffix' => 'string',
-            'order' => 'required|numeric',
-            'is_active' => 'required|boolean'
-        ]);
+        $metric = Metric::create($request->validated());
 
-        $metric = Metric::create($validated);
-
-        return response()->json($validated);
+        return response()->json($metric);
     }
 
     /**
@@ -48,19 +40,11 @@ class MetricController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(MetricRequest $request, string $id)
     {
         $metric = Metric::findOrFail($id);
 
-        $validated = $request->validate([
-            'label' => 'required|string|max:20',
-            'value' => 'required|numeric',
-            'suffix' => 'string',
-            'order' => 'required|numeric',
-            'is_active' => 'required|boolean'
-        ]);
-
-        $metric->update($validated);
+        $metric->update($request->validated());
 
         return response()->json($metric);
     }

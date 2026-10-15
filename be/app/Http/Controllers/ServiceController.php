@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ServiceRequest;
 use App\Models\Service;
 use Illuminate\Http\Request;
 
@@ -20,17 +21,9 @@ class ServiceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ServiceRequest $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'string',
-            'icon_url' => 'string',
-            'order' => 'numeric',
-            'is_active' => 'required|boolean'
-        ]);
-
-        $service = Service::create($validated);
+        $service = Service::create($request->validated());
 
         return response()->json($service);
     }
@@ -47,19 +40,11 @@ class ServiceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ServiceRequest $request, string $id)
     {
         $service = Service::findOrFail($id);
 
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'string',
-            'icon_url' => 'string',
-            'order' => 'numeric',
-            'is_active' => 'required|boolean'
-        ]);
-
-        $service->update($validated);
+        $service->update($request->validated());
 
         return response()->json($service);
     }

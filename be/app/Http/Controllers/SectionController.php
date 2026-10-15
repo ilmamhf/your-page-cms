@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SectionRequest;
 use App\Models\Section;
 use Illuminate\Http\Request;
 
@@ -20,18 +21,9 @@ class SectionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request) // POST /section/{id}
+    public function store(SectionRequest $request) // POST /section/{id}
     {
-        $validated = $request->validate([
-            'page_id' => 'required|exists:pages,id',
-            'title' => 'required|string',
-            'subtitle' => 'required|string',
-            'section_type' => 'required|string',
-            'order' => 'required|numeric',
-            'is_active' => 'required|boolean'
-        ]);
-
-        $section = Section::create($validated);
+        $section = Section::create($request->validated());
 
         return response()->json($section, 201);
     }
@@ -49,20 +41,11 @@ class SectionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(SectionRequest $request, string $id)
     {
         $section = Section::findOrFail($id);
 
-        $validated = $request->validate([
-            'page_id' => 'required|exists:pages,id',
-            'title' => 'required|string',
-            'subtitle' => 'required|string',
-            'section_type' => 'required|string',
-            'order' => 'required|numeric',
-            'is_active' => 'required|boolean'
-        ]);
-
-        $section->update($validated);
+        $section->update($request->validated());
         return response()->json($section);
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SectionHeroRequest;
 use App\Models\SectionHero;
 use Illuminate\Http\Request;
 
@@ -20,17 +21,9 @@ class SectionHeroController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(SectionHeroRequest $request)
     {
-        $validated = $request->validate([
-            'section_id' => 'required|exists:section,id',
-            'eyebrow' => 'string|max:255',
-            'hero_text' => 'required|string|max:255',
-            'description' => 'string',
-            'image_url' => 'string'
-        ]);
-
-        $section_hero = SectionHero::create($validated);
+        $section_hero = SectionHero::create($request->validated());
 
         return response()->json($section_hero);
     }
@@ -48,19 +41,11 @@ class SectionHeroController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(SectionHeroRequest $request, string $id)
     {
         $section_hero = SectionHero::findOrFail($id);
 
-        $validated = $request->validate([
-            'section_id' => 'required|exists:section,id',
-            'eyebrow' => 'string|max:255',
-            'hero_text' => 'required|string|max:255',
-            'description' => 'string',
-            'image_url' => 'string'
-        ]);
-
-        $section_hero->update($validated);
+        $section_hero->update($request->validated());
 
         return response()->json($section_hero);
     }
