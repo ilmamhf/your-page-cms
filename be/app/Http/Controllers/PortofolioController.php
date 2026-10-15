@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PortofolioRequest;
+use App\Http\Resources\PortofolioResource;
 use App\Models\Portofolio;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,7 @@ class PortofolioController extends Controller
     {
         $portofolios = Portofolio::all();
 
-        return response()->json($portofolios);
+        return PortofolioResource::collection($portofolios);
     }
 
     /**
@@ -26,7 +27,10 @@ class PortofolioController extends Controller
 
         $portofolio = Portofolio::create($request->validated());
 
-        return response()->json($portofolio);
+        return response()->json([
+            'message' => 'Portofolio added successfully',
+            'data' => new PortofolioResource($portofolio)
+        ]);
     }
 
     /**
@@ -36,7 +40,7 @@ class PortofolioController extends Controller
     {
         $portofolio = Portofolio::findOrFail($id);
 
-        return response()->json($portofolio);
+        return new PortofolioResource($portofolio);
     }
 
     /**
@@ -48,7 +52,10 @@ class PortofolioController extends Controller
 
         $portofolio->update($request->validated());
 
-        return response()->json($portofolio);
+        return response()->json([
+            'message' => 'Portofolio edited successfully',
+            'data' => new PortofolioResource($portofolio)
+        ]);
     }
 
     /**
@@ -58,6 +65,6 @@ class PortofolioController extends Controller
     {
         Portofolio::destroy($id);
 
-        return response()->json(['message' => 'Deleted Successfully']);
+        return response()->json(['message' => 'Portofolio deleted Successfully']);
     }
 }

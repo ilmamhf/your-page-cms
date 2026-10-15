@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SectionRequest;
+use App\Http\Resources\SectionResource;
 use App\Models\Section;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,7 @@ class SectionController extends Controller
     {
         $sections = Section::all();
 
-        return response()->json($sections);
+        return SectionResource::collection($sections);
     }
 
     /**
@@ -25,7 +26,10 @@ class SectionController extends Controller
     {
         $section = Section::create($request->validated());
 
-        return response()->json($section, 201);
+        return response()->json([
+            'message' => 'Section added successfully',
+            'data' => new SectionResource($section)
+        ]);
     }
 
     /**
@@ -35,7 +39,7 @@ class SectionController extends Controller
     {
         $section = Section::findOrFail($id);
 
-        return response()->json($section, 201);
+        return new SectionResource($section);
     }
 
     /**
@@ -46,7 +50,10 @@ class SectionController extends Controller
         $section = Section::findOrFail($id);
 
         $section->update($request->validated());
-        return response()->json($section);
+        return response()->json([
+            'message' => 'Section edited successfully',
+            'data' => new SectionResource($section)
+        ]);
     }
 
     /**
@@ -56,6 +63,6 @@ class SectionController extends Controller
     {
         Section::destroy($id);
 
-        return response()->json(['message' => 'Deleted successfully']);
+        return response()->json(['message' => 'Section deleted successfully']);
     }
 }

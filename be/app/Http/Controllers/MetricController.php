@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MetricRequest;
+use App\Http\Resources\MetricResource;
 use App\Models\Metric;
 
 class MetricController extends Controller
@@ -14,7 +15,7 @@ class MetricController extends Controller
     {
         $metrics = Metric::all();
 
-        return response()->json($metrics);
+        return MetricResource::collection($metrics);
     }
 
     /**
@@ -24,7 +25,10 @@ class MetricController extends Controller
     {
         $metric = Metric::create($request->validated());
 
-        return response()->json($metric);
+        return response()->json([
+            'message' => 'Metric added successfully',
+            'data' => new MetricResource ($metric),
+        ]);
     }
 
     /**
@@ -34,7 +38,7 @@ class MetricController extends Controller
     {
         $metric = Metric::findOrFail($id);
 
-        return response()->json($metric);
+        return new MetricResource($metric);
     }
 
     /**
@@ -46,7 +50,10 @@ class MetricController extends Controller
 
         $metric->update($request->validated());
 
-        return response()->json($metric);
+        return response()->json([
+            'message' => 'Metric edited successfully',
+            'data' => new MetricResource($metric)
+        ]);
     }
 
     /**
@@ -56,6 +63,6 @@ class MetricController extends Controller
     {
         Metric::destroy($id);
 
-        return response()->json(['message' => 'Deleted successfully']);
+        return response()->json(['message' => 'Metric deleted successfully']);
     }
 }

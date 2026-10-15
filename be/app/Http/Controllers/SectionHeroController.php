@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SectionHeroRequest;
+use App\Http\Resources\SectionHeroResource;
 use App\Models\SectionHero;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,7 @@ class SectionHeroController extends Controller
     {
         $heroSections = SectionHero::all();
 
-        return response()->json($heroSections);
+        return SectionHeroResource::collection($heroSections);
     }
 
     /**
@@ -25,7 +26,10 @@ class SectionHeroController extends Controller
     {
         $section_hero = SectionHero::create($request->validated());
 
-        return response()->json($section_hero);
+        return response()->json([
+            'message' => 'Hero Section added successfully',
+            'data' => new SectionHeroResource($section_hero)
+        ]);
     }
 
     /**
@@ -35,7 +39,7 @@ class SectionHeroController extends Controller
     {
         $section_hero = SectionHero::findOrFail($id);
 
-        return response()->json($section_hero);
+        return new SectionHeroResource($section_hero);
     }
 
     /**
@@ -47,7 +51,10 @@ class SectionHeroController extends Controller
 
         $section_hero->update($request->validated());
 
-        return response()->json($section_hero);
+        return response()->json([
+            'message' => 'Hero Section added successfully',
+            'data' => new SectionHeroResource($section_hero)
+        ]);
     }
 
     /**
@@ -57,6 +64,6 @@ class SectionHeroController extends Controller
     {
         SectionHero::destroy($id);
 
-        return response()->json(['message'=>'Deleted successfully']);
+        return response()->json(['message'=>'Hero Section deleted successfully']);
     }
 }

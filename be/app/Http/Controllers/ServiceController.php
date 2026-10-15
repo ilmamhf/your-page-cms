@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ServiceRequest;
+use App\Http\Resources\ServiceResource;
 use App\Models\Service;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,7 @@ class ServiceController extends Controller
     {
         $services = Service::all();
 
-        return response()->json($services);
+        return ServiceResource::collection($services);
     }
 
     /**
@@ -25,7 +26,10 @@ class ServiceController extends Controller
     {
         $service = Service::create($request->validated());
 
-        return response()->json($service);
+        return response()->json([
+            ['message' => 'Service added successfully'],
+            'data' => new ServiceResource($service)
+        ]);
     }
 
     /**
@@ -34,7 +38,7 @@ class ServiceController extends Controller
     public function show(string $id)
     {
         $service = Service::findOrFail($id);
-        return response()->json($service);
+        return new ServiceResource($service);
     }
 
     /**
@@ -46,7 +50,10 @@ class ServiceController extends Controller
 
         $service->update($request->validated());
 
-        return response()->json($service);
+        return response()->json([
+            'message' => 'Service edited successfully',
+            'data' => new ServiceResource($service)
+        ]);
     }
 
     /**
@@ -56,6 +63,6 @@ class ServiceController extends Controller
     {
         Service::destroy($id);
 
-        return response()->json(['message'=>'Deleted successfully']);
+        return response()->json(['message'=>'Service deleted successfully']);
     }
 }
