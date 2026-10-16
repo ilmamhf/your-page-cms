@@ -1,24 +1,15 @@
-import CardProject from "../components/CardProject";
-import CardService from "../components/CardService";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-import SectionCard from "../sections/SectionCard";
 import ContactSection from "../sections/ContactSection";
-import GridProject from "../sections/GridProject";
-import GridService from "../sections/GridService";
-import HeroSection1 from "../sections/HeroSection1";
-import HeroSection2 from "../sections/HeroSection2";
-import HeroSection3 from "../sections/HeroSection3";
-import testImage from "../../assets/vite.svg";
 import { useEffect, useState } from "react";
 import api from "../../api/axios";
-import type { Page, ApiResponse, LandingPageData } from "../../types/landing";
+import type { Page, LandingPageData } from "../../types/landing";
 import SectionRenderer from "../components/SectionRenderer";
 
 const WebsiteLayout = () => {
   const [pages, setPages] = useState<Page[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  // const [loading, setLoading] = useState<boolean>(true);
+  // const [error, setError] = useState<string | null>(null);
 
   const fetchLandingPage = async () => {
     try {
@@ -52,45 +43,6 @@ const WebsiteLayout = () => {
             ))}
           </div>
         ))}
-        {/* <section>
-          <HeroSection1
-            hero_text="Hello Cruel World :)"
-            image_url={testImage}
-          ></HeroSection1>
-
-          <section className="flex p-8 gap-8 justify-between">
-            <CardService name="Web Development" />
-            <CardService />
-            <CardService />
-          </section>
-
-          <SectionCard
-            title="Featured Work"
-            description="Our latest projects"
-          >
-            <CardProject />
-            <CardProject />
-            <CardProject />
-          </SectionCard>
-        </section>
-
-        <section>
-          <HeroSection2 />
-          <HeroSection3 />
-        </section>
-
-        <section>
-          <HeroSection1 />
-          <GridService />
-          <GridService />
-        </section>
-
-        <section>
-          <HeroSection1 />
-          <GridProject />
-          <GridProject />
-        </section> */}
-
         <ContactSection />
         <Footer />
       </div>
