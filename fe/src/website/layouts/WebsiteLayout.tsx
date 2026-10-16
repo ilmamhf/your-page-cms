@@ -10,12 +10,37 @@ import HeroSection1 from "../sections/HeroSection1";
 import HeroSection2 from "../sections/HeroSection2";
 import HeroSection3 from "../sections/HeroSection3";
 import testImage from "../../assets/vite.svg";
+import { useEffect, useState } from "react";
+import api from "../../api/axios";
+import type { Page, ApiResponse, LandingPageData } from "../../types/landing";
 
 const WebsiteLayout = () => {
+  const [pages, setPages] = useState<Page[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchLandingPage = async () => {
+    try {
+      const response = await api.get("/landing-page");
+      const landingData = response.data.data as LandingPageData;
+      setPages(landingData.pages);
+      console.log(pages);
+    } catch (err) {
+      console.error("Error getting data: ", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchLandingPage();
+  }, []);
+
   return (
     <>
       <Navbar />
       <div>
+        {pages.map((page: Page) => (
+          <section id={page.id}></section>
+        ))}
         <section>
           <HeroSection1
             hero="Hello Cruel World :)"
