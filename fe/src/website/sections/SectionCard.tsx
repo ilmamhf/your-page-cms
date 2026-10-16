@@ -20,9 +20,19 @@ const SectionCard = ({ section }: SectionCardProps) => {
         {section.items?.map((item) => {
           switch (section.section_type) {
             case "services":
-              return <CardService service={item as ServiceItem} />;
+              return (
+                <CardService
+                  service={item as ServiceItem}
+                  key={item.id}
+                />
+              );
             case "portofolios":
-              return <CardProject project={item as PortofolioItem} />;
+              return (
+                <CardProject
+                  project={item as PortofolioItem}
+                  key={item.id}
+                />
+              );
           }
         })}
       </div>

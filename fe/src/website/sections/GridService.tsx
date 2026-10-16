@@ -1,5 +1,4 @@
-import CardService, { type CardServiceProps } from "../components/CardService";
-import reactLogo from "../../assets/react.svg";
+import CardService from "../components/CardService";
 import type { ServiceItem } from "../../types/landing";
 
 interface GridServiceProps {

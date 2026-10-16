@@ -1,4 +1,3 @@
-import sample from "../../assets/image-sample-1.png";
 import type { PortofolioItem } from "../../types/landing";
 
 export interface CardProjectProps {

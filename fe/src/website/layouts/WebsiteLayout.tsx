@@ -45,7 +45,10 @@ const WebsiteLayout = () => {
             id={page.name.toLowerCase()}
           >
             {page.sections.map((section) => (
-              <SectionRenderer section={section} />
+              <SectionRenderer
+                section={section}
+                key={section.id}
+              />
             ))}
           </div>
         ))}

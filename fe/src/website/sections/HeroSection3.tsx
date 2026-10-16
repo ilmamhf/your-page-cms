@@ -25,7 +25,12 @@ const HeroSection3 = ({ section }: HeroSection3Props) => {
         <p className="text-xl">{section.subtitle}</p>
         <div className="flex gap-6">
           {section.items?.map((item) => {
-            return <CardStats stat={item as MetricItem} />;
+            return (
+              <CardStats
+                stat={item as MetricItem}
+                key={item.id}
+              />
+            );
           })}
         </div>
       </div>
