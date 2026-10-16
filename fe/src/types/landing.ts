@@ -1,6 +1,10 @@
+import reactLogo from "../../assets/react.svg";
+import imgSample from "../../assets/image-sample-1.png";
+
 export interface Page {
     id: number;
     name: string;
+    sections: Section[];
 }
 
 export type SectionItem = ServiceItem | PortofolioItem | MetricItem;

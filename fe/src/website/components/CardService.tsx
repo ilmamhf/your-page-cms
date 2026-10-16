@@ -1,25 +1,19 @@
-import reactLogo from "../../assets/react.svg";
+import type { ServiceItem } from "../../types/landing";
 
 export interface CardServiceProps {
-  icon?: string;
-  name?: string;
-  description?: string;
+  service: ServiceItem;
 }
 
-const CardService = ({
-  icon = reactLogo,
-  name = "Service Name",
-  description = "lorem ipsum dolor sit amet",
-}: CardServiceProps) => {
+const CardService = ({ service }: CardServiceProps) => {
   return (
     <div className="border p-4">
       <img
-        src={icon}
+        src={service.icon_url}
         alt="icon"
         className="size-12"
       />
-      <p className="font-bold">{name}</p>
-      <p>{description}</p>
+      <p className="font-bold">{service.title}</p>
+      <p>{service.description}</p>
     </div>
   );
 };

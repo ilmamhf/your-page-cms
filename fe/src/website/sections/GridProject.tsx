@@ -1,35 +1,36 @@
-import CardProject, { type CardProjectProps } from "../components/CardProject";
-import imgSample from "../../assets/image-sample-1.png";
+import CardProject from "../components/CardProject";
+
+import type { PortofolioItem } from "../../types/landing";
 
 interface GridProjectProps {
-  projects?: CardProjectProps[];
+  projects: PortofolioItem[];
 }
 
-const sample: CardProjectProps[] = [
-  {
-    img: imgSample,
-    title: "Project Name",
-    detail: "lorem ipsum dolor sit amet",
-  },
-  {
-    img: imgSample,
-    title: "Project Name",
-    detail: "lorem ipsum dolor sit amet",
-  },
-  {
-    img: imgSample,
-    title: "Project Name",
-    detail: "lorem ipsum dolor sit amet",
-  },
-];
+// const sample: CardProjectProps[] = [
+//   {
+//     img: imgSample,
+//     title: "Project Name",
+//     detail: "lorem ipsum dolor sit amet",
+//   },
+//   {
+//     img: imgSample,
+//     title: "Project Name",
+//     detail: "lorem ipsum dolor sit amet",
+//   },
+//   {
+//     img: imgSample,
+//     title: "Project Name",
+//     detail: "lorem ipsum dolor sit amet",
+//   },
+// ];
 
-const GridProject = ({ projects = sample }: GridProjectProps) => {
+const GridProject = ({ projects }: GridProjectProps) => {
   return (
     <div className="flex p-8 gap-8 justify-between">
-      {projects.map((service, index) => (
+      {projects.map((project, index) => (
         <CardProject
           key={index}
-          {...service}
+          project={project}
         />
       ))}
     </div>

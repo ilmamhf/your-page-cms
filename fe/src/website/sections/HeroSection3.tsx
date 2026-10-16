@@ -1,25 +1,12 @@
 import sample from "../../assets/image-sample-1.png";
+import type { MetricItem, Section } from "../../types/landing";
 import CardStats from "../components/CardStats";
 
 interface HeroSection3Props {
-  label?: string;
-  title?: string;
-  description?: string;
-  children?: React.ReactNode;
+  section: Section;
 }
 
-const HeroSection3 = ({
-  label = "small jargon",
-  title = "Hero Text",
-  description = "lorem ipsum dolor sit amet consectetur adipiscing elit et nostrud consequat vero officia officia minim in occaecat laboris dignissimos voluptas molestias nostrud imperdiet iusto non quidem tempor et est exercitation dolore odio in dolore labore eiusmod officia omnis lorem velit est eos culpa dolorem non assumenda ad velit incididunt est",
-  children = (
-    <>
-      <CardStats />
-      <CardStats />
-      <CardStats />
-    </>
-  ),
-}: HeroSection3Props) => {
+const HeroSection3 = ({ section }: HeroSection3Props) => {
   return (
     <section className="p-8 grid grid-cols-3 items-stretch overflow-hidden">
       {/* kiri */}
@@ -33,10 +20,14 @@ const HeroSection3 = ({
 
       {/* kanan */}
       <div className="col-span-2 flex flex-col px-4">
-        <p className="text-xl">{label}</p>
-        <p className="text-6xl -ml-1">{title}</p>
-        <p className="text-xl">{description}</p>
-        <div className="flex gap-6">{children}</div>
+        <p className="text-xl">{section.hero_detail?.eyebrow}</p>
+        <p className="text-6xl -ml-1">{section.title}</p>
+        <p className="text-xl">{section.subtitle}</p>
+        <div className="flex gap-6">
+          {section.items?.map((item) => {
+            return <CardStats stat={item as MetricItem} />;
+          })}
+        </div>
       </div>
     </section>
   );

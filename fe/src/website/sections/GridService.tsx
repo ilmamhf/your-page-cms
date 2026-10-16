@@ -1,35 +1,36 @@
 import CardService, { type CardServiceProps } from "../components/CardService";
 import reactLogo from "../../assets/react.svg";
+import type { ServiceItem } from "../../types/landing";
 
 interface GridServiceProps {
-  services?: CardServiceProps[];
+  services: ServiceItem[];
 }
 
-const sample: CardServiceProps[] = [
-  {
-    icon: reactLogo,
-    name: "Service Name",
-    description: "lorem ipsum dolor sit amet",
-  },
-  {
-    icon: reactLogo,
-    name: "Service Name",
-    description: "lorem ipsum dolor sit amet",
-  },
-  {
-    icon: reactLogo,
-    name: "Service Name",
-    description: "lorem ipsum dolor sit amet",
-  },
-];
+// const sample: CardServiceProps[] = [
+//   {
+//     icon: reactLogo,
+//     name: "Service Name",
+//     description: "lorem ipsum dolor sit amet",
+//   },
+//   {
+//     icon: reactLogo,
+//     name: "Service Name",
+//     description: "lorem ipsum dolor sit amet",
+//   },
+//   {
+//     icon: reactLogo,
+//     name: "Service Name",
+//     description: "lorem ipsum dolor sit amet",
+//   },
+// ];
 
-const GridService = ({ services = sample }: GridServiceProps) => {
+const GridService = ({ services }: GridServiceProps) => {
   return (
     <div className="flex p-8 gap-8 justify-between">
       {services.map((service, index) => (
         <CardService
+          service={service}
           key={index}
-          {...service}
         />
       ))}
     </div>

@@ -2,7 +2,7 @@ import CardProject from "../components/CardProject";
 import CardService from "../components/CardService";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-import SectionCard from "../components/SectionCard";
+import SectionCard from "../sections/SectionCard";
 import ContactSection from "../sections/ContactSection";
 import GridProject from "../sections/GridProject";
 import GridService from "../sections/GridService";
@@ -13,6 +13,7 @@ import testImage from "../../assets/vite.svg";
 import { useEffect, useState } from "react";
 import api from "../../api/axios";
 import type { Page, ApiResponse, LandingPageData } from "../../types/landing";
+import SectionRenderer from "../components/SectionRenderer";
 
 const WebsiteLayout = () => {
   const [pages, setPages] = useState<Page[]>([]);
@@ -39,12 +40,19 @@ const WebsiteLayout = () => {
       <Navbar />
       <div>
         {pages.map((page: Page) => (
-          <section id={page.id}></section>
+          <div
+            key={page.id}
+            id={page.name.toLowerCase()}
+          >
+            {page.sections.map((section) => (
+              <SectionRenderer section={section} />
+            ))}
+          </div>
         ))}
-        <section>
+        {/* <section>
           <HeroSection1
-            hero="Hello Cruel World :)"
-            image={testImage}
+            hero_text="Hello Cruel World :)"
+            image_url={testImage}
           ></HeroSection1>
 
           <section className="flex p-8 gap-8 justify-between">
@@ -78,7 +86,7 @@ const WebsiteLayout = () => {
           <HeroSection1 />
           <GridProject />
           <GridProject />
-        </section>
+        </section> */}
 
         <ContactSection />
         <Footer />
