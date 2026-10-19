@@ -1,17 +1,31 @@
 interface FieldContactProps {
   label: string;
   id: string;
+  textarea?: boolean;
+  className?: string;
 }
 
-const FieldContact = ({ label, id }: FieldContactProps) => {
+const FieldContact = ({
+  label,
+  id,
+  textarea,
+  className,
+}: FieldContactProps) => {
   return (
-    <div>
+    <div className="flex">
       <label htmlFor={id}>{label}</label>
-      <input
-        type="text"
-        id={id}
-        className="border-b m-2"
-      />
+      {textarea ? (
+        <textarea
+          id={id}
+          className={`border-b mx-2 w-full ${className}`}
+        />
+      ) : (
+        <input
+          type="text"
+          id={id}
+          className={`border-b mx-2 w-full ${className}`}
+        />
+      )}
     </div>
   );
 };

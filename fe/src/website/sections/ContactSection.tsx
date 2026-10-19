@@ -21,7 +21,7 @@ const ContactSection = ({
         {/* Content Grid */}
         <div className="grid grid-cols-3 gap-8 items-start">
           {/* Left Info Column (1 Column) */}
-          <div className="col-span-1 flex flex-col justify-between gap-6">
+          <div className="col-span-4 md:col-span-1 flex flex-col justify-between gap-4 w-full">
             <p>Open for collaboration or anything</p>
 
             {/* Contact Details */}
@@ -47,35 +47,39 @@ const ContactSection = ({
             </div>
           </div>
 
-          <div className="col-span-1 flex flex-col gap-4">
-            <FieldContact
-              label="Name"
-              id="name"
-            />
-            <FieldContact
-              label="Email"
-              id="email"
-            />
-            <FieldContact
-              label="Phone"
-              id="phone"
-            />
-          </div>
+          <div className="flex flex-row w-full col-span-4 md:col-span-2 justify-between gap-4">
+            <div className="col-span-1 flex flex-col gap-4 w-full">
+              <FieldContact
+                label="Name"
+                id="name"
+              />
+              <FieldContact
+                label="Email"
+                id="email"
+              />
+              <FieldContact
+                label="Phone"
+                id="phone"
+              />
+            </div>
 
-          <div>
-            <FieldContact
-              label="Message"
-              id="message"
-            />
+            <div className="flex flex-col justify-between w-full">
+              <FieldContact
+                label="Message"
+                id="message"
+                className="pb-4"
+                textarea={true}
+              />
 
-            {/* Submit Button */}
-            <div className="pt-2">
-              <button
-                type="submit"
-                className="border p-4"
-              >
-                Send Message
-              </button>
+              {/* Submit Button */}
+              <div className="pt-2 items-center justify-center self-end flex">
+                <button
+                  type="submit"
+                  className="border p-4"
+                >
+                  Send Message
+                </button>
+              </div>
             </div>
           </div>
         </div>

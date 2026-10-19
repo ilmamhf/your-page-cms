@@ -21,7 +21,7 @@ const HeroSection3 = ({ section }: HeroSection3Props) => {
       {/* kanan */}
       <div className="col-span-2 flex flex-col px-4">
         <p className="text-xl">{section.hero_detail?.eyebrow}</p>
-        <p className="text-6xl -ml-1">{section.title}</p>
+        <p className="text-6xl -ml-1 mb-2">{section.title}</p>
         <p className="text-xl">{section.subtitle}</p>
         <div className="flex gap-6">
           {section.items?.map((item) => {

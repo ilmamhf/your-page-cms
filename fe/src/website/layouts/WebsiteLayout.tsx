@@ -34,6 +34,7 @@ const WebsiteLayout = () => {
           <div
             key={page.id}
             id={page.name.toLowerCase()}
+            className="scroll-mt-24"
           >
             {page.sections.map((section) => (
               <SectionRenderer

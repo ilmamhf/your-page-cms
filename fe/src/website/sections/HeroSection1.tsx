@@ -27,15 +27,15 @@ const HeroSection1 = ({
   return (
     <section className="p-8 grid grid-cols-5 items-stretch overflow-hidden">
       {/* kiri */}
-      <div className="md:col-span-4  flex flex-col">
+      <div className="xl:col-span-4 col-span-3 flex flex-col">
         <p className="text-xl">{eyebrow}</p>
-        <p className="text-6xl -ml-1 py-4">{hero_text}</p>
+        <p className="text-6xl -ml-1 py-4 mr-1">{hero_text}</p>
         <p className="text-xl">{description}</p>
-        <div className="flex gap-6 pt-4">{children}</div>
+        {/* <div className="flex gap-6 pt-4">{children}</div> */}
       </div>
 
       {/* kanan */}
-      <div className="relative w-full h-full col-span-2 justify-self-end md:col-span-1 aspect-square">
+      <div className="relative w-full h-full col-span-2 xl:col-span-1 justify-self-end aspect-square">
         {image_url ? (
           <img
             src={image_url}

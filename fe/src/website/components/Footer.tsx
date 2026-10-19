@@ -64,11 +64,11 @@ const Footer = ({
 
       <div className="flex flex-col">
         <p>Quick Links</p>
-        <a href="">Home</a>
-        <a href="">About</a>
-        <a href="">Services</a>
-        <a href="">Portofolio</a>
-        <a href="">Contact</a>
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#portofolio">Portofolio</a>
+        <a href="#contact">Contact</a>
       </div>
     </section>
   );
