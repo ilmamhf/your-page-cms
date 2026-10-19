@@ -22,11 +22,11 @@ class ServiceFactory extends Factory
     {
 
         return [
-            'title' => fake()->sentence(3),
+            'title' => fake()->words(2, true),
             'description' => fake()->sentence(5),
             'icon_url' => fake()->imageUrl(640, 480),
             'order' => self::$order++,
-            'is_active' => fake()->boolean(50)
+            'is_active' => fake()->boolean(70)
         ];
     }
 }

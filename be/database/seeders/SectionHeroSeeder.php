@@ -21,6 +21,7 @@ class SectionHeroSeeder extends Seeder
         foreach ($sections as $section) {
             SectionHero::factory()->create([
                 'section_id' => $section->id,
+                'hero_text' => $section->title
             ]);
         }
     }

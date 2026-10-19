@@ -18,7 +18,7 @@ class PageFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->sentence(6)
+            'name' => fake()->sentence(1)
         ];
     }
 }

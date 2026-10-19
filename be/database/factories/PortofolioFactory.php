@@ -22,11 +22,11 @@ class PortofolioFactory extends Factory
     {
 
         return [
-            'title' => fake()->sentence(3),
+            'title' => fake()->words(3, true),
             'description' => fake()->sentence(5),
             'image_url' => fake()->imageUrl(640, 480),
             'order' => self::$order++,
-            'is_active' => fake()->boolean(50)
+            'is_active' => fake()->boolean(70)
         ];
     }
 }

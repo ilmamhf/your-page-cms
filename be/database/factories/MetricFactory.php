@@ -21,11 +21,11 @@ class MetricFactory extends Factory
     public function definition(): array
     {
         return [
-            'label' => fake()->sentence(2),
+            'label' => fake()->sentence(1),
             'value' => fake()->randomFloat(0, 3, 300),
             'suffix' => fake()->randomElement(['+', '+-', '']),
             'order' => self::$order++,
-            'is_active' => fake()->boolean(50),
+            'is_active' => fake()->boolean(70),
         ];
     }
 }

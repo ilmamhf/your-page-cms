@@ -20,7 +20,7 @@ class SectionHeroFactory extends Factory
     {
         return [
             'section_id' => Section::query()->inRandomOrder()->value('id'),
-            'eyebrow' => fake()->sentence(5),
+            'eyebrow' => fake()->sentence(4),
             'hero_text' => fake()->sentence(5),
             'description' => fake()->paragraph(2),
             'image_url' => fake()->imageUrl(640, 480),

@@ -21,11 +21,11 @@ class SectionFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => fake()->sentence(6),
-            'subtitle' => fake()->paragraph(3),
+            'title' => fake()->sentence(3),
+            'subtitle' => fake()->paragraph(5),
             'section_type' => fake()->randomElement(['services', 'portofolios', 'metrics']),
             'order' => self::$order++,
-            'is_active' => fake()->boolean(50)
+            'is_active' => fake()->boolean(100)
         ];
     }
 }

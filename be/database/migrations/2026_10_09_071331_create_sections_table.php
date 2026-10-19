@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('sections', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('title');
-            $table->text('subtitle');
+            $table->string('title')->nullable();
+            $table->text('subtitle')->nullable();
             $table->string('section_type');
             $table->integer('order');
             $table->boolean('is_active');
