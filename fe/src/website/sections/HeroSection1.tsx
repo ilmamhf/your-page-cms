@@ -25,17 +25,17 @@ const HeroSection1 = ({
   image_url = sample,
 }: HeroSection1Props) => {
   return (
-    <section className="p-8 grid grid-cols-3 items-stretch overflow-hidden">
+    <section className="p-8 grid grid-cols-5 items-stretch overflow-hidden">
       {/* kiri */}
-      <div className="col-span-2 flex flex-col">
+      <div className="md:col-span-4  flex flex-col">
         <p className="text-xl">{eyebrow}</p>
-        <p className="text-6xl -ml-1">{hero_text}</p>
+        <p className="text-6xl -ml-1 py-4">{hero_text}</p>
         <p className="text-xl">{description}</p>
         <div className="flex gap-6 pt-4">{children}</div>
       </div>
 
       {/* kanan */}
-      <div className="relative w-full h-full">
+      <div className="relative w-full h-full col-span-2 justify-self-end md:col-span-1 aspect-square">
         {image_url ? (
           <img
             src={image_url}

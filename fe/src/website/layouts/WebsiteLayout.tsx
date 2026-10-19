@@ -27,7 +27,7 @@ const WebsiteLayout = () => {
   }, []);
 
   return (
-    <>
+    <div className="md:px-8 xl:px-40">
       <Navbar />
       <div>
         {pages.map((page: Page) => (
@@ -46,7 +46,7 @@ const WebsiteLayout = () => {
         <ContactSection />
         <Footer />
       </div>
-    </>
+    </div>
   );
 };
 

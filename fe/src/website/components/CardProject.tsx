@@ -6,15 +6,15 @@ export interface CardProjectProps {
 
 const CardProject = ({ project }: CardProjectProps) => {
   return (
-    <div className="border">
+    <div className="border w-full aspect-square h-full">
       <img
         src={project.image_url}
         alt="img"
-        className="bg-amber-300 h-32 w-64 object-cover"
+        className="h-5/8 w-full object-cover"
       />
       <div className="p-4">
         <p className="font-bold">{project.title}</p>
-        <p>{project.description}</p>
+        <p className="line-clamp-1 xl:line-clamp-3">{project.description}</p>
       </div>
     </div>
   );

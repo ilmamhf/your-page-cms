@@ -6,28 +6,10 @@ interface GridProjectProps {
   projects: PortofolioItem[];
 }
 
-// const sample: CardProjectProps[] = [
-//   {
-//     img: imgSample,
-//     title: "Project Name",
-//     detail: "lorem ipsum dolor sit amet",
-//   },
-//   {
-//     img: imgSample,
-//     title: "Project Name",
-//     detail: "lorem ipsum dolor sit amet",
-//   },
-//   {
-//     img: imgSample,
-//     title: "Project Name",
-//     detail: "lorem ipsum dolor sit amet",
-//   },
-// ];
-
 const GridProject = ({ projects }: GridProjectProps) => {
   return (
-    <div className="flex p-8 gap-8 justify-between">
-      {projects.map((project, index) => (
+    <div className="grid grid-cols-2 lg:grid-cols-4 p-4 md:p-8 gap-6 w-full">
+      {projects.slice(0, 4).map((project, index) => (
         <CardProject
           key={index}
           project={project}

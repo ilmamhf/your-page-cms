@@ -5,28 +5,10 @@ interface GridServiceProps {
   services: ServiceItem[];
 }
 
-// const sample: CardServiceProps[] = [
-//   {
-//     icon: reactLogo,
-//     name: "Service Name",
-//     description: "lorem ipsum dolor sit amet",
-//   },
-//   {
-//     icon: reactLogo,
-//     name: "Service Name",
-//     description: "lorem ipsum dolor sit amet",
-//   },
-//   {
-//     icon: reactLogo,
-//     name: "Service Name",
-//     description: "lorem ipsum dolor sit amet",
-//   },
-// ];
-
 const GridService = ({ services }: GridServiceProps) => {
   return (
-    <div className="flex p-8 gap-8 justify-between">
-      {services.map((service, index) => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 p-4 md:p-8 gap-6">
+      {services.slice(0, 3).map((service, index) => (
         <CardService
           service={service}
           key={index}

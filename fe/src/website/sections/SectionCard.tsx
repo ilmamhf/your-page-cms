@@ -1,12 +1,28 @@
 import CardProject from "../components/CardProject";
 import type { PortofolioItem, Section, ServiceItem } from "../../types/landing";
 import CardService from "../components/CardService";
+import { useState } from "react";
+import GridService from "./GridService";
+import GridProject from "./GridProject";
 
 interface SectionCardProps {
   section: Section;
 }
 
+const childrenComponents: Record<
+  string,
+  ((props: any) => React.JSX.Element) | undefined
+> = {
+  services: (props: { items: ServiceItem[] }) => (
+    <GridService services={props.items} />
+  ),
+  portofolios: (props: { items: PortofolioItem[] }) => (
+    <GridProject projects={props.items} />
+  ),
+};
+
 const SectionCard = ({ section }: SectionCardProps) => {
+  const RenderComponent = childrenComponents[section.section_type];
   return (
     <section className="p-8">
       <div className="flex items-center justify-between">
@@ -16,25 +32,8 @@ const SectionCard = ({ section }: SectionCardProps) => {
         </div>
         {/* {action} */}
       </div>
-      <div className="flex py-4 gap-8 justify-between">
-        {section.items?.map((item) => {
-          switch (section.section_type) {
-            case "services":
-              return (
-                <CardService
-                  service={item as ServiceItem}
-                  key={item.id}
-                />
-              );
-            case "portofolios":
-              return (
-                <CardProject
-                  project={item as PortofolioItem}
-                  key={item.id}
-                />
-              );
-          }
-        })}
+      <div className="-mx-8 ">
+        {RenderComponent ? RenderComponent({ items: section.items }) : null}
       </div>
     </section>
   );
