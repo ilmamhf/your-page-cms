@@ -2,10 +2,17 @@ interface InputFieldProps {
   label: string;
   id: string;
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  textarea?: boolean;
+  onChange: () => void;
 }
 
-const InputField = ({ label, id, value, onChange }: InputFieldProps) => {
+const InputField = ({
+  label,
+  id,
+  value,
+  textarea,
+  onChange,
+}: InputFieldProps) => {
   return (
     <div className="flex flex-col">
       <label
@@ -14,14 +21,24 @@ const InputField = ({ label, id, value, onChange }: InputFieldProps) => {
       >
         {label}
       </label>
-      <input
-        type="text"
-        placeholder="Input here"
-        id={id}
-        value={value}
-        onChange={onChange}
-        className="border p-2"
-      />
+      {textarea ? (
+        <textarea
+          placeholder="Input here"
+          id={id}
+          value={value}
+          onChange={onChange}
+          className="border p-2"
+        />
+      ) : (
+        <input
+          type="text"
+          placeholder="Input here"
+          id={id}
+          value={value}
+          onChange={onChange}
+          className="border p-2"
+        />
+      )}
     </div>
   );
 };

@@ -8,8 +8,6 @@ import SectionRenderer from "../components/SectionRenderer";
 
 const WebsiteLayout = () => {
   const [pages, setPages] = useState<Page[]>([]);
-  // const [loading, setLoading] = useState<boolean>(true);
-  // const [error, setError] = useState<string | null>(null);
 
   const fetchLandingPage = async () => {
     try {
