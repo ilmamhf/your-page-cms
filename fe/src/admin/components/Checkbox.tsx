@@ -1,6 +1,6 @@
 interface CheckboxProps {
   label: string;
-  onChange: () => void;
+  onChange: (value: string) => void;
 }
 
 const Checkbox = ({ label, onChange }: CheckboxProps) => {
@@ -9,7 +9,7 @@ const Checkbox = ({ label, onChange }: CheckboxProps) => {
       <div>{label}</div>
       <input
         type="checkbox"
-        onChange={onChange}
+        onChange={(e) => onChange(e.target.value)}
       />
     </label>
   );

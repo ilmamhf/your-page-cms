@@ -3,7 +3,7 @@ interface InputFieldProps {
   id: string;
   value: string;
   textarea?: boolean;
-  onChange: () => void;
+  onChange: (value: string) => void;
 }
 
 const InputField = ({
@@ -26,7 +26,7 @@ const InputField = ({
           placeholder="Input here"
           id={id}
           value={value}
-          onChange={onChange}
+          onChange={(e) => onChange(e.target.value)}
           className="border p-2"
         />
       ) : (
@@ -35,7 +35,7 @@ const InputField = ({
           placeholder="Input here"
           id={id}
           value={value}
-          onChange={onChange}
+          onChange={(e) => onChange(e.target.value)}
           className="border p-2"
         />
       )}

@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
-import InputField from "../../components/InputField";
 import type { LandingPageData, Page, Section } from "../../../types/landing";
 import api from "../../../api/axios";
-import SectionTypeDropdown from "../../components/SectionTypeDropdown";
-import Checkbox from "../../components/Checkbox";
+import SectionForm from "./components/SectionForm";
 
 const Website = () => {
   const [FormData, setFormData] = useState<Page[]>([]);
@@ -23,7 +21,21 @@ const Website = () => {
     }
   };
 
-  const handleChange = () => {};
+  const handleSectionUpdate = (
+    pageId: string | number,
+    updatedSection: Section,
+  ) => {
+    setFormData((prevPages) => {
+      return prevPages.map((page) => {
+        return {
+          ...page,
+          sections: page.sections.map((section) =>
+            section.id === updatedSection.id ? updatedSection : section,
+          ),
+        };
+      });
+    });
+  };
 
   useEffect(() => {
     fetchWebsite();
@@ -39,37 +51,14 @@ const Website = () => {
             <div>{page.name}</div>
             <div>
               {page.sections.map((section: Section, index) => (
-                <div className="border p-4 my-4">
-                  <div>
-                    {page.name}_{index + 1}
-                  </div>
-                  <div>
-                    <InputField
-                      label="title"
-                      id={String(page.name) + "_title_" + String(section.id)}
-                      value={section.title}
-                      onChange={handleChange}
-                    />
-                    <InputField
-                      label="subtitle"
-                      id={String(page.name) + "_subtitle_" + String(section.id)}
-                      value={section.subtitle ? section.subtitle : ""}
-                      textarea={true}
-                      onChange={handleChange}
-                    />
-                    <SectionTypeDropdown
-                      value={section.section_type}
-                      onChange={handleChange}
-                    />
-
-                    {/* order component idk how to make */}
-
-                    <Checkbox
-                      label="Is Active?"
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
+                <SectionForm
+                  section={section}
+                  index={index}
+                  pageName={page.name}
+                  onUpdateSection={(updatedSection) =>
+                    handleSectionUpdate(page.id || page.name, updatedSection)
+                  }
+                />
               ))}
             </div>
           </div>
