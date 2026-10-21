@@ -3,7 +3,7 @@ interface InputFieldProps {
   id: string;
   value: string;
   textarea?: boolean;
-  onChange: (value: string) => void;
+  onChange: (value: any) => void;
 }
 
 const InputField = ({

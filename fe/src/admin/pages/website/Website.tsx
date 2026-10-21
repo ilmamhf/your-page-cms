@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import type { LandingPageData, Page, Section } from "../../../types/landing";
 import api from "../../../api/axios";
 import SectionForm from "./components/SectionForm";
+import SectionList from "./components/SectionList";
 
 const Website = () => {
-  const [FormData, setFormData] = useState<Page[]>([]);
+  const [formData, setFormData] = useState<Page[]>([]);
+  const [selectedSection, setSelectedSection] = useState<Section | null>(null);
 
   const fetchWebsite = async () => {
     try {
@@ -43,26 +45,16 @@ const Website = () => {
 
   return (
     <section className="">
-      <div>Website Management</div>
-
-      <div className="">
-        {FormData.map((page: Page) => (
-          <div className="border p-4">
-            <div>{page.name}</div>
-            <div>
-              {page.sections.map((section: Section, index) => (
-                <SectionForm
-                  section={section}
-                  index={index}
-                  pageName={page.name}
-                  onUpdateSection={(updatedSection) =>
-                    handleSectionUpdate(page.id || page.name, updatedSection)
-                  }
-                />
-              ))}
-            </div>
-          </div>
-        ))}
+      <div className="grid grid-flow-col grid-cols-5 gap-2">
+        <section className="col-span-2 p-4">
+          <SectionList
+            pages={formData}
+            onSelect={setSelectedSection}
+          />
+        </section>
+        <section className="col-span-3 flex">
+          <SectionForm section={selectedSection} />
+        </section>
       </div>
     </section>
   );

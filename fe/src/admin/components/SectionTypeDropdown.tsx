@@ -2,7 +2,7 @@ import { useState } from "react";
 
 interface SectionTypeDropdownProps {
   value: string;
-  onChange: React.ChangeEventHandler<HTMLSelectElement, HTMLSelectElement>;
+  onChange: (value: string) => void;
 }
 
 const SectionTypeDropdown = ({ value, onChange }: SectionTypeDropdownProps) => {
@@ -13,7 +13,9 @@ const SectionTypeDropdown = ({ value, onChange }: SectionTypeDropdownProps) => {
         <select
           className="border py-2"
           value={value}
-          onChange={onChange}
+          onChange={(e) => {
+            onChange(e.target.value);
+          }}
         >
           <option value="default">Default</option>
           <option value="hero">Hero</option>

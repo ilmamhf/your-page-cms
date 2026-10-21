@@ -1,56 +1,71 @@
-import type { Section } from "../../../../types/landing";
+import { useEffect, useState } from "react";
+import type {
+  Section,
+  SectionHeroDetail,
+  SectionItem,
+} from "../../../../types/landing";
 import Checkbox from "../../../components/Checkbox";
 import InputField from "../../../components/InputField";
 import SectionTypeDropdown from "../../../components/SectionTypeDropdown";
 
 interface SectionFormProps {
-  section: Section;
-  index: number;
-  pageName: string;
-  onUpdateSection: (updatedSection: Section) => void;
+  section: Section | null;
 }
 
-const SectionForm = ({
-  section,
-  index,
-  pageName,
-  onUpdateSection,
-}: SectionFormProps) => {
-  const handleChange = (field: keyof Section, value: any) => {
-    onUpdateSection({
-      ...section,
-      [field]: value,
+const SectionForm = ({ section }: SectionFormProps) => {
+  const [form, setForm] = useState<Section | null>(null);
+
+  useEffect(() => {
+    setForm(section);
+  }, [section]);
+
+  const handleChange = <K extends keyof Section>(
+    field: K,
+    value: Section[K],
+  ) => {
+    setForm((previous) => {
+      if (previous === null) return previous;
+
+      return {
+        ...previous,
+        [field]: value,
+      };
     });
   };
 
+  if (!section || !form) {
+    return <div></div>;
+  }
+
   return (
-    <div className="border p-4 my-4">
-      <div>
-        {pageName}_{index + 1}
-      </div>
+    <div className="p-4 w-full border h-screen">
+      <div className="text-2xl">Edit Section</div>
       <div>
         <InputField
           label="title"
-          id={String(pageName) + "_title_" + String(section.id)}
-          value={section.title}
+          id={"title_" + String(form.id)}
+          value={form.title ?? ""}
           onChange={(val) => handleChange("title", val)}
         />
         <InputField
           label="subtitle"
-          id={String(pageName) + "_subtitle_" + String(section.id)}
-          value={section.subtitle ? section.subtitle : ""}
+          id={"subtitle_" + String(form.id)}
+          value={form.subtitle ? form.subtitle : ""}
           textarea={true}
           onChange={(val) => handleChange("subtitle", val)}
         />
         <SectionTypeDropdown
-          value={section.section_type}
-          onChange={(val) => handleChange("section_type", val)}
+          value={form.section_type}
+          onChange={(val) =>
+            handleChange("section_type", val as Section["section_type"])
+          }
         />
 
         {/* order component idk how to make */}
 
         <Checkbox
           label="Is Active?"
+          checked={form.is_active}
           onChange={(val) => handleChange("is_active", val)}
         />
       </div>
