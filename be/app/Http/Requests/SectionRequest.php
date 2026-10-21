@@ -28,7 +28,14 @@ class SectionRequest extends FormRequest
             'subtitle' => 'required|string',
             'section_type' => 'required|string',
             'order' => 'required|numeric',
-            'is_active' => 'required|boolean'
+            'is_active' => 'required|boolean',
+
+            // Validasi untuk nested object hero_detail
+            'hero_detail'             => 'nullable|array',
+            'hero_detail.eyebrow'     => 'nullable|string|max:255',
+            'hero_detail.hero_text'   => 'nullable|string|max:255',
+            'hero_detail.description' => 'nullable|string',
+            'hero_detail.image_url'   => 'nullable|url',
         ];
     }
 }

@@ -7,6 +7,8 @@ use App\Http\Requests\SectionRequest;
 use App\Http\Resources\SectionResource;
 use App\Models\Section;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 class SectionController extends Controller
 {
@@ -49,11 +51,40 @@ class SectionController extends Controller
     public function update(SectionRequest $request, string $id)
     {
         $section = Section::findOrFail($id);
+        $data = $request->validated();
 
-        $section->update($request->validated());
+        DB::transaction(function () use ($section, $data){
+            $sectionData = Arr::only($data, [
+                'page_id',
+                'title',
+                'subtitle',
+                'section_type',
+                'order',
+                'is_active'
+            ]);
+
+            $section->update($sectionData);
+
+            if ($data['section_type'] === 'hero') {
+                $heroInput = $data['hero_detail'] ?? [];
+
+                $heroData = [
+                    'eyebrow'     => $heroInput['eyebrow'] ?? null,
+                    'image_url'   => $heroInput['image_url'] ?? null,
+                    'hero_text'   => $section->title,   
+                    'description' => $section->subtitle,
+                ];
+
+                $section->hero()->updateOrCreate(
+                    ['section_id' => $section->id],
+                    $heroData
+                );
+            }
+        });
+
         return response()->json([
             'message' => 'Section edited successfully',
-            'data' => new SectionResource($section)
+            'data' => new SectionResource($section->fresh()->load('hero'))
         ]);
     }
 

@@ -27,6 +27,6 @@ class Section extends Model
 
     public function hero(): HasOne
     {
-        return $this->hasOne(SectionHero::class);
+        return $this->hasOne(SectionHero::class, 'section_id');
     }
 }

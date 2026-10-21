@@ -6,6 +6,7 @@ import Website from "./admin/pages/website/Website";
 import Content from "./admin/pages/Content";
 import Dashboard from "./admin/pages/Dashboard";
 import Settings from "./admin/pages/Settings";
+import LoginPage from "./admin/pages/LoginPage";
 
 function App() {
   return (
@@ -13,6 +14,10 @@ function App() {
       <Route
         path="/"
         element={<WebsiteLayout />}
+      />
+      <Route
+        path="/login"
+        element={<LoginPage />}
       />
       <Route
         path="/admin"

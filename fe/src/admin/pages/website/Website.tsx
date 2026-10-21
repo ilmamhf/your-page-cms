@@ -23,22 +23,6 @@ const Website = () => {
     }
   };
 
-  const handleSectionUpdate = (
-    pageId: string | number,
-    updatedSection: Section,
-  ) => {
-    setFormData((prevPages) => {
-      return prevPages.map((page) => {
-        return {
-          ...page,
-          sections: page.sections.map((section) =>
-            section.id === updatedSection.id ? updatedSection : section,
-          ),
-        };
-      });
-    });
-  };
-
   useEffect(() => {
     fetchWebsite();
   }, []);

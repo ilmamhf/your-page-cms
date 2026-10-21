@@ -11,6 +11,7 @@ interface SectionRendererProps {
 
 const SectionRenderer = ({ section }: SectionRendererProps) => {
   //   if only list of singular items, use item cards, else use section with title etc
+  console.log("Hero text:", section.hero_detail?.hero_text);
   if (!section.title) {
     switch (section.section_type) {
       case "services": {
