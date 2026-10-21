@@ -35,6 +35,7 @@ class LandingPageResource extends JsonResource
 
                         return [
                             'id' => $section->id,
+                            'page_id' => $section->page_id,
                             'title' => $section->title,
                             'subtitle' => $section->subtitle,
                             'section_type' => $section->section_type,
