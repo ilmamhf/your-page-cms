@@ -8,9 +8,10 @@ import axios from "axios";
 
 interface SectionFormProps {
   section: Section | null;
+  onSaveSuccess: (updatedSection: Section) => void;
 }
 
-const SectionForm = ({ section }: SectionFormProps) => {
+const SectionForm = ({ section, onSaveSuccess }: SectionFormProps) => {
   const [form, setForm] = useState<Section | null>(null);
 
   useEffect(() => {
@@ -66,6 +67,10 @@ const SectionForm = ({ section }: SectionFormProps) => {
       });
 
       console.log("Data updated successfully", response.data);
+
+      const updatedData = form;
+
+      onSaveSuccess(updatedData);
     } catch (err) {
       if (axios.isAxiosError(err)) {
         console.log("Response status: ", err.response?.status);

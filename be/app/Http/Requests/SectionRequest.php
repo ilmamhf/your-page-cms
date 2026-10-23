@@ -24,8 +24,8 @@ class SectionRequest extends FormRequest
     {
         return [
             'page_id' => 'required|exists:pages,id',
-            'title' => 'required|string',
-            'subtitle' => 'required|string',
+            'title' => 'required_if:section_type,hero|nullable|string',
+            'subtitle' => 'nullable|string',
             'section_type' => 'required|string',
             'order' => 'required|numeric',
             'is_active' => 'required|boolean',

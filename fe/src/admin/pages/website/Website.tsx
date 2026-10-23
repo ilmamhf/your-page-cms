@@ -23,6 +23,18 @@ const Website = () => {
     }
   };
 
+  const handleSectionSaveSuccess = (updatedSection: Section) => {
+    setSelectedSection(updatedSection);
+    setFormData((prevPages) =>
+      prevPages.map((page) => ({
+        ...page,
+        sections: page.sections.map((sec) =>
+          sec.id === updatedSection.id ? updatedSection : sec,
+        ),
+      })),
+    );
+  };
+
   useEffect(() => {
     fetchWebsite();
   }, []);
@@ -37,7 +49,10 @@ const Website = () => {
           />
         </section>
         <section className="col-span-3 flex">
-          <SectionForm section={selectedSection} />
+          <SectionForm
+            section={selectedSection}
+            onSaveSuccess={handleSectionSaveSuccess}
+          />
         </section>
       </div>
     </section>
