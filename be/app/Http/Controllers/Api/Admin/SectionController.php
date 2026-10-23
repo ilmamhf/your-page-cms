@@ -5,7 +5,13 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SectionRequest;
 use App\Http\Resources\SectionResource;
+use App\Http\Resources\CMSSectionResource;
+use App\Models\Page;
+use App\Models\Portofolio;
 use App\Models\Section;
+use App\Models\Service;
+use App\Models\Metric;
+use App\Models\SectionHero;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -96,5 +102,21 @@ class SectionController extends Controller
         Section::destroy($id);
 
         return response()->json(['message' => 'Section deleted successfully']);
+    }
+
+
+    // For Section List Page CMS
+    public function cms() {
+        $pages = Page::with('sections.hero')->get();
+        $services = Service::all();
+        $portofolios = Portofolio::all();
+        $metrics = Metric::all();
+
+        return new CMSSectionResource([
+            'pages' => $pages,
+            'services' => $services,
+            'portofolios' => $portofolios,
+            'metrics' => $metrics
+        ]);
     }
 }

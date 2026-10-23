@@ -10,12 +10,13 @@ const Website = () => {
 
   const fetchWebsite = async () => {
     try {
-      const response = await api.get("/landing-page");
+      const response = await api.get("/sections-cms");
       if (!response) {
         throw new Error("Failed to fetch website");
       }
 
       const data = response.data.data as LandingPageData;
+      console.log(data);
 
       setFormData(data.pages);
     } catch (error) {

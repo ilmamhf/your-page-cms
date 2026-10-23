@@ -42,9 +42,11 @@ Route::get('/landing-page', [LandingPageController::class, 'ShowAllPages']);
 // endpoint CMS
 Route::middleware('auth:sanctum')->group(function () {
     Route::put('/page/{id}', [PageController::class, 'update']);
+
     Route::post('/sections', [SectionController::class, 'store']);
     Route::put('/section/{id}', [SectionController::class, 'update']);
     Route::delete('/section/{id}', [SectionController::class, 'destroy']);
+    Route::get('/sections-cms', [SectionController::class, 'cms']);
 
     Route::post('/section-heroes', [SectionHeroController::class, 'store']);
     Route::put('/section-hero/{id}', [SectionHeroController::class, 'update']);
