@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Section;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Override;
 
 class SectionRequest extends FormRequest
 {
@@ -27,7 +29,7 @@ class SectionRequest extends FormRequest
             'title' => 'required_if:section_type,hero|nullable|string',
             'subtitle' => 'nullable|string',
             'section_type' => 'required|string',
-            'order' => 'required|numeric',
+            'order' => 'nullable|numeric',
             'is_active' => 'required|boolean',
 
             // Validasi untuk nested object hero_detail
@@ -37,5 +39,17 @@ class SectionRequest extends FormRequest
             'hero_detail.description' => 'nullable|string',
             'hero_detail.image_url'   => 'nullable|url',
         ];
+    }
+
+    // if order null
+    protected function prepareForValidation()
+    {
+        if (! $this->filled('order') && $this->filled('page_id')) {
+            $nextOrder = Section::where('page_id', $this->page_id)->max('order') + 1;
+
+            $this->merge([
+                'order' => $nextOrder,
+            ]);
+        }
     }
 }

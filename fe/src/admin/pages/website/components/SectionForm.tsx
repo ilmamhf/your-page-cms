@@ -55,7 +55,7 @@ const SectionForm = ({ section, onSaveSuccess }: SectionFormProps) => {
         title: form.title,
         subtitle: form.subtitle,
         section_type: form.section_type,
-        order: form.order,
+        order: form.order ?? null,
         is_active: form.is_active,
         hero_detail: {
           section_id: form.id,

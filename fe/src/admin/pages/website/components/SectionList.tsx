@@ -1,11 +1,13 @@
+import { useState } from "react";
 import type { Page, Section } from "../../../../types/landing";
 
 interface SectionListProps {
   pages: Page[];
-  onSelect: (section: Section) => void;
+  onSelect: (section: Section | null) => void;
+  onAddSection: (id: string | number) => void;
 }
 
-const SectionList = ({ pages, onSelect }: SectionListProps) => {
+const SectionList = ({ pages, onSelect, onAddSection }: SectionListProps) => {
   return (
     <div className="grid gap-2">
       <div className="text-2xl">Section List</div>
@@ -23,6 +25,12 @@ const SectionList = ({ pages, onSelect }: SectionListProps) => {
               </button>
             ))}
           </div>
+          <button
+            className="border"
+            onClick={() => onAddSection(page.id)}
+          >
+            Add new section
+          </button>
         </div>
       ))}
     </div>

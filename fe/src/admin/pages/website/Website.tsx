@@ -36,6 +36,40 @@ const Website = () => {
     );
   };
 
+  const handleAddNewSection = async (pageId: string | number) => {
+    try {
+      const newSectionPayload = {
+        page_id: pageId,
+        title: "Your New Section Here",
+        subtitle: "",
+        section_type: "hero",
+        is_active: false,
+      };
+      const response = await api.post("/sections", newSectionPayload);
+      if (!response) {
+        throw new Error("Failed to create new Section");
+      }
+
+      const createdSection: Section = response.data.data;
+
+      setFormData((prevPages) =>
+        prevPages.map((page) => {
+          if (page.id == pageId) {
+            return {
+              ...page,
+              sections: [...page.sections, createdSection],
+            };
+          }
+          return page;
+        }),
+      );
+
+      setSelectedSection(response.data.data as Section);
+    } catch (error) {
+      console.error("Failed creating new section:", error);
+    }
+  };
+
   useEffect(() => {
     fetchWebsite();
   }, []);
@@ -47,6 +81,7 @@ const Website = () => {
           <SectionList
             pages={formData}
             onSelect={setSelectedSection}
+            onAddSection={handleAddNewSection}
           />
         </section>
         <section className="col-span-3 flex">
