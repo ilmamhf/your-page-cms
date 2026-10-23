@@ -70,6 +70,25 @@ const Website = () => {
     }
   };
 
+  const handleDeleteSection = async (sectionId: string | number) => {
+    try {
+      const response = await api.delete(`/section/${sectionId}`);
+
+      setFormData((prevPages) =>
+        prevPages.map((page) => ({
+          ...page,
+          sections: page.sections.filter((sec) => sec.id !== sectionId),
+        })),
+      );
+
+      if (selectedSection?.id === sectionId) {
+        setSelectedSection(null);
+      }
+    } catch (err) {
+      console.error("Failed deleting section:", err);
+    }
+  };
+
   useEffect(() => {
     fetchWebsite();
   }, []);
@@ -82,6 +101,7 @@ const Website = () => {
             pages={formData}
             onSelect={setSelectedSection}
             onAddSection={handleAddNewSection}
+            onDeleteSection={handleDeleteSection}
           />
         </section>
         <section className="col-span-3 flex">
