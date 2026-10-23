@@ -107,7 +107,12 @@ class SectionController extends Controller
 
     // For Section List Page CMS
     public function cms() {
-        $pages = Page::with('sections.hero')->get();
+        $pages = Page::with([
+            'sections' => function ($query) {
+                $query->orderBy('order', 'asc');
+            },
+            'sections.hero',
+        ])->get();
         $services = Service::all();
         $portofolios = Portofolio::all();
         $metrics = Metric::all();
