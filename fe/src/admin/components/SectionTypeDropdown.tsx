@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 interface SectionTypeDropdownProps {
   value: string;
   onChange: (value: string) => void;

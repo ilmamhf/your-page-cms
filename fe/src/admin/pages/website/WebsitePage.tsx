@@ -74,6 +74,9 @@ const Website = () => {
     try {
       const response = await api.delete(`/section/${sectionId}`);
 
+      if (!response) {
+        throw new Error("Failed deleting section");
+      }
       setFormData((prevPages) =>
         prevPages.map((page) => ({
           ...page,
@@ -94,7 +97,7 @@ const Website = () => {
   }, []);
 
   return (
-    <section className="">
+    <section>
       <div className="grid grid-flow-col grid-cols-5 gap-2">
         <section className="col-span-2 p-4">
           <SectionList
