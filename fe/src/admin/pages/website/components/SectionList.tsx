@@ -14,39 +14,45 @@ const SectionList = ({
   onDeleteSection,
 }: SectionListProps) => {
   return (
-    <div className="grid gap-2">
-      <div className="text-2xl">Section List</div>
+    <div className="grid">
+      <div className="text-2xl pb-4">Website Sections Management</div>
       {pages.map((page: Page) => (
-        <div className="border p-4">
-          <div>Page {page.name}</div>
-          <div className="grid grid-flow-row">
-            {page.sections.map((section: Section) => (
-              <button
-                className="border p-2 flex justify-between"
-                key={section.id}
-                onClick={() => onSelect(section)}
-              >
-                <div>Section {section.section_type}</div>
-                <button
-                  className="border"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (confirm("Delete ?")) {
-                      onDeleteSection(section.id);
-                    }
-                  }}
-                >
-                  Delete
-                </button>
-              </button>
-            ))}
+        <div className="border grid grid-cols-4">
+          <div className="p-2 border-2 font-medium text-center place-content-center text-xl">
+            {page.name}
           </div>
-          <button
-            className="border"
-            onClick={() => onAddSection(page.id)}
-          >
-            Add new section
-          </button>
+          <div className="flex flex-col col-span-3">
+            <div className="grid grid-flow-row">
+              {page.sections.map((section: Section) => (
+                <button
+                  className="border p-2 flex justify-between"
+                  key={section.id}
+                  onClick={() => onSelect(section)}
+                >
+                  <div className="self-center">
+                    {section.title ?? "List of "} {`(${section.section_type})`}
+                  </div>
+                  <button
+                    className="border p-2"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (confirm("Delete ?")) {
+                        onDeleteSection(section.id);
+                      }
+                    }}
+                  >
+                    Delete
+                  </button>
+                </button>
+              ))}
+            </div>
+            <button
+              className="border p-2"
+              onClick={() => onAddSection(page.id)}
+            >
+              Add new section +
+            </button>
+          </div>
         </div>
       ))}
     </div>

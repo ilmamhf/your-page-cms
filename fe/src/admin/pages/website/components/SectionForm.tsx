@@ -97,17 +97,17 @@ const SectionForm = ({ section, onSaveSuccess }: SectionFormProps) => {
   );
 
   return (
-    <div className="p-4 w-full border h-screen flex flex-col">
+    <div className="p-4 w-full border-l h-screen flex flex-col">
       <div className="text-2xl">Edit Section</div>
       <div>
         <InputField
-          label="title"
+          label="Title"
           id={"title_" + String(form.id)}
           value={form.title ?? ""}
           onChange={(val) => handleChange("title", val)}
         />
         <InputField
-          label="subtitle"
+          label="Subtitle"
           id={"subtitle_" + String(form.id)}
           value={form.subtitle ? form.subtitle : ""}
           textarea={true}

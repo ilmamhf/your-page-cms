@@ -42,7 +42,9 @@ const WebsiteLayout = () => {
             ))}
           </div>
         ))}
-        <ContactSection />
+        <div id="contact">
+          <ContactSection />
+        </div>
         <Footer />
       </div>
     </div>

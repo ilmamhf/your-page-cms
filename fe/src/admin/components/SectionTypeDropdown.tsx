@@ -17,7 +17,6 @@ const SectionTypeDropdown = ({ value, onChange }: SectionTypeDropdownProps) => {
             onChange(e.target.value);
           }}
         >
-          <option value="default">Default</option>
           <option value="hero">Hero</option>
           <option value="services">Services</option>
           <option value="portofolios">Portofolio</option>
