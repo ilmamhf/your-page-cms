@@ -1,8 +1,6 @@
 import type {
   MetricItem,
-  Page,
   PortofolioItem,
-  Section,
   SectionItem,
   ServiceItem,
 } from "../../../../types/landing";
@@ -10,7 +8,7 @@ import type { ContentsData } from "../ContentPage";
 
 interface ContentListProps {
   contentData: ContentsData;
-  onSelect: (content: SectionItem) => void;
+  onSelect: (content: SectionItem | null, type: string) => void;
   onDeleteContent: () => void;
   onAddContent: () => void;
 }
@@ -34,7 +32,10 @@ const ContentList = ({
               <button
                 className="border p-2 flex justify-between"
                 key={service.id}
-                onClick={() => onSelect(service)}
+                onClick={() => {
+                  onSelect(service, "services");
+                  console.log("service:", service);
+                }}
               >
                 <div className="self-center">{service.title}</div>
                 <button
@@ -67,7 +68,10 @@ const ContentList = ({
               <button
                 className="border p-2 flex justify-between"
                 key={portofolio.id}
-                onClick={() => onSelect(portofolio)}
+                onClick={() => {
+                  console.log(portofolio);
+                  onSelect(portofolio, "portofolios");
+                }}
               >
                 <div className="self-center">{portofolio.title}</div>
                 <button
@@ -100,7 +104,7 @@ const ContentList = ({
               <button
                 className="border p-2 flex justify-between"
                 key={metric.id}
-                onClick={() => onSelect(metric)}
+                onClick={() => onSelect(metric, "metrics")}
               >
                 <div className="self-center">
                   {metric.value} {metric.label}

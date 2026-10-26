@@ -7,8 +7,9 @@ import type {
   SectionItem,
   ServiceItem,
 } from "../../../types/landing";
-import ContentForm from "./components/ContentForm";
 import ContentList from "./components/ContentList";
+import PortofolioForm from "./components/PortofolioForm";
+import MetricForm from "./components/MetricForm";
 
 export interface ContentsData {
   services: ServiceItem[];
@@ -63,17 +64,17 @@ const ContentPage = () => {
     portofolios: [],
     metrics: [],
   });
-  const [servicesData, setServicesData] = useState<ServiceItem[]>();
 
   const [selectedContent, setselectedContent] = useState<SectionItem | null>(
     null,
   );
+  const [selectedType, setSelectedType] = useState("");
 
   const fetchContents = async () => {
     try {
       // fetch
       setContentData(sample);
-      setServicesData(sample.services);
+      // setServicesData(sample.services);
     } catch (error) {
       console.error("Error: ", error);
     }
@@ -85,13 +86,30 @@ const ContentPage = () => {
 
   const handleSave = async () => {};
 
+  const renderForm = (
+    selectedItem: SectionItem | null,
+    typeSelected: string,
+  ) => {
+    switch (typeSelected) {
+      case "services":
+        return <ServicesForm serviceItem={selectedItem as ServiceItem} />;
+      case "portofolios":
+        return (
+          <PortofolioForm portofolioItem={selectedItem as PortofolioItem} />
+        );
+      case "metrics":
+        return <MetricForm metricItem={selectedItem as MetricItem} />;
+    }
+  };
+
   return (
     <div className="grid grid-flow-col grid-cols-5">
       <section className="col-span-2 p-4">
         <ContentList
           contentData={contentData}
-          onSelect={function (content: SectionItem): void {
-            throw new Error("Function not implemented.");
+          onSelect={(content, type) => {
+            setSelectedType(type);
+            setselectedContent(content);
           }}
           onDeleteContent={function (): void {
             throw new Error("Function not implemented.");
@@ -102,11 +120,7 @@ const ContentPage = () => {
         />
       </section>
       <section className="border-l col-span-3 h-screen">
-        <ContentForm
-          content={selectedContent}
-          // onSaveSuccess={handleSave}
-          type={""}
-        />
+        {renderForm(selectedContent, selectedType)}
       </section>
       d
     </div>

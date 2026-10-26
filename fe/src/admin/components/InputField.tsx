@@ -1,7 +1,7 @@
 interface InputFieldProps {
   label: string;
   id: string;
-  value: string;
+  value: string | number;
   textarea?: boolean;
   onChange: (value: any) => void;
 }
