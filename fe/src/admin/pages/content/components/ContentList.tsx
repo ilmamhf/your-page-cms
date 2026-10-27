@@ -9,8 +9,11 @@ import type { ContentsData } from "../ContentPage";
 interface ContentListProps {
   contentData: ContentsData;
   onSelect: (content: SectionItem | null, type: string) => void;
-  onDeleteContent: () => void;
-  onAddContent: () => void;
+  onDeleteContent: <K extends keyof ContentsData>(
+    contentType: K,
+    id: string | number,
+  ) => void;
+  onAddContent: <K extends keyof ContentsData>(contentType: K) => void;
 }
 
 const ContentList = ({
@@ -43,7 +46,7 @@ const ContentList = ({
                   onClick={(e) => {
                     e.stopPropagation();
                     if (confirm("Delete ?")) {
-                      onDeleteContent();
+                      onDeleteContent("services", service.id);
                     }
                   }}
                 >
@@ -54,7 +57,7 @@ const ContentList = ({
           </div>
           <button
             className="border p-2"
-            onClick={() => onAddContent()}
+            onClick={() => onAddContent("services")}
           >
             Add New Service
           </button>
@@ -79,7 +82,7 @@ const ContentList = ({
                   onClick={(e) => {
                     e.stopPropagation();
                     if (confirm("Delete ?")) {
-                      onDeleteContent();
+                      onDeleteContent("portofolios", portofolio.id);
                     }
                   }}
                 >
@@ -90,9 +93,9 @@ const ContentList = ({
           </div>
           <button
             className="border p-2"
-            onClick={() => onAddContent()}
+            onClick={() => onAddContent("portofolios")}
           >
-            Add New Service
+            Add New Portofolio
           </button>
         </div>
 
@@ -114,7 +117,7 @@ const ContentList = ({
                   onClick={(e) => {
                     e.stopPropagation();
                     if (confirm("Delete ?")) {
-                      onDeleteContent();
+                      onDeleteContent("metrics", metric.id);
                     }
                   }}
                 >
@@ -125,9 +128,9 @@ const ContentList = ({
           </div>
           <button
             className="border p-2"
-            onClick={() => onAddContent()}
+            onClick={() => onAddContent("metrics")}
           >
-            Add New Service
+            Add New Metric
           </button>
         </div>
       </div>

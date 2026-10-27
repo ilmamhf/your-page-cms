@@ -1,13 +1,23 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import type { PortofolioItem } from "../../../../types/landing";
 import InputField from "../../../components/InputField";
 import Checkbox from "../../../components/Checkbox";
+import type { ContentsData } from "../ContentPage";
+import api from "../../../../api/axios";
+import axios from "axios";
 
 interface PortofolioFormProps {
   portofolioItem: PortofolioItem | null;
+  onSaveSuccess: <K extends keyof ContentsData>(
+    updatedContent: ContentsData[K][number],
+    contentType: K,
+  ) => void;
 }
 
-const PortofolioForm = ({ portofolioItem }: PortofolioFormProps) => {
+const PortofolioForm = ({
+  portofolioItem,
+  onSaveSuccess,
+}: PortofolioFormProps) => {
   const [formData, setFormData] = useState<PortofolioItem | null>(null);
 
   useEffect(() => {
@@ -31,10 +41,27 @@ const PortofolioForm = ({ portofolioItem }: PortofolioFormProps) => {
   };
 
   const handleSave = async () => {
+    if (!formData) return;
     try {
+      const response = await api.put(`/portofolio/${formData.id}`, {
+        title: formData.title,
+        description: formData.description,
+        icon_url: formData.image_url,
+        is_active: formData.is_active,
+        order: formData.order,
+      });
+
+      const updated = formData;
+      onSaveSuccess(updated, "portofolios");
+
       console.log("saved");
-    } catch (error) {
-      console.error("Failed Saving:", error);
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        console.log("Response status: ", err.response?.status);
+        console.log("Response data:", err.response?.data);
+      } else {
+        console.log("Failed updating data", err);
+      }
     }
   };
 

@@ -2,12 +2,19 @@ import React, { useEffect, useState } from "react";
 import type { ServiceItem } from "../../../../types/landing";
 import InputField from "../../../components/InputField";
 import Checkbox from "../../../components/Checkbox";
+import api from "../../../../api/axios";
+import axios from "axios";
+import type { ContentsData } from "../ContentPage";
 
 interface ServicesFormProps {
   serviceItem: ServiceItem | null;
+  onSaveSuccess: <K extends keyof ContentsData>(
+    updatedContent: ContentsData[K][number],
+    contentType: K,
+  ) => void;
 }
 
-const ServicesForm = ({ serviceItem }: ServicesFormProps) => {
+const ServicesForm = ({ serviceItem, onSaveSuccess }: ServicesFormProps) => {
   const [formData, setFormData] = useState<ServiceItem | null>(null);
 
   useEffect(() => {
@@ -31,10 +38,27 @@ const ServicesForm = ({ serviceItem }: ServicesFormProps) => {
   };
 
   const handleSave = async () => {
+    if (!formData) return;
     try {
+      const response = await api.put(`/service/${formData.id}`, {
+        title: formData.title,
+        description: formData.description,
+        icon_url: formData.icon_url,
+        is_active: formData.is_active,
+        order: formData.order,
+      });
+
+      const updated = formData;
+      onSaveSuccess(updated, "services");
+
       console.log("saved");
-    } catch (error) {
-      console.error("Failed Saving:", error);
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        console.log("Response status: ", err.response?.status);
+        console.log("Response data:", err.response?.data);
+      } else {
+        console.log("Failed updating data", err);
+      }
     }
   };
 
