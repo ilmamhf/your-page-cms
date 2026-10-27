@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import type { MetricItem } from "../../../../types/landing";
 import InputField from "../../../components/InputField";
 import Checkbox from "../../../components/Checkbox";
@@ -48,7 +48,7 @@ const MetricForm = ({ metricItem, onSaveSuccess }: MetricFormProps) => {
         order: formData.order,
       });
 
-      const updated = formData;
+      const updated = response.data.data;
       onSaveSuccess(updated, "metrics");
 
       console.log("saved");

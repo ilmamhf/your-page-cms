@@ -3,7 +3,6 @@ import ServicesForm from "./components/ServicesForm";
 import type {
   MetricItem,
   PortofolioItem,
-  Section,
   SectionItem,
   ServiceItem,
 } from "../../../types/landing";

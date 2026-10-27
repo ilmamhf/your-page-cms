@@ -1,7 +1,4 @@
-import CardProject from "../components/CardProject";
 import type { PortofolioItem, Section, ServiceItem } from "../../types/landing";
-import CardService from "../components/CardService";
-import { useState } from "react";
 import GridService from "./GridService";
 import GridProject from "./GridProject";
 

@@ -51,7 +51,7 @@ const PortofolioForm = ({
         order: formData.order,
       });
 
-      const updated = formData;
+      const updated = response.data.data;
       onSaveSuccess(updated, "portofolios");
 
       console.log("saved");
