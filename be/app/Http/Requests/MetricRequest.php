@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Metric;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Override;
 
 class MetricRequest extends FormRequest
 {
@@ -25,9 +27,21 @@ class MetricRequest extends FormRequest
         return [
             'label' => 'required|string|max:20',
             'value' => 'required|numeric',
-            'suffix' => 'string',
-            'order' => 'required|numeric',
+            'suffix' => 'nullable|string',
+            'order' => 'numeric',
             'is_active' => 'required|boolean'
         ];
+    }
+
+    #[Override]
+    protected function prepareForValidation()
+    {
+        if (! $this->filled('order')) {
+            $nextOrder = Metric::max('order') + 1;
+
+            $this->merge([
+                'order' => $nextOrder
+            ]);
+        }
     }
 }

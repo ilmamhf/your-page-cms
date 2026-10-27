@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('title');
-            $table->text('description');
-            $table->string('image_url');
-            $table->integer('order');
+            $table->text('description')->nullable();
+            $table->string('image_url')->nullable();
+            $table->integer('order')->default(0);
             $table->boolean('is_active');
         });
     }

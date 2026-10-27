@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\Admin\SectionHeroController;
 use App\Http\Controllers\Api\Admin\ServiceController;
 use App\Http\Controllers\Api\Admin\PortofolioController;
 use App\Http\Controllers\Api\Public\LandingPageController;
+use App\Http\Controllers\Api\Admin\CMSController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -63,4 +64,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/metrics', [MetricController::class, 'store']);
     Route::put('/metric/{id}', [MetricController::class, 'update']);
     Route::delete('/metric/{id}', [MetricController::class, 'destroy']);
+
+    Route::get('/content-cms', [CMSController::class, 'contents']);
 });

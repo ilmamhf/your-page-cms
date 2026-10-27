@@ -16,8 +16,8 @@ return new class extends Migration
             $table->timestamps();
             $table->string('label');
             $table->float('value');
-            $table->string('suffix');
-            $table->integer('order');
+            $table->string('suffix')->nullable();
+            $table->integer('order')->default(0);
             $table->boolean('is_active');
         });
     }

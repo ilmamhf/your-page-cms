@@ -28,7 +28,7 @@ class ServiceController extends Controller
         $service = Service::create($request->validated());
 
         return response()->json([
-            ['message' => 'Service added successfully'],
+            'message' => 'Service added successfully',
             'data' => new ServiceResource($service)
         ]);
     }

@@ -4,6 +4,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Service;
+use Override;
 
 class ServiceRequest extends FormRequest
 {
@@ -24,10 +26,27 @@ class ServiceRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:255',
-            'description' => 'string',
-            'icon_url' => 'url',
+            'description' => 'nullable|string',
+            'icon_url' => 'nullable|url',
             'order' => 'numeric',
             'is_active' => 'required|boolean'
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        if ($this->icon_url === '') {
+            $this->merge([
+                'icon_url' => null,
+            ]);
+        }
+        
+        if (! $this->filled('order')) {
+            $nextOrder = Service::max('order') + 1;
+
+            $this->merge([
+                'order' => $nextOrder,
+            ]);
+        }
     }
 }

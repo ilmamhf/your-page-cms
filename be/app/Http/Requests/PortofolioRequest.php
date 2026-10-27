@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Portofolio;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Override;
 
 class PortofolioRequest extends FormRequest
 {
@@ -24,10 +26,27 @@ class PortofolioRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:255',
-            'description' => 'string',
-            'image_url' => 'url',
-            'order' => 'required|numeric',
+            'description' => 'nullable|string',
+            'image_url' => 'nullable|url',
+            'order' => 'numeric',
             'is_active' => 'required|boolean'
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        if ($this->image_url === '') {
+            $this->merge([
+                'image_url' => null,
+            ]);
+        }
+
+        if (! $this->filled('order')) {
+            $nextOrder = Portofolio::max('order') + 1;
+
+            $this->merge([
+                'order' => $nextOrder
+            ]);
+        }
     }
 }
