@@ -30,10 +30,10 @@ const Sidebar = () => {
           Content
         </Link>
         <Link
-          to={"/admin/settings"}
+          to={"/admin/profile"}
           className="flex"
         >
-          Settings
+          Profile
         </Link>
       </nav>
     </aside>

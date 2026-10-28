@@ -98,8 +98,8 @@ const Website = () => {
 
   return (
     <section>
-      <div className="grid grid-flow-col grid-cols-5 gap-2">
-        <section className="col-span-2 p-4">
+      <div className="grid grid-cols-5 gap-2 h-full overflow-hidden">
+        <section className="col-span-2 p-4 h-full overflow-y-auto">
           <SectionList
             pages={formData}
             onSelect={setSelectedSection}

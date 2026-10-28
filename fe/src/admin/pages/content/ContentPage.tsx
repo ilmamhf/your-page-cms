@@ -167,8 +167,8 @@ const ContentPage = () => {
   };
 
   return (
-    <div className="grid grid-flow-col grid-cols-5">
-      <section className="col-span-2 p-4">
+    <div className="grid grid-cols-5 h-full overflow-hidden">
+      <section className="col-span-2 p-4 h-full overflow-y-auto">
         <ContentList
           contentData={contentData}
           onSelect={(content, type) => {

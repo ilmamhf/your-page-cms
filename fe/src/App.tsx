@@ -5,8 +5,9 @@ import AdminLayout from "./admin/layouts/AdminLayout";
 import Website from "./admin/pages/website/WebsitePage";
 import ContentPage from "./admin/pages/content/ContentPage";
 import Dashboard from "./admin/pages/Dashboard";
-import Settings from "./admin/pages/Settings";
+import Settings from "./admin/pages/ProfilePage";
 import LoginPage from "./admin/pages/LoginPage";
+import ProfilePage from "./admin/pages/ProfilePage";
 
 function App() {
   return (
@@ -36,8 +37,8 @@ function App() {
           element={<ContentPage />}
         />
         <Route
-          path="settings"
-          element={<Settings />}
+          path="profile"
+          element={<ProfilePage />}
         />
       </Route>
     </Routes>
