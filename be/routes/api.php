@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Admin\ServiceController;
 use App\Http\Controllers\Api\Admin\PortofolioController;
 use App\Http\Controllers\Api\Public\LandingPageController;
 use App\Http\Controllers\Api\Admin\CMSController;
+use App\Http\Controllers\Api\Admin\WebsiteProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -66,4 +67,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/metric/{id}', [MetricController::class, 'destroy']);
 
     Route::get('/content-cms', [CMSController::class, 'contents']);
+    Route::get('/website-profile-cms', [WebsiteProfileController::class, 'index']);
 });

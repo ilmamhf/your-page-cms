@@ -28,6 +28,8 @@ class DatabaseSeeder extends Seeder
             ServiceSeeder::class,
             PortofolioSeeder::class,
             MetricSeeder::class,
+            WebsiteProfileSeeder::class,
+            SocialMediaSeeder::class,
         ]);
     }
 }
