@@ -18,8 +18,20 @@ interface SectionFormProps {
 
 type Feedback = { type: "success" | "error"; message: string } | null;
 
-// The parent keys this form by section id, so it remounts on selection
-// change and can initialize straight from props.
+/** Get the display subtitle for the form shell. */
+function getFormSubtitle(form: Section | null): string {
+  if (!form) return "";
+  if (form.section_type === "hero" || form.section_type === "metrics") {
+    return form.hero_detail?.hero_text ?? "Hero section";
+  }
+  return form.title ?? "Section";
+}
+
+/** Determine if section type uses hero_detail for its main heading. */
+function usesHeroDetail(sectionType: string): boolean {
+  return sectionType === "hero" || sectionType === "metrics";
+}
+
 const SectionForm = ({ section, onSaveSuccess, onCancel }: SectionFormProps) => {
   const [form, setForm] = useState<Section | null>(section);
   const [saving, setSaving] = useState(false);
@@ -95,29 +107,45 @@ const SectionForm = ({ section, onSaveSuccess, onCancel }: SectionFormProps) => 
     );
   }
 
+  const isHeroOrMetrics = usesHeroDetail(form.section_type);
+
   return (
     <FormShell
       title="Edit section"
-      subtitle={form.title}
+      subtitle={getFormSubtitle(form)}
       feedback={feedback}
       saving={saving}
       onSave={handleSave}
       onCancel={onCancel}
       saveLabel="Save"
     >
-      <InputField
-        label="Title"
-        id={"title_" + String(form.id)}
-        value={form.title ?? ""}
-        onChange={(val) => handleChange("title", val)}
-      />
-      <InputField
-        label="Subtitle"
-        id={"subtitle_" + String(form.id)}
-        value={form.subtitle ?? ""}
-        textarea={true}
-        onChange={(val) => handleChange("subtitle", val)}
-      />
+      {/* For hero/metrics: Heading field edits hero_detail.hero_text */}
+      {isHeroOrMetrics ? (
+        <InputField
+          label="Heading"
+          id={"hero_text_" + String(form.id)}
+          value={form.hero_detail?.hero_text ?? ""}
+          placeholder="Main heading text"
+          onChange={(val) => handleHeroDetailChange("hero_text", val)}
+        />
+      ) : (
+        <>
+          <InputField
+            label="Title"
+            id={"title_" + String(form.id)}
+            value={form.title ?? ""}
+            onChange={(val) => handleChange("title", val)}
+          />
+          <InputField
+            label="Subtitle"
+            id={"subtitle_" + String(form.id)}
+            value={form.subtitle ?? ""}
+            textarea={true}
+            onChange={(val) => handleChange("subtitle", val)}
+          />
+        </>
+      )}
+
       <SectionTypeDropdown
         value={form.section_type}
         onChange={(val) => handleChange("section_type", val as Section["section_type"])}
@@ -132,7 +160,7 @@ const SectionForm = ({ section, onSaveSuccess, onCancel }: SectionFormProps) => 
       </div>
 
       {/* Hero and metrics sections carry an optional eyebrow + image. */}
-      {["hero", "metrics"].includes(form.section_type) && (
+      {isHeroOrMetrics && (
         <div className="mt-4 border-t border-line pt-4">
           <InputField
             label="Eyebrow"

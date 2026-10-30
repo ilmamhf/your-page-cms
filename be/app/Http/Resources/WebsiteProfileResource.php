@@ -18,7 +18,15 @@ class WebsiteProfileResource extends JsonResource
         $socialMedias = $this['social_medias'];
 
         return [
-            'website_profile' => $websiteProfile,
+            'website_profile' => [
+                'id' => $websiteProfile->id,
+                'name' => $websiteProfile->name,
+                'email' => $websiteProfile->email,
+                'phone_number' => $websiteProfile->phone_number,
+                'location' => $websiteProfile->location,
+                'theme_primary' => $websiteProfile->theme_primary,
+                'theme_secondary' => $websiteProfile->theme_secondary,
+            ],
             'social_medias' => $socialMedias,
         ];
     }

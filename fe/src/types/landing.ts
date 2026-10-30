@@ -73,6 +73,8 @@ export interface PublicWebsiteProfile {
   email: string | null;
   phone_number: string | null;
   location: string | null;
+  theme_primary: string | null;
+  theme_secondary: string | null;
   social_medias: PublicSocialMedia[];
 }
 
@@ -97,6 +99,8 @@ export interface CompanyProfile {
   email: string;
   phone_number: string;
   location: string;
+  theme_primary: string | null;
+  theme_secondary: string | null;
 }
 
 export interface WebsiteProfileData {

@@ -27,6 +27,8 @@ class WebsiteProfileRequest extends FormRequest
             'email' => 'nullable|email|max:255',
             'phone_number' => 'nullable|string|max:32',
             'location' => 'nullable|string|max:255',
+            'theme_primary' => 'nullable|string|size:7|regex:/^#[0-9A-Fa-f]{6}$/',
+            'theme_secondary' => 'nullable|string|size:7|regex:/^#[0-9A-Fa-f]{6}$/',
 
             'social_media' => 'array',
             'social_media.*.id' => 'nullable|integer|exists:social_media,id',

@@ -48,15 +48,25 @@ const Website = () => {
     );
   };
 
-  const handleAddNewSection = async (pageId: number) => {
+  const handleAddNewSection = async (pageId: number, sectionType: Section["section_type"] = "hero") => {
     setFeedback(null);
     try {
+      const isHeroOrMetrics = sectionType === "hero" || sectionType === "metrics";
       const response = await api.post("/sections", {
         page_id: pageId,
-        title: "Your New Section Here",
+        title: isHeroOrMetrics ? "" : "New Section",
         subtitle: "",
-        section_type: "hero",
+        section_type: sectionType,
         is_active: false,
+        hero_detail: isHeroOrMetrics
+          ? {
+              section_id: 0, // will be set by backend
+              hero_text: isHeroOrMetrics ? "New Hero Section" : "",
+              description: "",
+              eyebrow: "",
+              image_url: null,
+            }
+          : null,
       });
 
       const createdSection = response.data.data as Section;

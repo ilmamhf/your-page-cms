@@ -6,22 +6,26 @@ export interface CardServiceProps {
 }
 
 /**
- * Service card — icon displayed directly without wrapper for maximum clarity.
+ * Service card — icon displayed directly for maximum clarity.
+ * Gracefully handles missing icon_url by showing a default icon.
  */
 const CardService = ({ service }: CardServiceProps) => {
   return (
-    <div>
-      {/* Icon directly — no wrapper, no background, full visibility */}
+    <div className="h-full">
+      {/* Icon — no wrapper, no background, full visibility */}
       <div className="mb-4 text-primary" aria-hidden="true">
         {service.icon_url ? (
           <img
             src={service.icon_url}
             alt=""
             className="size-8 object-contain"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+              e.currentTarget.nextElementSibling?.classList.remove('hidden');
+            }}
           />
-        ) : (
-          <Icon name="layers" className="size-8" />
-        )}
+        ) : null}
+        <Icon name="layers" className={`size-8 ${service.icon_url ? 'hidden' : ''}`} />
       </div>
       <h3 className="font-semibold text-ink">{service.title}</h3>
       <p className="mt-1.5 text-sm leading-relaxed text-mute">

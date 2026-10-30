@@ -10,6 +10,7 @@ import ImageInput from "../components/ImageInput";
 import Icon from "../../components/Icon";
 import api from "../../api/axios";
 import { errorMessage } from "../../api/error";
+import { isValidHex, applyTheme } from "../../utils/color";
 
 type Feedback = { type: "success" | "error"; message: string } | null;
 
@@ -90,6 +91,8 @@ const ProfilePage = () => {
         email: companyProfile.email,
         phone_number: companyProfile.phone_number,
         location: companyProfile.location,
+        theme_primary: companyProfile.theme_primary,
+        theme_secondary: companyProfile.theme_secondary,
         social_media: socialMedias
           .filter((social) => social.name.trim() !== "")
           .map((social) => ({
@@ -104,6 +107,10 @@ const ProfilePage = () => {
       const data = response.data.data as WebsiteProfileData;
       setCompanyProfile(data.website_profile);
       setSocialMedias(data.social_medias);
+      // Apply theme immediately so admin CMS updates without refresh
+      if (data.website_profile?.theme_primary && data.website_profile?.theme_secondary) {
+        applyTheme(data.website_profile.theme_primary, data.website_profile.theme_secondary);
+      }
       setFeedback({ type: "success", message: "Profile saved." });
     } catch (error) {
       setFeedback({ type: "error", message: errorMessage(error, "Failed to save the profile.") });
@@ -174,6 +181,118 @@ const ProfilePage = () => {
           value={companyProfile.location ?? ""}
           onChange={(val) => handleChangeProfile("location", val)}
         />
+      </div>
+
+      {/* Brand colors card */}
+      <div className="panel mb-5 p-6">
+        <h2 className="mb-3 font-semibold">Brand Colors</h2>
+        <p className="mb-4 text-sm text-mute">
+          Primary is used for buttons, links, and accents. Secondary is used for
+          the footer, metrics band, and sidebar.
+        </p>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label
+              htmlFor="themePrimary"
+              className="label"
+            >
+              Primary color
+            </label>
+            <div className="flex items-center gap-3">
+              <input
+                type="color"
+                id="themePrimary"
+                value={companyProfile.theme_primary ?? "#2563eb"}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (isValidHex(val)) {
+                    handleChangeProfile("theme_primary", val);
+                  }
+                }}
+                className="size-10 rounded border border-line bg-white cursor-pointer"
+              />
+              <input
+                type="text"
+                id="themePrimaryText"
+                value={companyProfile.theme_primary ?? "#2563eb"}
+                onChange={(e) => {
+                  const val = e.target.value.toLowerCase();
+                  if (isValidHex(val)) {
+                    handleChangeProfile("theme_primary", val);
+                  }
+                }}
+                className="field flex-1 font-mono text-sm"
+                placeholder="#2563eb"
+              />
+            </div>
+          </div>
+          <div>
+            <label
+              htmlFor="themeSecondary"
+              className="label"
+            >
+              Secondary color
+            </label>
+            <div className="flex items-center gap-3">
+              <input
+                type="color"
+                id="themeSecondary"
+                value={companyProfile.theme_secondary ?? "#0f172a"}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (isValidHex(val)) {
+                    handleChangeProfile("theme_secondary", val);
+                  }
+                }}
+                className="size-10 rounded border border-line bg-white cursor-pointer"
+              />
+              <input
+                type="text"
+                id="themeSecondaryText"
+                value={companyProfile.theme_secondary ?? "#0f172a"}
+                onChange={(e) => {
+                  const val = e.target.value.toLowerCase();
+                  if (isValidHex(val)) {
+                    handleChangeProfile("theme_secondary", val);
+                  }
+                }}
+                className="field flex-1 font-mono text-sm"
+                placeholder="#0f172a"
+              />
+            </div>
+          </div>
+        </div>
+        {/* Live preview */}
+        <div className="mt-4 flex items-center gap-3 rounded-lg border border-line bg-app p-3">
+          <span className="text-sm text-mute">Preview:</span>
+          <button
+            type="button"
+            className="btn-primary"
+            style={{ backgroundColor: companyProfile.theme_primary ?? "#2563eb" }}
+          >
+            Primary button
+          </button>
+          <button
+            type="button"
+            className="btn-outline"
+            style={{
+              backgroundColor: companyProfile.theme_secondary ?? "#0f172a",
+              borderColor: companyProfile.theme_secondary ?? "#0f172a",
+              color: "#fff",
+            }}
+          >
+            Secondary button
+          </button>
+          <span
+            className="rounded-full px-2.5 py-0.5 text-xs font-medium"
+            style={{
+              backgroundColor: `${companyProfile.theme_primary ?? "#2563eb"}1a`,
+              color: companyProfile.theme_primary ?? "#2563eb",
+            }}
+          >
+            Badge
+          </span>
+        </div>
       </div>
 
       {/* Social media card */}

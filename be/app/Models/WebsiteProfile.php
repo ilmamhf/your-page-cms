@@ -12,6 +12,8 @@ class WebsiteProfile extends Model
         'email',
         'phone_number',
         'location',
+        'theme_primary',
+        'theme_secondary',
     ];
 
     public function socialMedias(): HasMany

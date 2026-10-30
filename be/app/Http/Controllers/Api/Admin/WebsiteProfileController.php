@@ -50,6 +50,8 @@ class WebsiteProfileController extends Controller
                 'email',
                 'phone_number',
                 'location',
+                'theme_primary',
+                'theme_secondary',
             ]));
 
             $incomingIds = collect($data['social_media'] ?? [])->pluck('id')->filter()->all();

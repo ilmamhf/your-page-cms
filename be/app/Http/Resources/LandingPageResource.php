@@ -26,6 +26,8 @@ class LandingPageResource extends JsonResource
                 'email' => $websiteProfile->email,
                 'phone_number' => $websiteProfile->phone_number,
                 'location' => $websiteProfile->location,
+                'theme_primary' => $websiteProfile->theme_primary,
+                'theme_secondary' => $websiteProfile->theme_secondary,
                 'social_medias' => $websiteProfile->socialMedias->map(fn ($social) => [
                     'name' => $social->name,
                     'link' => $social->link,

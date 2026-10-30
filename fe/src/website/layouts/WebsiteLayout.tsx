@@ -7,6 +7,7 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import ContactSection from "../sections/ContactSection";
 import SectionRenderer from "../components/SectionRenderer";
+import { applyTheme } from "../../utils/color";
 
 const WebsiteLayout = () => {
   const [pages, setPages] = useState<Page[]>([]);
@@ -31,6 +32,15 @@ const WebsiteLayout = () => {
   useEffect(() => {
     fetchLandingPage();
   }, []);
+
+  // Apply theme colors from profile to CSS custom properties
+  useEffect(() => {
+    if (profile?.theme_primary && profile?.theme_secondary) {
+      applyTheme(profile.theme_primary, profile.theme_secondary);
+    } else {
+      applyTheme(null, null);
+    }
+  }, [profile?.theme_primary, profile?.theme_secondary]);
 
   const handleRetry = () => {
     setLoading(true);
