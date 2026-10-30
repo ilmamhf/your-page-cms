@@ -1,65 +1,54 @@
+import type { PublicSocialMedia } from "../../types/landing";
 import sampleIcon from "../../assets/react.svg";
 
 interface FooterProps {
   companyName?: string;
-  location?: string;
-  linkedin?: string;
-  instagram?: string;
-  x?: string;
-  facebook?: string;
+  location?: string | null;
+  socialMedias?: PublicSocialMedia[];
 }
 
-const Footer = ({
-  companyName,
-  location,
-  linkedin,
-  instagram,
-  x,
-  facebook,
-}: FooterProps) => {
+const Footer = ({ companyName, location, socialMedias = [] }: FooterProps) => {
   return (
     <section className="flex flex-row items-center justify-between p-8 border-t">
       <div>
         <div className="flex flex-row items-center gap-4">
           <img
             src={sampleIcon}
-            alt="icon"
+            alt="logo"
             width={48}
           />
-          <p className="text-2xl">{companyName}</p>
+          <p className="text-2xl">{companyName ?? "Our Company"}</p>
         </div>
         <p>Get in contact</p>
-        <div className="flex gap-2 py-2">
-          <img
-            src={sampleIcon}
-            alt="icon"
-            width={32}
-          />
-          <p>{location}</p>
-        </div>
-        <div className="flex flex-row gap-2">
-          <a href="">
+        {location && (
+          <div className="flex gap-2 py-2">
             <img
               src={sampleIcon}
-              alt="icon"
+              alt="location"
               width={32}
             />
-          </a>
-          <a href="">
-            <img
-              src={sampleIcon}
-              alt="icon"
-              width={32}
-            />
-          </a>
-          <a href="">
-            <img
-              src={sampleIcon}
-              alt="icon"
-              width={32}
-            />
-          </a>
-        </div>
+            <p>{location}</p>
+          </div>
+        )}
+        {socialMedias.length > 0 && (
+          <div className="flex flex-row gap-2">
+            {socialMedias.map((social) => (
+              <a
+                href={social.link ?? undefined}
+                target="_blank"
+                rel="noreferrer"
+                key={social.name}
+                title={social.name}
+              >
+                <img
+                  src={social.icon_url ?? sampleIcon}
+                  alt={social.name}
+                  width={32}
+                />
+              </a>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="flex flex-col">

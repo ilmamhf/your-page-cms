@@ -6,20 +6,20 @@ interface SectionCardProps {
   section: Section;
 }
 
-const childrenComponents: Record<
-  string,
-  ((props: any) => React.JSX.Element) | undefined
-> = {
-  services: (props: { items: ServiceItem[] }) => (
-    <GridService services={props.items} />
-  ),
-  portofolios: (props: { items: PortofolioItem[] }) => (
-    <GridProject projects={props.items} />
-  ),
-};
-
 const SectionCard = ({ section }: SectionCardProps) => {
-  const RenderComponent = childrenComponents[section.section_type];
+  const renderItems = () => {
+    const items = section.items ?? [];
+
+    switch (section.section_type) {
+      case "services":
+        return <GridService services={items as ServiceItem[]} />;
+      case "portofolios":
+        return <GridProject projects={items as PortofolioItem[]} />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <section className="p-8">
       <div className="flex items-center justify-between">
@@ -27,11 +27,8 @@ const SectionCard = ({ section }: SectionCardProps) => {
           <h1 className="font-bold text-2xl">{section.title}</h1>
           <p>{section.subtitle}</p>
         </div>
-        {/* {action} */}
       </div>
-      <div className="-mx-8 ">
-        {RenderComponent ? RenderComponent({ items: section.items }) : null}
-      </div>
+      <div className="-mx-8 ">{renderItems()}</div>
     </section>
   );
 };

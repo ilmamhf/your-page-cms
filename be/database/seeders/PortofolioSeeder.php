@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Portofolio;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class PortofolioSeeder extends Seeder

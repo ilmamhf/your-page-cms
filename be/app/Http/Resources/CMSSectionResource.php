@@ -5,8 +5,6 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-use function PHPSTORM_META\map;
-
 class CMSSectionResource extends JsonResource
 {
     /**
@@ -34,6 +32,7 @@ class CMSSectionResource extends JsonResource
                             'metrics' => MetricResource::collection($metrics),
                             default => null
                         };
+
                         return [
                             'id' => $section->id,
                             'page_id' => $section->page_id,
@@ -43,17 +42,17 @@ class CMSSectionResource extends JsonResource
                             'is_active' => $section->is_active,
                             'hero_detail' => $section->section_type == 'hero' && $section->hero ? [
                                 'id' => $section->hero->id,
-                                'section_id' => $section->hero->id,
+                                'section_id' => $section->id,
                                 'eyebrow' => $section->hero->eyebrow,
                                 'hero_text' => $section->hero->hero_text,
                                 'description' => $section->hero->description,
                                 'image_url' => $section->hero->image_url,
                             ] : null,
-                            'items' => $items
+                            'items' => $items,
                         ];
-                    })
+                    }),
                 ];
-            })
+            }),
         ];
     }
 }

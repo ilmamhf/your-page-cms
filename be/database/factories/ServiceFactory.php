@@ -15,7 +15,6 @@ class ServiceFactory extends Factory
      *
      * @return array<string, mixed>
      */
-
     private static int $order = 0;
 
     public function definition(): array
@@ -26,7 +25,7 @@ class ServiceFactory extends Factory
             'description' => fake()->sentence(5),
             'icon_url' => fake()->imageUrl(640, 480),
             'order' => self::$order++,
-            'is_active' => fake()->boolean(70)
+            'is_active' => fake()->boolean(70),
         ];
     }
 }

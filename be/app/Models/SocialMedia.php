@@ -12,7 +12,7 @@ class SocialMedia extends Model
         'icon_url',
         'link',
         'order',
-        'website_profile_id'
+        'website_profile_id',
     ];
 
     public function websiteProfile(): BelongsTo

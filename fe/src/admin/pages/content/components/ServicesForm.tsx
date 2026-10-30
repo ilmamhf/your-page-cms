@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
-import type { ServiceItem } from "../../../../types/landing";
-import InputField from "../../../components/InputField";
+import { useState } from "react";
+import type { ServiceItem, ContentsData } from "../../../../types/landing";
 import Checkbox from "../../../components/Checkbox";
+import FeedbackBar from "../../../components/FeedbackBar";
+import ImageInput from "../../../components/ImageInput";
+import InputField from "../../../components/InputField";
 import api from "../../../../api/axios";
-import axios from "axios";
-import type { ContentsData } from "../ContentPage";
+import { errorMessage } from "../../../../api/error";
 
 interface ServicesFormProps {
   serviceItem: ServiceItem | null;
@@ -14,31 +15,31 @@ interface ServicesFormProps {
   ) => void;
 }
 
-const ServicesForm = ({ serviceItem, onSaveSuccess }: ServicesFormProps) => {
-  const [formData, setFormData] = useState<ServiceItem | null>(null);
+type Feedback = { type: "success" | "error"; message: string } | null;
 
-  useEffect(() => {
-    console.log("Data dari parent:", serviceItem);
-    setFormData(serviceItem);
-  }, [serviceItem]);
+// The parent keys this form by item id, so it remounts on selection change
+// and can initialize straight from props.
+const ServicesForm = ({ serviceItem, onSaveSuccess }: ServicesFormProps) => {
+  const [formData, setFormData] = useState<ServiceItem | null>(serviceItem);
+  const [saving, setSaving] = useState(false);
+  const [feedback, setFeedback] = useState<Feedback>(null);
 
   const handleChange = <K extends keyof ServiceItem>(
     fieldName: K,
     value: ServiceItem[K],
   ) => {
     setFormData((previous) => {
-      if (previous === null) {
-        return previous;
-      }
-      return {
-        ...previous,
-        [fieldName]: value,
-      };
+      if (previous === null) return previous;
+      return { ...previous, [fieldName]: value };
     });
   };
 
   const handleSave = async () => {
     if (!formData) return;
+
+    setFeedback(null);
+    setSaving(true);
+
     try {
       const response = await api.put(`/service/${formData.id}`, {
         title: formData.title,
@@ -48,23 +49,21 @@ const ServicesForm = ({ serviceItem, onSaveSuccess }: ServicesFormProps) => {
         order: formData.order,
       });
 
-      const updated = response.data.data;
-      onSaveSuccess(updated, "services");
-
-      console.log("saved");
+      onSaveSuccess(response.data.data as ServiceItem, "services");
+      setFeedback({ type: "success", message: "Service saved." });
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        console.log("Response status: ", err.response?.status);
-        console.log("Response data:", err.response?.data);
-      } else {
-        console.log("Failed updating data", err);
-      }
+      setFeedback({ type: "error", message: errorMessage(err, "Failed to save the service.") });
+    } finally {
+      setSaving(false);
     }
   };
 
   return (
-    <div className="p-4 w-full border-l h-screen flex flex-col">
+    <div className="p-4 w-full border-l h-screen overflow-y-auto flex flex-col">
       <div className="pb-3 text-2xl">Edit Service</div>
+
+      {feedback && <FeedbackBar type={feedback.type} message={feedback.message} />}
+
       <InputField
         label="Service Name"
         id="serviceName"
@@ -77,24 +76,24 @@ const ServicesForm = ({ serviceItem, onSaveSuccess }: ServicesFormProps) => {
         value={formData?.description ?? ""}
         onChange={(val) => handleChange("description", val)}
       />
-      {/* <InputField
-        label="Icon (opsional)"
-        id="serviceIcon"
+      <ImageInput
+        label="Icon (optional)"
         value={formData?.icon_url ?? ""}
-        onChange={(val) => handleChange("icon_url", val)}
-      /> */}
+        onChange={(url) => handleChange("icon_url", url)}
+      />
       <Checkbox
         label="Is Active ?"
         checked={formData?.is_active ?? false}
         onChange={(val) => handleChange("is_active", val)}
       />
 
-      <div className="flex w-full justify-end">
+      <div className="flex w-full justify-end py-4">
         <button
-          className="border px-4 py-2"
+          className="border px-4 py-2 disabled:opacity-50"
+          disabled={saving}
           onClick={handleSave}
         >
-          Save
+          {saving ? "Saving..." : "Save"}
         </button>
       </div>
     </div>

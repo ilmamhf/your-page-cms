@@ -4,15 +4,13 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SectionRequest;
-use App\Http\Resources\SectionResource;
 use App\Http\Resources\CMSSectionResource;
+use App\Http\Resources\SectionResource;
+use App\Models\Metric;
 use App\Models\Page;
 use App\Models\Portofolio;
 use App\Models\Section;
 use App\Models\Service;
-use App\Models\Metric;
-use App\Models\SectionHero;
-use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
@@ -34,10 +32,11 @@ class SectionController extends Controller
     public function store(SectionRequest $request) // POST /section/{id}
     {
         $section = Section::create($request->validated());
+        $section->load('hero');
 
         return response()->json([
             'message' => 'Section added successfully',
-            'data' => new SectionResource($section)
+            'data' => new SectionResource($section),
         ]);
     }
 
@@ -59,26 +58,28 @@ class SectionController extends Controller
         $section = Section::findOrFail($id);
         $data = $request->validated();
 
-        DB::transaction(function () use ($section, $data){
+        DB::transaction(function () use ($section, $data) {
             $sectionData = Arr::only($data, [
                 'page_id',
                 'title',
                 'subtitle',
                 'section_type',
                 'order',
-                'is_active'
+                'is_active',
             ]);
 
             $section->update($sectionData);
 
-            if ($data['section_type'] === 'hero') {
+            if (($data['section_type'] ?? null) === 'hero') {
                 $heroInput = $data['hero_detail'] ?? [];
 
+                // Explicit hero fields win; otherwise mirror the section's
+                // title/subtitle so the two stay in sync.
                 $heroData = [
-                    'eyebrow'     => $heroInput['eyebrow'] ?? null,
-                    'image_url'   => $heroInput['image_url'] ?? null,
-                    'hero_text'   => $section->title,   
-                    'description' => $section->subtitle,
+                    'eyebrow' => $heroInput['eyebrow'] ?? null,
+                    'image_url' => $heroInput['image_url'] ?? null,
+                    'hero_text' => $heroInput['hero_text'] ?? $section->title,
+                    'description' => $heroInput['description'] ?? $section->subtitle,
                 ];
 
                 $section->hero()->updateOrCreate(
@@ -90,7 +91,7 @@ class SectionController extends Controller
 
         return response()->json([
             'message' => 'Section edited successfully',
-            'data' => new SectionResource($section->fresh()->load('hero'))
+            'data' => new SectionResource($section->fresh()->load('hero')),
         ]);
     }
 
@@ -99,14 +100,15 @@ class SectionController extends Controller
      */
     public function destroy(string $id)
     {
-        Section::destroy($id);
+        $section = Section::findOrFail($id);
+        $section->delete();
 
         return response()->json(['message' => 'Section deleted successfully']);
     }
 
-
     // For Section List Page CMS
-    public function cms() {
+    public function cms()
+    {
         $pages = Page::with([
             'sections' => function ($query) {
                 $query->orderBy('order', 'asc');
@@ -121,7 +123,7 @@ class SectionController extends Controller
             'pages' => $pages,
             'services' => $services,
             'portofolios' => $portofolios,
-            'metrics' => $metrics
+            'metrics' => $metrics,
         ]);
     }
 }

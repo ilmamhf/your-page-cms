@@ -29,7 +29,7 @@ class MetricRequest extends FormRequest
             'value' => 'required|numeric',
             'suffix' => 'nullable|string',
             'order' => 'numeric',
-            'is_active' => 'required|boolean'
+            'is_active' => 'required|boolean',
         ];
     }
 
@@ -40,7 +40,7 @@ class MetricRequest extends FormRequest
             $nextOrder = Metric::max('order') + 1;
 
             $this->merge([
-                'order' => $nextOrder
+                'order' => $nextOrder,
             ]);
         }
     }

@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SectionHeroRequest;
 use App\Http\Resources\SectionHeroResource;
 use App\Models\SectionHero;
-use Illuminate\Http\Request;
 
 class SectionHeroController extends Controller
 {
@@ -29,7 +28,7 @@ class SectionHeroController extends Controller
 
         return response()->json([
             'message' => 'Hero Section added successfully',
-            'data' => new SectionHeroResource($section_hero)
+            'data' => new SectionHeroResource($section_hero),
         ]);
     }
 
@@ -53,8 +52,8 @@ class SectionHeroController extends Controller
         $section_hero->update($request->validated());
 
         return response()->json([
-            'message' => 'Hero Section added successfully',
-            'data' => new SectionHeroResource($section_hero)
+            'message' => 'Hero Section edited successfully',
+            'data' => new SectionHeroResource($section_hero),
         ]);
     }
 
@@ -63,8 +62,9 @@ class SectionHeroController extends Controller
      */
     public function destroy(string $id)
     {
-        SectionHero::destroy($id);
+        $section_hero = SectionHero::findOrFail($id);
+        $section_hero->delete();
 
-        return response()->json(['message'=>'Hero Section deleted successfully']);
+        return response()->json(['message' => 'Hero Section deleted successfully']);
     }
 }

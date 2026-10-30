@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ServiceRequest;
 use App\Http\Resources\ServiceResource;
 use App\Models\Service;
-use Illuminate\Http\Request;
 
 class ServiceController extends Controller
 {
@@ -29,7 +28,7 @@ class ServiceController extends Controller
 
         return response()->json([
             'message' => 'Service added successfully',
-            'data' => new ServiceResource($service)
+            'data' => new ServiceResource($service),
         ]);
     }
 
@@ -39,6 +38,7 @@ class ServiceController extends Controller
     public function show(string $id)
     {
         $service = Service::findOrFail($id);
+
         return new ServiceResource($service);
     }
 
@@ -53,7 +53,7 @@ class ServiceController extends Controller
 
         return response()->json([
             'message' => 'Service edited successfully',
-            'data' => new ServiceResource($service)
+            'data' => new ServiceResource($service),
         ]);
     }
 
@@ -62,8 +62,9 @@ class ServiceController extends Controller
      */
     public function destroy(string $id)
     {
-        Service::destroy($id);
+        $service = Service::findOrFail($id);
+        $service->delete();
 
-        return response()->json(['message'=>'Service deleted successfully']);
+        return response()->json(['message' => 'Service deleted successfully']);
     }
 }

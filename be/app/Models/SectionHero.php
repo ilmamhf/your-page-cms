@@ -10,12 +10,12 @@ class SectionHero extends Model
 {
     use HasFactory;
 
-    protected  $fillable = [
+    protected $fillable = [
         'section_id',
         'eyebrow',
         'hero_text',
         'description',
-        'image_url'
+        'image_url',
     ];
 
     public function section(): BelongsTo

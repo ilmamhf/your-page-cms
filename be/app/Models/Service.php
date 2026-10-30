@@ -14,6 +14,6 @@ class Service extends Model
         'description',
         'icon_url',
         'order',
-        'is_active'
+        'is_active',
     ];
 }

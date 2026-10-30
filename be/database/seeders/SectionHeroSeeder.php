@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
-use App\Models\SectionHero;
 use App\Models\Section;
+use App\Models\SectionHero;
+use Illuminate\Database\Seeder;
 
 class SectionHeroSeeder extends Seeder
 {
@@ -21,7 +20,7 @@ class SectionHeroSeeder extends Seeder
         foreach ($sections as $section) {
             SectionHero::factory()->create([
                 'section_id' => $section->id,
-                'hero_text' => $section->title
+                'hero_text' => $section->title,
             ]);
         }
     }

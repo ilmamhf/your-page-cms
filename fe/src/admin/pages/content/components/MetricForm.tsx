@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
-import type { MetricItem } from "../../../../types/landing";
-import InputField from "../../../components/InputField";
+import { useState } from "react";
+import type { MetricItem, ContentsData } from "../../../../types/landing";
 import Checkbox from "../../../components/Checkbox";
-import type { ContentsData } from "../ContentPage";
+import FeedbackBar from "../../../components/FeedbackBar";
+import InputField from "../../../components/InputField";
 import api from "../../../../api/axios";
-import axios from "axios";
+import { errorMessage } from "../../../../api/error";
 
 interface MetricFormProps {
   metricItem: MetricItem | null;
@@ -14,57 +14,55 @@ interface MetricFormProps {
   ) => void;
 }
 
-const MetricForm = ({ metricItem, onSaveSuccess }: MetricFormProps) => {
-  const [formData, setFormData] = useState<MetricItem | null>(null);
+type Feedback = { type: "success" | "error"; message: string } | null;
 
-  useEffect(() => {
-    console.log("Data dari parent:", metricItem);
-    setFormData(metricItem);
-  }, [metricItem]);
+// The parent keys this form by item id, so it remounts on selection change
+// and can initialize straight from props.
+const MetricForm = ({ metricItem, onSaveSuccess }: MetricFormProps) => {
+  const [formData, setFormData] = useState<MetricItem | null>(metricItem);
+  const [saving, setSaving] = useState(false);
+  const [feedback, setFeedback] = useState<Feedback>(null);
 
   const handleChange = <K extends keyof MetricItem>(
     fieldName: K,
     value: MetricItem[K],
   ) => {
     setFormData((previous) => {
-      if (previous === null) {
-        return previous;
-      }
-      return {
-        ...previous,
-        [fieldName]: value,
-      };
+      if (previous === null) return previous;
+      return { ...previous, [fieldName]: value };
     });
   };
 
   const handleSave = async () => {
     if (!formData) return;
+
+    setFeedback(null);
+    setSaving(true);
+
     try {
       const response = await api.put(`/metric/${formData.id}`, {
         label: formData.label,
-        value: formData.value,
+        value: Number(formData.value),
         suffix: formData.suffix,
         is_active: formData.is_active,
         order: formData.order,
       });
 
-      const updated = response.data.data;
-      onSaveSuccess(updated, "metrics");
-
-      console.log("saved");
+      onSaveSuccess(response.data.data as MetricItem, "metrics");
+      setFeedback({ type: "success", message: "Metric saved." });
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        console.log("Response status: ", err.response?.status);
-        console.log("Response data:", err.response?.data);
-      } else {
-        console.log("Failed updating data", err);
-      }
+      setFeedback({ type: "error", message: errorMessage(err, "Failed to save the metric.") });
+    } finally {
+      setSaving(false);
     }
   };
 
   return (
-    <div className="p-4 w-full border-l h-screen flex flex-col">
+    <div className="p-4 w-full border-l h-screen overflow-y-auto flex flex-col">
       <div className="pb-3 text-2xl">Edit Metric</div>
+
+      {feedback && <FeedbackBar type={feedback.type} message={feedback.message} />}
+
       <InputField
         label="Metric Name"
         id="metricName"
@@ -74,12 +72,13 @@ const MetricForm = ({ metricItem, onSaveSuccess }: MetricFormProps) => {
       <InputField
         label="Metric Value"
         id="metricValue"
+        type="number"
         value={formData?.value ?? ""}
-        onChange={(val) => handleChange("value", val)}
+        onChange={(val) => handleChange("value", Number(val))}
       />
       <InputField
         label="Suffix"
-        id="metricIcon"
+        id="metricSuffix"
         value={formData?.suffix ?? ""}
         onChange={(val) => handleChange("suffix", val)}
       />
@@ -89,12 +88,13 @@ const MetricForm = ({ metricItem, onSaveSuccess }: MetricFormProps) => {
         onChange={(val) => handleChange("is_active", val)}
       />
 
-      <div className="flex w-full justify-end">
+      <div className="flex w-full justify-end py-4">
         <button
-          className="border px-4 py-2"
+          className="border px-4 py-2 disabled:opacity-50"
+          disabled={saving}
           onClick={handleSave}
         >
-          Save
+          {saving ? "Saving..." : "Save"}
         </button>
       </div>
     </div>

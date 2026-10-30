@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('website_profiles', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('name')->default("Your Company Name");
+            $table->string('name')->default('Your Company Name');
             $table->string('email')->nullable();
             $table->string('phone_number')->nullable();
             $table->string('location')->nullable();

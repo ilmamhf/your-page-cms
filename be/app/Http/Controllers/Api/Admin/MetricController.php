@@ -28,7 +28,7 @@ class MetricController extends Controller
 
         return response()->json([
             'message' => 'Metric added successfully',
-            'data' => new MetricResource ($metric),
+            'data' => new MetricResource($metric),
         ]);
     }
 
@@ -53,7 +53,7 @@ class MetricController extends Controller
 
         return response()->json([
             'message' => 'Metric edited successfully',
-            'data' => new MetricResource($metric)
+            'data' => new MetricResource($metric),
         ]);
     }
 
@@ -62,7 +62,8 @@ class MetricController extends Controller
      */
     public function destroy(string $id)
     {
-        Metric::destroy($id);
+        $metric = Metric::findOrFail($id);
+        $metric->delete();
 
         return response()->json(['message' => 'Metric deleted successfully']);
     }

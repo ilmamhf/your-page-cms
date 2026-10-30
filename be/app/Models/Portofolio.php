@@ -14,6 +14,6 @@ class Portofolio extends Model
         'description',
         'image_url',
         'order',
-        'is_active'
+        'is_active',
     ];
 }

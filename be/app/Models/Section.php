@@ -17,7 +17,7 @@ class Section extends Model
         'subtitle',
         'section_type',
         'order',
-        'is_active'
+        'is_active',
     ];
 
     public function page(): BelongsTo

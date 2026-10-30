@@ -15,7 +15,6 @@ class MetricFactory extends Factory
      *
      * @return array<string, mixed>
      */
-
     private static int $order = 0;
 
     public function definition(): array

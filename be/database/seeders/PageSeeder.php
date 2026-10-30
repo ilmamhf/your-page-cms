@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Page;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class PageSeeder extends Seeder
@@ -17,7 +16,7 @@ class PageSeeder extends Seeder
 
         foreach ($pages as $page) {
             Page::create([
-                'name' => $page
+                'name' => $page,
             ]);
         }
     }

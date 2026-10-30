@@ -1,15 +1,16 @@
 <?php
 
-use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\Admin\CMSController;
 use App\Http\Controllers\Api\Admin\MetricController;
 use App\Http\Controllers\Api\Admin\PageController;
+use App\Http\Controllers\Api\Admin\PortofolioController;
 use App\Http\Controllers\Api\Admin\SectionController;
 use App\Http\Controllers\Api\Admin\SectionHeroController;
 use App\Http\Controllers\Api\Admin\ServiceController;
-use App\Http\Controllers\Api\Admin\PortofolioController;
-use App\Http\Controllers\Api\Public\LandingPageController;
-use App\Http\Controllers\Api\Admin\CMSController;
+use App\Http\Controllers\Api\Admin\UploadController;
 use App\Http\Controllers\Api\Admin\WebsiteProfileController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\Public\LandingPageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,7 +18,8 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::post('/register', [AuthController::class, 'register']);
+// NOTE: registration is disabled on purpose. The CMS has a single admin account
+// created by Database\AdminSeeder (see ADMIN_EMAIL / ADMIN_PASSWORD in .env).
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
@@ -68,4 +70,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/content-cms', [CMSController::class, 'contents']);
     Route::get('/website-profile-cms', [WebsiteProfileController::class, 'index']);
+    Route::put('/website-profile-cms', [WebsiteProfileController::class, 'update']);
+
+    Route::post('/upload', [UploadController::class, 'store']);
+    Route::delete('/upload', [UploadController::class, 'destroy']);
 });

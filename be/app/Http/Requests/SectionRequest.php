@@ -5,7 +5,6 @@ namespace App\Http\Requests;
 use App\Models\Section;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Override;
 
 class SectionRequest extends FormRequest
 {
@@ -33,11 +32,11 @@ class SectionRequest extends FormRequest
             'is_active' => 'required|boolean',
 
             // Validasi untuk nested object hero_detail
-            'hero_detail'             => 'nullable|array',
-            'hero_detail.eyebrow'     => 'nullable|string|max:255',
-            'hero_detail.hero_text'   => 'nullable|string|max:255',
+            'hero_detail' => 'nullable|array',
+            'hero_detail.eyebrow' => 'nullable|string|max:255',
+            'hero_detail.hero_text' => 'nullable|string|max:255',
             'hero_detail.description' => 'nullable|string',
-            'hero_detail.image_url'   => 'nullable|url',
+            'hero_detail.image_url' => 'nullable|url',
         ];
     }
 

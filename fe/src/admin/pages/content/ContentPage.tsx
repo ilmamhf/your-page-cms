@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ServicesForm from "./components/ServicesForm";
 import type {
+  ContentsData,
   MetricItem,
   PortofolioItem,
   SectionItem,
@@ -9,34 +10,33 @@ import type {
 import ContentList from "./components/ContentList";
 import PortofolioForm from "./components/PortofolioForm";
 import MetricForm from "./components/MetricForm";
+import FeedbackBar from "../../components/FeedbackBar";
 import api from "../../../api/axios";
+import { errorMessage } from "../../../api/error";
 
-export interface ContentsData {
-  services: ServiceItem[];
-  portofolios: PortofolioItem[];
-  metrics: MetricItem[];
-}
+type Feedback = { type: "success" | "error"; message: string } | null;
+
+const emptyContents: ContentsData = {
+  services: [],
+  portofolios: [],
+  metrics: [],
+};
 
 const ContentPage = () => {
-  const [contentData, setContentData] = useState<ContentsData>({
-    services: [],
-    portofolios: [],
-    metrics: [],
-  });
-
-  const [selectedContent, setselectedContent] = useState<SectionItem | null>(
-    null,
-  );
-  const [selectedType, setSelectedType] = useState("");
+  const [contentData, setContentData] = useState<ContentsData>(emptyContents);
+  const [selectedContent, setSelectedContent] = useState<SectionItem | null>(null);
+  const [selectedType, setSelectedType] = useState<keyof ContentsData | "">("");
+  const [loading, setLoading] = useState(true);
+  const [feedback, setFeedback] = useState<Feedback>(null);
 
   const fetchContents = async () => {
     try {
       const response = await api.get("/content-cms");
-
-      const data = response.data.data;
-      setContentData(data);
+      setContentData({ ...emptyContents, ...response.data.data });
     } catch (error) {
-      console.error("Error: ", error);
+      setFeedback({ type: "error", message: errorMessage(error, "Failed to load content.") });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -44,11 +44,16 @@ const ContentPage = () => {
     fetchContents();
   }, []);
 
+  const handleRetry = () => {
+    setLoading(true);
+    fetchContents();
+  };
+
   const handleSaveSuccess = <K extends keyof ContentsData>(
     updatedContent: ContentsData[K][number],
     contentType: K,
   ) => {
-    setselectedContent(updatedContent);
+    setSelectedContent(updatedContent);
 
     setContentData((prevContents) => ({
       ...prevContents,
@@ -81,107 +86,124 @@ const ContentPage = () => {
           suffix: "",
           is_active: false,
         };
-      default:
-        throw new Error("Payload Error");
     }
   };
 
-  const handleAddNewContent = async <K extends keyof ContentsData>(
-    contentType: K,
-  ) => {
+  const handleAddNewContent = async <K extends keyof ContentsData>(contentType: K) => {
+    setFeedback(null);
     try {
-      const newPayload = payloadGenerator(contentType);
-      console.log("new content:", newPayload);
-      const response = await api.post(`/${String(contentType)}`, newPayload);
-      if (!response) {
-        throw new Error("Failed to create new Content");
-      }
+      const response = await api.post(`/${contentType}`, payloadGenerator(contentType));
 
-      const createdContent: SectionItem = response.data.data;
+      const createdContent = response.data.data as SectionItem;
 
       setContentData((prev) => ({
         ...prev,
         [contentType]: [...prev[contentType], createdContent],
       }));
 
-      setselectedContent(createdContent);
+      setSelectedContent(createdContent);
+      setSelectedType(contentType);
     } catch (error) {
-      console.error("Failed creating new content:", error);
+      setFeedback({ type: "error", message: errorMessage(error, "Failed to create the item.") });
     }
   };
 
   const handleDeleteContent = async <K extends keyof ContentsData>(
     contentType: K,
-    contentId: string | number,
+    contentId: number,
   ) => {
+    setFeedback(null);
     try {
-      const newContentType = contentType.slice(0, -1);
-      const response = await api.delete(`/${newContentType}/${contentId}`);
+      // endpoint is singular: /services -> /service/{id}
+      const singular = contentType.slice(0, -1);
+      await api.delete(`/${singular}/${contentId}`);
 
-      if (!response) {
-        throw new Error("Failed deleting section");
-      }
       setContentData((prev) => ({
         ...prev,
-        [contentType]: prev[contentType].filter(
-          (item) => item.id !== contentId,
-        ),
+        [contentType]: prev[contentType].filter((item) => item.id !== contentId),
       }));
 
       if (selectedContent?.id === contentId) {
-        setselectedContent(null);
+        setSelectedContent(null);
       }
-    } catch (err) {
-      console.error("Failed deleting section:", err);
+
+      setFeedback({ type: "success", message: "Item deleted." });
+    } catch (error) {
+      setFeedback({ type: "error", message: errorMessage(error, "Failed to delete the item.") });
     }
   };
 
-  const renderForm = (
-    selectedItem: SectionItem | null,
-    typeSelected: string,
-  ) => {
-    if (selectedItem === null) return <></>;
-    switch (typeSelected) {
+  const renderForm = () => {
+    const key = selectedContent ? `${selectedType}_${selectedContent.id}` : "empty";
+
+    switch (selectedType) {
       case "services":
         return (
           <ServicesForm
-            serviceItem={selectedItem as ServiceItem}
+            key={key}
+            serviceItem={selectedContent as ServiceItem}
             onSaveSuccess={handleSaveSuccess}
           />
         );
       case "portofolios":
         return (
           <PortofolioForm
-            portofolioItem={selectedItem as PortofolioItem}
+            key={key}
+            portofolioItem={selectedContent as PortofolioItem}
             onSaveSuccess={handleSaveSuccess}
           />
         );
       case "metrics":
         return (
           <MetricForm
-            metricItem={selectedItem as MetricItem}
+            key={key}
+            metricItem={selectedContent as MetricItem}
             onSaveSuccess={handleSaveSuccess}
           />
+        );
+      default:
+        return (
+          <div className="p-4 w-full border-l h-screen text-gray-500">
+            Select an item on the left to edit it.
+          </div>
         );
     }
   };
 
+  if (loading) {
+    return <div className="p-4">Loading content...</div>;
+  }
+
   return (
     <div className="grid grid-cols-5 h-full overflow-hidden">
       <section className="col-span-2 p-4 h-full overflow-y-auto">
+        {feedback && (
+          <div className="flex items-center gap-2">
+            <FeedbackBar
+              type={feedback.type}
+              message={feedback.message}
+            />
+            {feedback.type === "error" && (
+              <button
+                className="border px-3 py-2 text-sm shrink-0"
+                onClick={handleRetry}
+              >
+                Retry
+              </button>
+            )}
+          </div>
+        )}
         <ContentList
           contentData={contentData}
           onSelect={(content, type) => {
             setSelectedType(type);
-            setselectedContent(content);
+            setSelectedContent(content);
           }}
           onDeleteContent={handleDeleteContent}
           onAddContent={handleAddNewContent}
         />
       </section>
-      <section className="col-span-3 h-screen">
-        {renderForm(selectedContent, selectedType)}
-      </section>
+      <section className="col-span-3 h-screen">{renderForm()}</section>
     </div>
   );
 };

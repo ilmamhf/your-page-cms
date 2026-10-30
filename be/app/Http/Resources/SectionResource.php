@@ -22,6 +22,12 @@ class SectionResource extends JsonResource
             'section_type' => $this->section_type,
             'order' => $this->order,
             'is_active' => (bool) $this->is_active,
+            // Only present when the caller eager-loaded the relation
+            // (e.g. ->load('hero')), so /sections stays lightweight.
+            'hero_detail' => $this->relationLoaded('hero') && $this->hero
+                ? new SectionHeroResource($this->hero)
+                : null,
+            'items' => null,
         ];
     }
 }

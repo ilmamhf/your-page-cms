@@ -14,15 +14,8 @@ class PageController extends Controller
     public function index() // GET /api/pages
     {
         $pages = Page::all();
-        return response()->json($pages);
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+        return response()->json($pages);
     }
 
     /**
@@ -41,21 +34,16 @@ class PageController extends Controller
     public function update(Request $request, string $id)
     {
         $page = Page::findOrFail($id);
-    
+
         $validated = $request->validate([
-            'name' => 'required|string|max:12'
+            'name' => 'required|string|max:255',
         ]);
-        
+
         $page->update($validated);
 
-        return response()->json($validated);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Page $page)
-    {
-        //
+        return response()->json([
+            'message' => 'Page edited successfully',
+            'data' => $page->fresh(),
+        ]);
     }
 }

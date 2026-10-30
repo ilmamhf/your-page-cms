@@ -1,32 +1,44 @@
 import { useEffect, useState } from "react";
 import type { LandingPageData, Page, Section } from "../../../types/landing";
 import api from "../../../api/axios";
+import { errorMessage } from "../../../api/error";
+import FeedbackBar from "../../components/FeedbackBar";
 import SectionForm from "./components/SectionForm";
 import SectionList from "./components/SectionList";
 
+type Feedback = { type: "success" | "error"; message: string } | null;
+
 const Website = () => {
-  const [formData, setFormData] = useState<Page[]>([]);
+  const [pages, setPages] = useState<Page[]>([]);
   const [selectedSection, setSelectedSection] = useState<Section | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [feedback, setFeedback] = useState<Feedback>(null);
 
   const fetchWebsite = async () => {
     try {
       const response = await api.get("/sections-cms");
-      if (!response) {
-        throw new Error("Failed to fetch website");
-      }
-
       const data = response.data.data as LandingPageData;
-      console.log(data);
 
-      setFormData(data.pages);
+      setPages(data.pages);
     } catch (error) {
-      console.error(error);
+      setFeedback({ type: "error", message: errorMessage(error, "Failed to load sections.") });
+    } finally {
+      setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    fetchWebsite();
+  }, []);
+
+  const handleRetry = () => {
+    setLoading(true);
+    fetchWebsite();
   };
 
   const handleSectionSaveSuccess = (updatedSection: Section) => {
     setSelectedSection(updatedSection);
-    setFormData((prevPages) =>
+    setPages((prevPages) =>
       prevPages.map((page) => ({
         ...page,
         sections: page.sections.map((sec) =>
@@ -36,48 +48,39 @@ const Website = () => {
     );
   };
 
-  const handleAddNewSection = async (pageId: string | number) => {
+  const handleAddNewSection = async (pageId: number) => {
+    setFeedback(null);
     try {
-      const newSectionPayload = {
+      const response = await api.post("/sections", {
         page_id: pageId,
         title: "Your New Section Here",
         subtitle: "",
         section_type: "hero",
         is_active: false,
-      };
-      const response = await api.post("/sections", newSectionPayload);
-      if (!response) {
-        throw new Error("Failed to create new Section");
-      }
+      });
 
-      const createdSection: Section = response.data.data;
+      const createdSection = response.data.data as Section;
 
-      setFormData((prevPages) =>
-        prevPages.map((page) => {
-          if (page.id == pageId) {
-            return {
-              ...page,
-              sections: [...page.sections, createdSection],
-            };
-          }
-          return page;
-        }),
+      setPages((prevPages) =>
+        prevPages.map((page) =>
+          page.id === pageId
+            ? { ...page, sections: [...page.sections, createdSection] }
+            : page,
+        ),
       );
 
-      setSelectedSection(response.data.data as Section);
+      setSelectedSection(createdSection);
     } catch (error) {
-      console.error("Failed creating new section:", error);
+      setFeedback({ type: "error", message: errorMessage(error, "Failed to create the section.") });
     }
   };
 
-  const handleDeleteSection = async (sectionId: string | number) => {
+  const handleDeleteSection = async (sectionId: number) => {
+    setFeedback(null);
     try {
-      const response = await api.delete(`/section/${sectionId}`);
+      await api.delete(`/section/${sectionId}`);
 
-      if (!response) {
-        throw new Error("Failed deleting section");
-      }
-      setFormData((prevPages) =>
+      setPages((prevPages) =>
         prevPages.map((page) => ({
           ...page,
           sections: page.sections.filter((sec) => sec.id !== sectionId),
@@ -87,21 +90,40 @@ const Website = () => {
       if (selectedSection?.id === sectionId) {
         setSelectedSection(null);
       }
-    } catch (err) {
-      console.error("Failed deleting section:", err);
+
+      setFeedback({ type: "success", message: "Section deleted." });
+    } catch (error) {
+      setFeedback({ type: "error", message: errorMessage(error, "Failed to delete the section.") });
     }
   };
 
-  useEffect(() => {
-    fetchWebsite();
-  }, []);
+  if (loading) {
+    return <div className="p-4">Loading sections...</div>;
+  }
 
   return (
     <section>
+      {feedback && (
+        <div className="p-4 pb-0 flex items-center gap-2">
+          <FeedbackBar
+            type={feedback.type}
+            message={feedback.message}
+          />
+          {feedback.type === "error" && (
+            <button
+              className="border px-3 py-2 text-sm shrink-0"
+              onClick={handleRetry}
+            >
+              Retry
+            </button>
+          )}
+        </div>
+      )}
+
       <div className="grid grid-cols-5 gap-2 h-full overflow-hidden">
         <section className="col-span-2 p-4 h-full overflow-y-auto">
           <SectionList
-            pages={formData}
+            pages={pages}
             onSelect={setSelectedSection}
             onAddSection={handleAddNewSection}
             onDeleteSection={handleDeleteSection}
@@ -109,6 +131,7 @@ const Website = () => {
         </section>
         <section className="col-span-3 flex">
           <SectionForm
+            key={selectedSection?.id ?? "none"}
             section={selectedSection}
             onSaveSuccess={handleSectionSaveSuccess}
           />

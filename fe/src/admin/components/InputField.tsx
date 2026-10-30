@@ -3,7 +3,10 @@ interface InputFieldProps {
   id: string;
   value: string | number;
   textarea?: boolean;
-  onChange: (value: any) => void;
+  type?: "text" | "password" | "email" | "number";
+  placeholder?: string;
+  autoComplete?: string;
+  onChange: (value: string) => void;
 }
 
 const InputField = ({
@@ -11,6 +14,9 @@ const InputField = ({
   id,
   value,
   textarea,
+  type = "text",
+  placeholder = "Input here",
+  autoComplete,
   onChange,
 }: InputFieldProps) => {
   return (
@@ -27,7 +33,7 @@ const InputField = ({
       )}
       {textarea ? (
         <textarea
-          placeholder="Input here"
+          placeholder={placeholder}
           id={id}
           value={value}
           onChange={(e) => onChange(e.target.value)}
@@ -35,9 +41,10 @@ const InputField = ({
         />
       ) : (
         <input
-          type="text"
-          placeholder="Input here"
+          type={type}
+          placeholder={placeholder}
           id={id}
+          autoComplete={autoComplete}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           className="border p-2"

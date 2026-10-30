@@ -1,8 +1,23 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import api from "../../api/axios";
+import { clearToken } from "../../api/token";
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await api.post("/logout");
+    } catch {
+      // token may already be invalid; log out locally either way
+    } finally {
+      clearToken();
+      navigate("/login", { replace: true });
+    }
+  };
+
   return (
-    <aside className="border-r h-screen w-[240px] flex flex-col items-center p-4">
+    <aside className="border-r h-screen w-[240px] flex flex-col items-center p-4 bg-indigo-950 text-amber-50">
       <Link
         to={"/admin"}
         className="flex text-2xl"
@@ -36,6 +51,13 @@ const Sidebar = () => {
           Profile
         </Link>
       </nav>
+
+      <button
+        className="mt-auto border border-amber-50 px-3 py-1 text-sm"
+        onClick={handleLogout}
+      >
+        Logout
+      </button>
     </aside>
   );
 };

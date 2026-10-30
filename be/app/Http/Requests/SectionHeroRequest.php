@@ -23,11 +23,11 @@ class SectionHeroRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'section_id' => 'required|exists:section,id',
+            'section_id' => 'required|exists:sections,id',
             'eyebrow' => 'string|max:255',
             'hero_text' => 'required|string|max:255',
             'description' => 'string',
-            'image_url' => 'url'
+            'image_url' => 'nullable|string|max:2048',
         ];
     }
 }

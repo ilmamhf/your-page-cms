@@ -1,20 +1,78 @@
 import type {
+  ContentsData,
   MetricItem,
   PortofolioItem,
   SectionItem,
   ServiceItem,
 } from "../../../../types/landing";
-import type { ContentsData } from "../ContentPage";
 
 interface ContentListProps {
   contentData: ContentsData;
-  onSelect: (content: SectionItem | null, type: string) => void;
+  onSelect: (content: SectionItem, type: keyof ContentsData) => void;
   onDeleteContent: <K extends keyof ContentsData>(
     contentType: K,
-    id: string | number,
+    id: number,
   ) => void;
   onAddContent: <K extends keyof ContentsData>(contentType: K) => void;
 }
+
+interface ContentGroupProps<T extends SectionItem> {
+  title: string;
+  items: T[];
+  label: (item: T) => string;
+  type: keyof ContentsData;
+  onSelect: (content: SectionItem, type: keyof ContentsData) => void;
+  onDelete: (type: keyof ContentsData, id: number) => void;
+  onAdd: (type: keyof ContentsData) => void;
+}
+
+const ContentGroup = <T extends SectionItem>({
+  title,
+  items,
+  label,
+  type,
+  onSelect,
+  onDelete,
+  onAdd,
+}: ContentGroupProps<T>) => (
+  <div className="flex flex-col pb-8">
+    <div className="text-xl pb-2">{title}</div>
+    <div className="grid grid-flow-row border">
+      {items.length === 0 && (
+        <p className="p-2 text-sm text-gray-500">Nothing here yet.</p>
+      )}
+      {items.map((item) => (
+        <div
+          className="border-b flex justify-between items-center last:border-b-0"
+          key={item.id}
+        >
+          <button
+            className="p-2 flex-1 text-left"
+            onClick={() => onSelect(item, type)}
+          >
+            {label(item)}
+          </button>
+          <button
+            className="border p-2 m-1"
+            onClick={() => {
+              if (confirm("Delete this item?")) {
+                onDelete(type, item.id);
+              }
+            }}
+          >
+            Delete
+          </button>
+        </div>
+      ))}
+    </div>
+    <button
+      className="border p-2"
+      onClick={() => onAdd(type)}
+    >
+      Add New
+    </button>
+  </div>
+);
 
 const ContentList = ({
   contentData,
@@ -27,112 +85,35 @@ const ContentList = ({
       <div className="text-2xl pb-4">Contents Management</div>
 
       <div className="flex flex-col col-span-3">
-        {/* Services */}
-        <div className="flex flex-col">
-          <div className="text-xl pb-2">Services List</div>
-          <div className="grid grid-flow-row">
-            {contentData.services.map((service: ServiceItem) => (
-              <button
-                className="border p-2 flex justify-between"
-                key={service.id}
-                onClick={() => {
-                  onSelect(service, "services");
-                  console.log("service:", service);
-                }}
-              >
-                <div className="self-center">{service.title}</div>
-                <button
-                  className="border p-2"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (confirm("Delete ?")) {
-                      onDeleteContent("services", service.id);
-                    }
-                  }}
-                >
-                  Delete
-                </button>
-              </button>
-            ))}
-          </div>
-          <button
-            className="border p-2"
-            onClick={() => onAddContent("services")}
-          >
-            Add New Service
-          </button>
-        </div>
+        <ContentGroup<ServiceItem>
+          title="Services List"
+          items={contentData.services}
+          label={(service) => service.title}
+          type="services"
+          onSelect={onSelect}
+          onDelete={onDeleteContent}
+          onAdd={onAddContent}
+        />
 
-        {/* Portofolios */}
-        <div className="flex flex-col pt-8">
-          <div className="text-xl pb-2">Portofolio List</div>
-          <div className="grid grid-flow-row">
-            {contentData.portofolios.map((portofolio: PortofolioItem) => (
-              <button
-                className="border p-2 flex justify-between"
-                key={portofolio.id}
-                onClick={() => {
-                  console.log(portofolio);
-                  onSelect(portofolio, "portofolios");
-                }}
-              >
-                <div className="self-center">{portofolio.title}</div>
-                <button
-                  className="border p-2"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (confirm("Delete ?")) {
-                      onDeleteContent("portofolios", portofolio.id);
-                    }
-                  }}
-                >
-                  Delete
-                </button>
-              </button>
-            ))}
-          </div>
-          <button
-            className="border p-2"
-            onClick={() => onAddContent("portofolios")}
-          >
-            Add New Portofolio
-          </button>
-        </div>
+        <ContentGroup<PortofolioItem>
+          title="Portofolio List"
+          items={contentData.portofolios}
+          label={(portofolio) => portofolio.title}
+          type="portofolios"
+          onSelect={onSelect}
+          onDelete={onDeleteContent}
+          onAdd={onAddContent}
+        />
 
-        {/* Metrics */}
-        <div className="flex flex-col pt-8">
-          <div className="text-xl pb-2">Metric List</div>
-          <div className="grid grid-flow-row">
-            {contentData.metrics.map((metric: MetricItem) => (
-              <button
-                className="border p-2 flex justify-between"
-                key={metric.id}
-                onClick={() => onSelect(metric, "metrics")}
-              >
-                <div className="self-center">
-                  {metric.value} {metric.label}
-                </div>
-                <button
-                  className="border p-2"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (confirm("Delete ?")) {
-                      onDeleteContent("metrics", metric.id);
-                    }
-                  }}
-                >
-                  Delete
-                </button>
-              </button>
-            ))}
-          </div>
-          <button
-            className="border p-2"
-            onClick={() => onAddContent("metrics")}
-          >
-            Add New Metric
-          </button>
-        </div>
+        <ContentGroup<MetricItem>
+          title="Metric List"
+          items={contentData.metrics}
+          label={(metric) => `${metric.value} ${metric.label}`}
+          type="metrics"
+          onSelect={onSelect}
+          onDelete={onDeleteContent}
+          onAdd={onAddContent}
+        />
       </div>
     </div>
   );

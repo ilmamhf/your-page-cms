@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Page;
 use App\Models\Section;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -16,16 +15,14 @@ class SectionFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    private static int $order = 1;
-
     public function definition(): array
     {
         return [
             'title' => fake()->sentence(3),
             'subtitle' => fake()->paragraph(5),
             'section_type' => fake()->randomElement(['services', 'portofolios', 'metrics']),
-            'order' => self::$order++,
-            'is_active' => fake()->boolean(100)
+            'order' => fake()->unique()->numberBetween(1, 9999),
+            'is_active' => fake()->boolean(100),
         ];
     }
 }

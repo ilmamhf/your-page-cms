@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('section_heroes', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->foreignId('section_id')->constrained('sections')->onDelete("cascade");
+            $table->foreignId('section_id')->constrained('sections')->onDelete('cascade');
             $table->string('eyebrow');
             $table->string('hero_text');
             $table->text('description');

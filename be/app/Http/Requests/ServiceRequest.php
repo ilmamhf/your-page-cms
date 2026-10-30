@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Service;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use App\Models\Service;
-use Override;
 
 class ServiceRequest extends FormRequest
 {
@@ -29,7 +28,7 @@ class ServiceRequest extends FormRequest
             'description' => 'nullable|string',
             'icon_url' => 'nullable|url',
             'order' => 'numeric',
-            'is_active' => 'required|boolean'
+            'is_active' => 'required|boolean',
         ];
     }
 
@@ -40,7 +39,7 @@ class ServiceRequest extends FormRequest
                 'icon_url' => null,
             ]);
         }
-        
+
         if (! $this->filled('order')) {
             $nextOrder = Service::max('order') + 1;
 

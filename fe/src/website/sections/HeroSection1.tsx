@@ -4,7 +4,6 @@ interface HeroSection1Props {
   eyebrow?: string;
   hero_text?: string;
   description?: string;
-  children?: React.ReactNode;
   image_url?: string | null;
 }
 
@@ -12,16 +11,6 @@ const HeroSection1 = ({
   eyebrow = "Lorem Ipsum",
   hero_text = "Hero Text",
   description = "lorem ipsum dolor sit amet consectetur adipiscing elit et nostrud consequat vero officia officia minim in occaecat laboris dignissimos voluptas molestias nostrud imperdiet iusto non quidem tempor et est exercitation dolore odio in dolore labore eiusmod officia omnis lorem velit est eos culpa dolorem non assumenda ad velit incididunt est",
-  children = (
-    <>
-      <div className="p-4 border w-32 items-center justify-center flex">
-        <div>button 1</div>
-      </div>
-      <div className="p-4 border w-32 items-center justify-center flex">
-        <div>button 2</div>
-      </div>
-    </>
-  ),
   image_url = sample,
 }: HeroSection1Props) => {
   return (
