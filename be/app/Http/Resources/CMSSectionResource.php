@@ -40,7 +40,8 @@ class CMSSectionResource extends JsonResource
                             'section_type' => $section->section_type,
                             'order' => $section->order,
                             'is_active' => $section->is_active,
-                            'hero_detail' => $section->section_type == 'hero' && $section->hero ? [
+                            // Eyebrow + image for hero and metrics sections.
+                            'hero_detail' => $section->hero ? [
                                 'id' => $section->hero->id,
                                 'section_id' => $section->id,
                                 'eyebrow' => $section->hero->eyebrow,

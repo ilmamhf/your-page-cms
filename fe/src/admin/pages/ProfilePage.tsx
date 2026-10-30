@@ -7,6 +7,7 @@ import type {
 import InputField from "../components/InputField";
 import FeedbackBar from "../components/FeedbackBar";
 import ImageInput from "../components/ImageInput";
+import Icon from "../../components/Icon";
 import api from "../../api/axios";
 import { errorMessage } from "../../api/error";
 
@@ -112,38 +113,48 @@ const ProfilePage = () => {
   };
 
   if (loading) {
-    return <div className="p-4">Loading profile...</div>;
+    return <div className="p-6 text-mute">Loading profile…</div>;
   }
 
   if (!companyProfile) {
     return (
-      <div className="p-4">
+      <div className="p-6">
         {feedback && <FeedbackBar type={feedback.type} message={feedback.message} />}
         <button
-          className="border px-4 py-2"
+          className="btn-outline"
           onClick={handleRetry}
         >
-          Retry
+          Try again
         </button>
       </div>
     );
   }
 
+  const savedSocials = socialMedias.filter((social) => social.name.trim() !== "");
+
   return (
-    <div className="grid grid-cols-5">
-      {/* left */}
-      <div className="col-span-2 p-4">
-        <p className="text-2xl pb-2">Website Profile</p>
+    <div className="mx-auto max-w-3xl p-6 md:p-8">
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold tracking-[-0.01em]">Business Information</h1>
+        <p className="mt-1 text-sm text-mute">
+          These details appear in your site header, contact section and footer.
+        </p>
+      </div>
 
-        {feedback && <FeedbackBar type={feedback.type} message={feedback.message} />}
+      {feedback && (
+        <div className="mb-5">
+          <FeedbackBar type={feedback.type} message={feedback.message} />
+        </div>
+      )}
 
+      {/* Business information card */}
+      <div className="panel mb-5 p-6">
         <InputField
-          label="Company Name"
+          label="Company name"
           id="companyName"
           value={companyProfile.name ?? ""}
           onChange={(val) => handleChangeProfile("name", val)}
         />
-
         <InputField
           label="Email"
           id="email"
@@ -151,90 +162,97 @@ const ProfilePage = () => {
           value={companyProfile.email ?? ""}
           onChange={(val) => handleChangeProfile("email", val)}
         />
-
         <InputField
-          label="Phone Number"
+          label="Phone number"
           id="phoneNumber"
           value={companyProfile.phone_number ?? ""}
           onChange={(val) => handleChangeProfile("phone_number", val)}
         />
-
         <InputField
           label="Location"
           id="location"
           value={companyProfile.location ?? ""}
           onChange={(val) => handleChangeProfile("location", val)}
         />
+      </div>
 
-        {/* social media */}
-        <div className="py-4">
-          <div className="pb-2">Social Media</div>
-
-          {socialMedias.length === 0 && (
-            <p className="text-sm text-gray-500 pb-2">No social media yet.</p>
-          )}
-
-          {socialMedias.map((socMed, index) => (
-            <div
-              className="border flex w-full mb-2"
-              key={`${socMed.id}_${index}`}
-            >
-              <div className="flex flex-col w-full">
-                <div className="flex items-center gap-2 p-2">
-                  <ImageInput
-                    label=""
-                    value={socMed.icon_url ?? ""}
-                    previewSize={32}
-                    onChange={(url) => handleChangeSocial(index, "icon_url", url)}
-                  />
-                  <input
-                    type="text"
-                    placeholder="Name (e.g. Instagram)"
-                    value={socMed.name}
-                    onChange={(e) => handleChangeSocial(index, "name", e.target.value)}
-                    className="p-2 min-w-0 w-full border"
-                  />
-                </div>
-
-                <div className="flex p-2 pt-0">
-                  <input
-                    type="text"
-                    placeholder="https://..."
-                    value={socMed.link ?? ""}
-                    onChange={(e) => handleChangeSocial(index, "link", e.target.value)}
-                    className="p-2 flex min-w-0 w-full border"
-                  />
-                </div>
-              </div>
-
-              <button
-                className="border p-2 m-2 h-fit text-red-600"
-                onClick={() => handleRemoveSocial(index)}
-              >
-                Delete
-              </button>
-            </div>
-          ))}
-
-          <button
-            className="border p-2 w-full"
-            onClick={handleAddSocial}
-          >
-            Add New Social Media +
-          </button>
+      {/* Social media card */}
+      <div className="panel mb-5 p-6">
+        <div className="mb-3 flex items-baseline justify-between">
+          <h2 className="font-semibold">Social Media</h2>
+          <span className="text-xs text-mute">{savedSocials.length} saved</span>
         </div>
 
+        {socialMedias.length === 0 && (
+          <p className="pb-2 text-sm text-mute">No social media yet.</p>
+        )}
+
+        {socialMedias.map((socMed, index) => (
+          <div
+            className="mb-3 flex w-full items-start gap-2 rounded-lg border border-line bg-app p-3"
+            key={`${socMed.id}_${index}`}
+          >
+            <div className="flex min-w-0 flex-1 flex-col gap-2">
+              <div className="flex items-center gap-2">
+                <ImageInput
+                  label=""
+                  value={socMed.icon_url ?? ""}
+                  previewSize={32}
+                  onChange={(url) => handleChangeSocial(index, "icon_url", url)}
+                />
+                <input
+                  type="text"
+                  placeholder="Name (e.g. Instagram)"
+                  value={socMed.name}
+                  onChange={(e) => handleChangeSocial(index, "name", e.target.value)}
+                  className="field min-w-0 flex-1"
+                />
+              </div>
+
+              <input
+                type="text"
+                placeholder="https://..."
+                value={socMed.link ?? ""}
+                onChange={(e) => handleChangeSocial(index, "link", e.target.value)}
+                className="field"
+              />
+            </div>
+
+            <button
+              aria-label={`Remove ${socMed.name || "social link"}`}
+              className="btn-quiet mt-1 shrink-0 px-2 py-1.5 text-mute hover:bg-red-50 hover:text-red-600"
+              onClick={() => handleRemoveSocial(index)}
+            >
+              <Icon
+                name="trash"
+                className="size-4"
+              />
+            </button>
+          </div>
+        ))}
+
         <button
-          className="border p-2 flex justify-self-end px-4 disabled:opacity-50"
-          disabled={saving}
-          onClick={handleSave}
+          className="btn-outline mt-1 w-full"
+          onClick={handleAddSocial}
         >
-          {saving ? "Saving..." : "Save Changes"}
+          <Icon
+            name="plus"
+            className="size-4"
+          />
+          Add social link
         </button>
       </div>
 
-      {/* right */}
-      <div className="p-4"></div>
+      {/* Save bar */}
+      <div className="flex justify-end">
+        <button
+          className="btn-primary px-5"
+          disabled={saving}
+          onClick={handleSave}
+        >
+          {saving ? "Saving…" : "Save changes"}
+        </button>
+      </div>
     </div>
   );
 };

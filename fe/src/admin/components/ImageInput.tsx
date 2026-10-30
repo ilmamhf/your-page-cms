@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { uploadImage } from "../../api/upload";
 import { errorMessage } from "../../api/error";
+import Icon from "../../components/Icon";
 
 interface ImageInputProps {
   label: string;
@@ -37,8 +38,8 @@ const ImageInput = ({ label, value, onChange, previewSize = 64 }: ImageInputProp
   };
 
   return (
-    <div className="flex flex-col py-2">
-      <div className="py-2">{label}</div>
+    <div className="flex flex-col py-1.5">
+      {label && <span className="label">{label}</span>}
 
       <div className="flex items-center gap-3">
         {value ? (
@@ -46,33 +47,44 @@ const ImageInput = ({ label, value, onChange, previewSize = 64 }: ImageInputProp
             src={value}
             alt={label}
             style={{ width: previewSize, height: previewSize }}
-            className="border object-cover shrink-0"
+            className="shrink-0 rounded-lg border border-line bg-cloud object-cover"
           />
         ) : (
           <div
             style={{ width: previewSize, height: previewSize }}
-            className="border place-content-center text-center text-xs text-gray-400 shrink-0"
+            className="grid shrink-0 place-content-center rounded-lg border border-dashed border-line bg-cloud text-mute-soft"
           >
-            No image
+            <Icon
+              name="image"
+              className="size-4"
+            />
           </div>
         )}
 
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1.5">
           <button
             type="button"
-            className="border px-3 py-1 text-sm disabled:opacity-50"
+            className="btn-outline px-3 py-1.5 text-xs"
             disabled={uploading}
             onClick={() => inputRef.current?.click()}
           >
-            {uploading ? "Uploading..." : value ? "Replace image" : "Upload image"}
+            <Icon
+              name={uploading ? "spinner" : "upload"}
+              className={`size-3.5 ${uploading ? "animate-spin" : ""}`}
+            />
+            {uploading ? "Uploading…" : value ? "Replace image" : "Upload image"}
           </button>
 
           {value && (
             <button
               type="button"
-              className="border px-3 py-1 text-sm text-red-600"
+              className="btn-quiet px-3 py-1.5 text-xs text-red-600 hover:text-red-700"
               onClick={() => onChange("")}
             >
+              <Icon
+                name="trash"
+                className="size-3.5"
+              />
               Remove
             </button>
           )}
@@ -87,7 +99,9 @@ const ImageInput = ({ label, value, onChange, previewSize = 64 }: ImageInputProp
         />
       </div>
 
-      {error && <div className="text-sm text-red-600 py-1">{error}</div>}
+      {error && (
+        <p className="py-1 text-xs text-red-600">{error}</p>
+      )}
     </div>
   );
 };

@@ -5,22 +5,26 @@ interface SectionTypeDropdownProps {
 
 const SectionTypeDropdown = ({ value, onChange }: SectionTypeDropdownProps) => {
   return (
-    <div className="py-4">
-      <label className="">
-        <div className="pb-2">Section Type</div>
-        <select
-          className="border py-2"
-          value={value}
-          onChange={(e) => {
-            onChange(e.target.value);
-          }}
-        >
-          <option value="hero">Hero</option>
-          <option value="services">Services</option>
-          <option value="portofolios">Portofolio</option>
-          <option value="metrics">Metrics</option>
-        </select>
+    <div className="flex flex-col py-1.5">
+      <label
+        htmlFor="sectionType"
+        className="label"
+      >
+        Section type
       </label>
+      <select
+        id="sectionType"
+        className="field cursor-pointer"
+        value={value}
+        onChange={(e) => {
+          onChange(e.target.value);
+        }}
+      >
+        <option value="hero">Hero</option>
+        <option value="services">Services</option>
+        <option value="portofolios">Portofolio</option>
+        <option value="metrics">Metrics</option>
+      </select>
     </div>
   );
 };

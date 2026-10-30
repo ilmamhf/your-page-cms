@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import api from "../../api/axios";
 import { errorMessage } from "../../api/error";
 import type { LandingPageData, Page } from "../../types/landing";
+import Icon from "../../components/Icon";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import ContactSection from "../sections/ContactSection";
@@ -39,53 +40,74 @@ const WebsiteLayout = () => {
 
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center text-gray-500">
-        Loading...
+      <div className="flex h-screen items-center justify-center">
+        <Icon
+          name="spinner"
+          className="size-5 animate-spin text-primary"
+        />
+        <span className="ml-3 text-sm text-mute">Loading the page…</span>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex h-screen items-center justify-center flex-col gap-4">
-        <p className="text-red-600">{error}</p>
-        <button
-          className="border px-4 py-2"
-          onClick={handleRetry}
-        >
-          Retry
-        </button>
+      <div className="flex h-screen items-center justify-center px-6">
+        <div className="panel flex max-w-md flex-col items-start gap-4 p-8">
+          <div className="flex items-center gap-3 text-red-600">
+            <Icon
+              name="alert"
+              className="size-5 shrink-0"
+            />
+            <p className="text-sm">{error}</p>
+          </div>
+          <button
+            className="btn-outline"
+            onClick={handleRetry}
+          >
+            Try again
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="md:px-8 xl:px-40">
+    <div className="min-h-screen">
       <Navbar companyName={profile?.name} />
-      <div>
-        {pages.map((page: Page) => (
+
+      <main>
+        {pages.map((page: Page, pageIndex) => (
           <div
             key={page.id}
             id={page.name.toLowerCase()}
-            className="scroll-mt-24"
+            className="scroll-mt-16"
           >
-            {page.sections.map((section) => (
+            {page.sections.map((section, sectionIndex) => (
               <SectionRenderer
                 section={section}
                 key={section.id}
+                isLead={pageIndex === 0 && sectionIndex === 0}
               />
             ))}
           </div>
         ))}
+
         <div id="contact">
-          <ContactSection />
+          <ContactSection
+            email={profile?.email ?? undefined}
+            phone={profile?.phone_number ?? undefined}
+          />
         </div>
-        <Footer
-          companyName={profile?.name}
-          location={profile?.location}
-          socialMedias={profile?.social_medias ?? []}
-        />
-      </div>
+      </main>
+
+      <Footer
+        companyName={profile?.name}
+        location={profile?.location}
+        socialMedias={profile?.social_medias ?? []}
+        email={profile?.email}
+        phone={profile?.phone_number}
+      />
     </div>
   );
 };

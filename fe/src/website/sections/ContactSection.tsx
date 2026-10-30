@@ -1,5 +1,5 @@
 import FieldContact from "../components/FieldContact";
-import sampleIcon from "../../assets/react.svg";
+import Icon from "../../components/Icon";
 
 interface ContactSectionProps {
   email?: string;
@@ -11,78 +11,93 @@ const ContactSection = ({
   phone = "0812 2345 5678",
 }: ContactSectionProps) => {
   return (
-    <section className="p-8 border-t">
-      <div className="flex flex-col gap-6">
-        {/* Section Header */}
-        <h2 className="-ml-0.5 text-4xl font-semibold">
-          Have a Project in Mind? Get in Touch
-        </h2>
+    <section className="shell border-t border-line py-14 md:py-16">
+      <div className="grid gap-10 md:grid-cols-2 md:gap-14">
+        {/* intro + details */}
+        <div>
+          <h2 className="text-2xl font-bold tracking-[-0.01em] text-ink md:text-3xl">
+            Have a project in mind? Get in touch.
+          </h2>
+          <p className="mt-4 max-w-[46ch] leading-relaxed text-mute">
+            Fill out the form or reach us directly — we reply within two
+            business days.
+          </p>
 
-        {/* Content Grid */}
-        <div className="grid grid-cols-3 gap-8 items-start">
-          {/* Left Info Column (1 Column) */}
-          <div className="col-span-4 md:col-span-1 flex flex-col justify-between gap-4 w-full">
-            <p>Open for collaboration or anything</p>
-
-            {/* Contact Details */}
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center gap-3">
-                <img
-                  src={sampleIcon}
-                  alt="Email icon"
-                  width={24}
-                  height={24}
+          <div className="mt-8 flex flex-col gap-5">
+            <a
+              href={`mailto:${email}`}
+              className="group flex items-center gap-4"
+            >
+              <span className="grid size-11 shrink-0 place-content-center rounded-full bg-primary-soft text-primary transition-colors group-hover:bg-primary group-hover:text-white">
+                <Icon
+                  name="mail"
+                  className="size-5"
                 />
-                <span>{email}</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <img
-                  src={sampleIcon}
-                  alt="Phone icon"
-                  width={24}
-                  height={24}
+              </span>
+              <span>
+                <span className="block text-sm font-semibold text-ink">Email</span>
+                <span className="text-sm text-mute transition-colors group-hover:text-primary">
+                  {email}
+                </span>
+              </span>
+            </a>
+
+            <a
+              href={`tel:${phone.replace(/\s/g, "")}`}
+              className="group flex items-center gap-4"
+            >
+              <span className="grid size-11 shrink-0 place-content-center rounded-full bg-primary-soft text-primary transition-colors group-hover:bg-primary group-hover:text-white">
+                <Icon
+                  name="phone"
+                  className="size-5"
                 />
-                <span>{phone}</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-row w-full col-span-4 md:col-span-2 justify-between gap-4">
-            <div className="col-span-1 flex flex-col gap-4 w-full">
-              <FieldContact
-                label="Name"
-                id="name"
-              />
-              <FieldContact
-                label="Email"
-                id="email"
-              />
-              <FieldContact
-                label="Phone"
-                id="phone"
-              />
-            </div>
-
-            <div className="flex flex-col justify-between w-full">
-              <FieldContact
-                label="Message"
-                id="message"
-                className="pb-4"
-                textarea={true}
-              />
-
-              {/* Submit Button */}
-              <div className="pt-2 items-center justify-center self-end flex">
-                <button
-                  type="submit"
-                  className="border p-4"
-                >
-                  Send Message
-                </button>
-              </div>
-            </div>
+              </span>
+              <span>
+                <span className="block text-sm font-semibold text-ink">Phone</span>
+                <span className="text-sm text-mute transition-colors group-hover:text-primary">
+                  {phone}
+                </span>
+              </span>
+            </a>
           </div>
         </div>
+
+        {/* elevated form card */}
+        <form
+          className="panel p-6 md:p-8"
+          onSubmit={(e) => e.preventDefault()}
+        >
+          <div className="grid gap-4">
+            <FieldContact
+              label="Name"
+              id="name"
+              placeholder="Your name"
+            />
+            <FieldContact
+              label="Email"
+              id="email"
+              placeholder="you@example.com"
+            />
+            <FieldContact
+              label="Phone"
+              id="phone"
+              placeholder="+62 812 3456 7890"
+            />
+            <FieldContact
+              label="Message"
+              id="message"
+              placeholder="How can we help?"
+              textarea={true}
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="btn-primary mt-5 w-full"
+          >
+            Send message
+          </button>
+        </form>
       </div>
     </section>
   );

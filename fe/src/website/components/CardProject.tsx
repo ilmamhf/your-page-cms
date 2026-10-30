@@ -6,17 +6,21 @@ export interface CardProjectProps {
 
 const CardProject = ({ project }: CardProjectProps) => {
   return (
-    <div className="border w-full aspect-square h-full">
-      <img
-        src={project.image_url}
-        alt="img"
-        className="h-5/8 w-full object-cover"
-      />
-      <div className="p-4">
-        <p className="font-bold">{project.title}</p>
-        <p className="line-clamp-1 xl:line-clamp-3">{project.description}</p>
+    <article className="group">
+      <div className="overflow-hidden rounded-xl border border-line bg-cloud">
+        {project.image_url ? (
+          <img
+            src={project.image_url}
+            alt={project.title}
+            className="aspect-[4/3] w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+          />
+        ) : (
+          <div className="aspect-[4/3] w-full" />
+        )}
       </div>
-    </div>
+      <h3 className="mt-3.5 font-semibold text-ink">{project.title}</h3>
+      <p className="mt-1 text-sm text-mute line-clamp-1">{project.description}</p>
+    </article>
   );
 };
 

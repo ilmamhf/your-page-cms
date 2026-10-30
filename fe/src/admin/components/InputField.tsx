@@ -15,21 +15,21 @@ const InputField = ({
   value,
   textarea,
   type = "text",
-  placeholder = "Input here",
+  placeholder,
   autoComplete,
   onChange,
 }: InputFieldProps) => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col py-1.5">
       {label ? (
         <label
           htmlFor={id}
-          className="py-2"
+          className="label"
         >
           {label}
         </label>
       ) : (
-        <div></div>
+        <div aria-hidden="true"></div>
       )}
       {textarea ? (
         <textarea
@@ -37,7 +37,7 @@ const InputField = ({
           id={id}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="border p-2"
+          className="field resize-y"
         />
       ) : (
         <input
@@ -47,7 +47,7 @@ const InputField = ({
           autoComplete={autoComplete}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="border p-2"
+          className="field"
         />
       )}
     </div>

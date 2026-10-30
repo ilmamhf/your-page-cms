@@ -11,6 +11,7 @@ import ContentList from "./components/ContentList";
 import PortofolioForm from "./components/PortofolioForm";
 import MetricForm from "./components/MetricForm";
 import FeedbackBar from "../../components/FeedbackBar";
+import { FormPlaceholder } from "../../components/FormShell";
 import api from "../../../api/axios";
 import { errorMessage } from "../../../api/error";
 
@@ -135,6 +136,10 @@ const ContentPage = () => {
 
   const renderForm = () => {
     const key = selectedContent ? `${selectedType}_${selectedContent.id}` : "empty";
+    const handleCancel = () => {
+      setSelectedContent(null);
+      setSelectedType("");
+    };
 
     switch (selectedType) {
       case "services":
@@ -143,6 +148,7 @@ const ContentPage = () => {
             key={key}
             serviceItem={selectedContent as ServiceItem}
             onSaveSuccess={handleSaveSuccess}
+            onCancel={handleCancel}
           />
         );
       case "portofolios":
@@ -151,6 +157,7 @@ const ContentPage = () => {
             key={key}
             portofolioItem={selectedContent as PortofolioItem}
             onSaveSuccess={handleSaveSuccess}
+            onCancel={handleCancel}
           />
         );
       case "metrics":
@@ -159,33 +166,37 @@ const ContentPage = () => {
             key={key}
             metricItem={selectedContent as MetricItem}
             onSaveSuccess={handleSaveSuccess}
+            onCancel={handleCancel}
           />
         );
       default:
         return (
-          <div className="p-4 w-full border-l h-screen text-gray-500">
-            Select an item on the left to edit it.
-          </div>
+          <FormPlaceholder
+            title="Nothing selected"
+            hint="Pick an item on the left to edit it."
+          />
         );
     }
   };
 
   if (loading) {
-    return <div className="p-4">Loading content...</div>;
+    return <div className="p-6 text-mute">Loading content…</div>;
   }
 
   return (
-    <div className="grid grid-cols-5 h-full overflow-hidden">
-      <section className="col-span-2 p-4 h-full overflow-y-auto">
+    <div className="grid grid-cols-1 md:h-full md:grid-cols-5 md:overflow-hidden">
+      <section className="border-b border-line p-4 md:col-span-2 md:h-full md:overflow-y-auto md:border-b-0 md:border-r md:p-6">
         {feedback && (
-          <div className="flex items-center gap-2">
-            <FeedbackBar
-              type={feedback.type}
-              message={feedback.message}
-            />
+          <div className="mb-4 flex items-center gap-2">
+            <div className="flex-1">
+              <FeedbackBar
+                type={feedback.type}
+                message={feedback.message}
+              />
+            </div>
             {feedback.type === "error" && (
               <button
-                className="border px-3 py-2 text-sm shrink-0"
+                className="btn-outline shrink-0 px-3 py-1.5 text-xs"
                 onClick={handleRetry}
               >
                 Retry
@@ -203,7 +214,7 @@ const ContentPage = () => {
           onAddContent={handleAddNewContent}
         />
       </section>
-      <section className="col-span-3 h-screen">{renderForm()}</section>
+      <section className="flex md:col-span-3">{renderForm()}</section>
     </div>
   );
 };

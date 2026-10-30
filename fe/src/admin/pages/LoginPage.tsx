@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { isAxiosError } from "axios";
 import InputField from "../components/InputField";
+import Logo from "../../components/Logo";
 import api from "../../api/axios";
 import { setToken } from "../../api/token";
 
@@ -38,18 +39,29 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex h-screen items-center justify-center">
+    <div className="flex min-h-screen items-center justify-center bg-navy px-4 py-12">
       <form
-        className="border flex flex-col items-center p-8 gap-2"
+        className="panel w-full max-w-sm p-8"
         onSubmit={(e) => {
           e.preventDefault();
           handleLogin();
         }}
       >
-        <div className="text-xl pb-2">CMS Login</div>
+        <div className="mb-6 flex items-center gap-2.5">
+          <Logo name="MyBussAdmin" />
+          <div>
+            <p className="text-lg font-bold leading-none tracking-[-0.01em]">
+              MyBussAdmin
+            </p>
+            <p className="mt-1 text-xs text-mute">Sign in to manage your site</p>
+          </div>
+        </div>
 
         {error && (
-          <div className="border border-red-400 bg-red-50 text-red-700 p-2 w-full text-sm">
+          <div
+            role="alert"
+            className="mb-4 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"
+          >
             {error}
           </div>
         )}
@@ -58,6 +70,7 @@ const LoginPage = () => {
           label="Email"
           id="email"
           type="email"
+          autoComplete="email"
           value={email}
           onChange={setEmail}
         />
@@ -72,9 +85,9 @@ const LoginPage = () => {
         <button
           type="submit"
           disabled={submitting}
-          className="border px-4 py-2 mt-4 w-full disabled:opacity-50"
+          className="btn-primary mt-5 w-full"
         >
-          {submitting ? "Logging in..." : "Login"}
+          {submitting ? "Logging in…" : "Login"}
         </button>
       </form>
     </div>

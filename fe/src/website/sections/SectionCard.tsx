@@ -7,6 +7,8 @@ interface SectionCardProps {
 }
 
 const SectionCard = ({ section }: SectionCardProps) => {
+  const isPortfolio = section.section_type === "portofolios";
+
   const renderItems = () => {
     const items = section.items ?? [];
 
@@ -21,14 +23,31 @@ const SectionCard = ({ section }: SectionCardProps) => {
   };
 
   return (
-    <section className="p-8">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-bold text-2xl">{section.title}</h1>
-          <p>{section.subtitle}</p>
+    <section className="shell border-t border-line py-14 md:py-16">
+      {/* header row, like the kit's "Our Featured Work" */}
+      <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+        <div className="max-w-[54ch]">
+          <h2 className="text-2xl font-bold tracking-[-0.01em] text-ink md:text-3xl">
+            {section.title}
+          </h2>
+          {section.subtitle && (
+            <p className="mt-2 text-base leading-relaxed text-mute">
+              {section.subtitle}
+            </p>
+          )}
         </div>
+
+        {isPortfolio && (
+          <a
+            href="#portofolio"
+            className="shrink-0 text-sm font-semibold text-primary transition-colors hover:text-primary-deep"
+          >
+            View all projects
+          </a>
+        )}
       </div>
-      <div className="-mx-8 ">{renderItems()}</div>
+
+      {renderItems()}
     </section>
   );
 };

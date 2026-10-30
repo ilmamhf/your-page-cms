@@ -70,7 +70,11 @@ class SectionController extends Controller
 
             $section->update($sectionData);
 
-            if (($data['section_type'] ?? null) === 'hero') {
+            // Hero and metrics sections both carry an optional hero row
+            // (eyebrow + image) used by the public site.
+            $type = $data['section_type'] ?? $section->section_type;
+
+            if (in_array($type, ['hero', 'metrics'], true)) {
                 $heroInput = $data['hero_detail'] ?? [];
 
                 // Explicit hero fields win; otherwise mirror the section's

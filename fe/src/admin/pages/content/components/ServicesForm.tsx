@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { ServiceItem, ContentsData } from "../../../../types/landing";
 import Checkbox from "../../../components/Checkbox";
-import FeedbackBar from "../../../components/FeedbackBar";
+import FormShell from "../../../components/FormShell";
 import ImageInput from "../../../components/ImageInput";
 import InputField from "../../../components/InputField";
 import api from "../../../../api/axios";
@@ -13,13 +13,14 @@ interface ServicesFormProps {
     updatedContent: ContentsData[K][number],
     contentType: K,
   ) => void;
+  onCancel: () => void;
 }
 
 type Feedback = { type: "success" | "error"; message: string } | null;
 
 // The parent keys this form by item id, so it remounts on selection change
 // and can initialize straight from props.
-const ServicesForm = ({ serviceItem, onSaveSuccess }: ServicesFormProps) => {
+const ServicesForm = ({ serviceItem, onSaveSuccess, onCancel }: ServicesFormProps) => {
   const [formData, setFormData] = useState<ServiceItem | null>(serviceItem);
   const [saving, setSaving] = useState(false);
   const [feedback, setFeedback] = useState<Feedback>(null);
@@ -59,21 +60,25 @@ const ServicesForm = ({ serviceItem, onSaveSuccess }: ServicesFormProps) => {
   };
 
   return (
-    <div className="p-4 w-full border-l h-screen overflow-y-auto flex flex-col">
-      <div className="pb-3 text-2xl">Edit Service</div>
-
-      {feedback && <FeedbackBar type={feedback.type} message={feedback.message} />}
-
+    <FormShell
+      title="Edit service"
+      subtitle={formData?.title}
+      feedback={feedback}
+      saving={saving}
+      onSave={handleSave}
+      onCancel={onCancel}
+    >
       <InputField
-        label="Service Name"
+        label="Service name"
         id="serviceName"
         value={formData?.title ?? ""}
         onChange={(val) => handleChange("title", val)}
       />
       <InputField
-        label="Service Description"
+        label="Description"
         id="serviceDesc"
         value={formData?.description ?? ""}
+        textarea={true}
         onChange={(val) => handleChange("description", val)}
       />
       <ImageInput
@@ -81,22 +86,14 @@ const ServicesForm = ({ serviceItem, onSaveSuccess }: ServicesFormProps) => {
         value={formData?.icon_url ?? ""}
         onChange={(url) => handleChange("icon_url", url)}
       />
-      <Checkbox
-        label="Is Active ?"
-        checked={formData?.is_active ?? false}
-        onChange={(val) => handleChange("is_active", val)}
-      />
-
-      <div className="flex w-full justify-end py-4">
-        <button
-          className="border px-4 py-2 disabled:opacity-50"
-          disabled={saving}
-          onClick={handleSave}
-        >
-          {saving ? "Saving..." : "Save"}
-        </button>
+      <div className="mt-2 border-t border-line pt-3">
+        <Checkbox
+          label="Show this service on the site"
+          checked={formData?.is_active ?? false}
+          onChange={(val) => handleChange("is_active", val)}
+        />
       </div>
-    </div>
+    </FormShell>
   );
 };
 

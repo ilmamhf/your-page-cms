@@ -54,7 +54,8 @@ class LandingPageResource extends JsonResource
                             'order' => $section->order,
                             'is_active' => $section->is_active,
 
-                            'hero_detail' => $section->section_type === 'hero' && $section->hero ? [
+                            // Eyebrow + image for hero and metrics sections.
+                            'hero_detail' => $section->hero ? [
                                 'eyebrow' => $section->hero->eyebrow,
                                 'hero_text' => $section->hero->hero_text,
                                 'description' => $section->hero->description,

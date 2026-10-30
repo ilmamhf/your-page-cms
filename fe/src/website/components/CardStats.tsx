@@ -1,17 +1,24 @@
-import type { MetricItem } from "../../types/landing";
-
 interface CardStatsProps {
-  stat: MetricItem;
+  label?: string;
+  value?: string | number;
+  suffix?: string;
 }
 
-const CardStats = ({ stat }: CardStatsProps) => {
+/**
+ * One figure in the metrics band. Label sits under the number, dimmed.
+ */
+const CardStats = ({ label, value, suffix }: CardStatsProps) => {
   return (
-    <div className="pt-4">
-      <p className="text-5xl font-bold">
-        {stat.value}
-        {stat.suffix}
-      </p>
-      <p>{stat.label}</p>
+    <div className="px-1 md:px-6 md:first:pl-0">
+      <dd className="text-[clamp(2.25rem,5vw,3.25rem)] font-bold leading-none tracking-[-0.03em] tabular-nums">
+        {value}
+        {suffix}
+      </dd>
+      {label && (
+        <dt className="mt-3 max-w-[18ch] text-sm leading-snug text-white/55">
+          {label}
+        </dt>
+      )}
     </div>
   );
 };

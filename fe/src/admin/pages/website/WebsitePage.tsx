@@ -102,16 +102,18 @@ const Website = () => {
   }
 
   return (
-    <section>
+    <section className="flex flex-col md:h-full">
       {feedback && (
-        <div className="p-4 pb-0 flex items-center gap-2">
-          <FeedbackBar
-            type={feedback.type}
-            message={feedback.message}
-          />
+        <div className="flex shrink-0 items-center gap-2 border-b border-line bg-app px-4 py-3 md:px-6">
+          <div className="flex-1">
+            <FeedbackBar
+              type={feedback.type}
+              message={feedback.message}
+            />
+          </div>
           {feedback.type === "error" && (
             <button
-              className="border px-3 py-2 text-sm shrink-0"
+              className="btn-outline shrink-0 px-3 py-1.5 text-xs"
               onClick={handleRetry}
             >
               Retry
@@ -120,8 +122,8 @@ const Website = () => {
         </div>
       )}
 
-      <div className="grid grid-cols-5 gap-2 h-full overflow-hidden">
-        <section className="col-span-2 p-4 h-full overflow-y-auto">
+      <div className="grid grid-cols-1 md:min-h-0 md:flex-1 md:grid-cols-5 md:overflow-hidden">
+        <section className="border-b border-line p-4 md:col-span-2 md:h-full md:overflow-y-auto md:border-b-0 md:border-r md:p-6">
           <SectionList
             pages={pages}
             onSelect={setSelectedSection}
@@ -129,11 +131,12 @@ const Website = () => {
             onDeleteSection={handleDeleteSection}
           />
         </section>
-        <section className="col-span-3 flex">
+        <section className="flex md:col-span-3">
           <SectionForm
             key={selectedSection?.id ?? "none"}
             section={selectedSection}
             onSaveSuccess={handleSectionSaveSuccess}
+            onCancel={() => setSelectedSection(null)}
           />
         </section>
       </div>

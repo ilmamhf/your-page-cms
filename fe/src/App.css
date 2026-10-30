@@ -1,3 +1,5 @@
 html {
     scroll-behavior: smooth;
+    /* keep anchored sections clear of the sticky navbar */
+    scroll-padding-top: 5rem;
 }

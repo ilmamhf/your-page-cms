@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { PortofolioItem, ContentsData } from "../../../../types/landing";
 import Checkbox from "../../../components/Checkbox";
-import FeedbackBar from "../../../components/FeedbackBar";
+import FormShell from "../../../components/FormShell";
 import ImageInput from "../../../components/ImageInput";
 import InputField from "../../../components/InputField";
 import api from "../../../../api/axios";
@@ -13,13 +13,14 @@ interface PortofolioFormProps {
     updatedContent: ContentsData[K][number],
     contentType: K,
   ) => void;
+  onCancel: () => void;
 }
 
 type Feedback = { type: "success" | "error"; message: string } | null;
 
 // The parent keys this form by item id, so it remounts on selection change
 // and can initialize straight from props.
-const PortofolioForm = ({ portofolioItem, onSaveSuccess }: PortofolioFormProps) => {
+const PortofolioForm = ({ portofolioItem, onSaveSuccess, onCancel }: PortofolioFormProps) => {
   const [formData, setFormData] = useState<PortofolioItem | null>(portofolioItem);
   const [saving, setSaving] = useState(false);
   const [feedback, setFeedback] = useState<Feedback>(null);
@@ -59,21 +60,25 @@ const PortofolioForm = ({ portofolioItem, onSaveSuccess }: PortofolioFormProps) 
   };
 
   return (
-    <div className="p-4 w-full border-l h-screen overflow-y-auto flex flex-col">
-      <div className="pb-3 text-2xl">Edit Portofolio</div>
-
-      {feedback && <FeedbackBar type={feedback.type} message={feedback.message} />}
-
+    <FormShell
+      title="Edit portofolio"
+      subtitle={formData?.title}
+      feedback={feedback}
+      saving={saving}
+      onSave={handleSave}
+      onCancel={onCancel}
+    >
       <InputField
-        label="Portofolio Name"
+        label="Project name"
         id="portofolioName"
         value={formData?.title ?? ""}
         onChange={(val) => handleChange("title", val)}
       />
       <InputField
-        label="Portofolio Description"
+        label="Description"
         id="portofolioDesc"
         value={formData?.description ?? ""}
+        textarea={true}
         onChange={(val) => handleChange("description", val)}
       />
       <ImageInput
@@ -82,22 +87,14 @@ const PortofolioForm = ({ portofolioItem, onSaveSuccess }: PortofolioFormProps) 
         previewSize={96}
         onChange={(url) => handleChange("image_url", url)}
       />
-      <Checkbox
-        label="Is Active ?"
-        checked={formData?.is_active ?? false}
-        onChange={(val) => handleChange("is_active", val)}
-      />
-
-      <div className="flex w-full justify-end py-4">
-        <button
-          className="border px-4 py-2 disabled:opacity-50"
-          disabled={saving}
-          onClick={handleSave}
-        >
-          {saving ? "Saving..." : "Save"}
-        </button>
+      <div className="mt-2 border-t border-line pt-3">
+        <Checkbox
+          label="Show this portofolio on the site"
+          checked={formData?.is_active ?? false}
+          onChange={(val) => handleChange("is_active", val)}
+        />
       </div>
-    </div>
+    </FormShell>
   );
 };
 

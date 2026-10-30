@@ -1,7 +1,9 @@
 import { useState } from "react";
 import type { Section, SectionHeroDetail } from "../../../../types/landing";
 import Checkbox from "../../../components/Checkbox";
-import FeedbackBar from "../../../components/FeedbackBar";
+import FormShell, {
+  FormPlaceholder,
+} from "../../../components/FormShell";
 import ImageInput from "../../../components/ImageInput";
 import InputField from "../../../components/InputField";
 import SectionTypeDropdown from "../../../components/SectionTypeDropdown";
@@ -11,13 +13,14 @@ import { errorMessage } from "../../../../api/error";
 interface SectionFormProps {
   section: Section | null;
   onSaveSuccess: (updatedSection: Section) => void;
+  onCancel: () => void;
 }
 
 type Feedback = { type: "success" | "error"; message: string } | null;
 
 // The parent keys this form by section id, so it remounts on selection
 // change and can initialize straight from props.
-const SectionForm = ({ section, onSaveSuccess }: SectionFormProps) => {
+const SectionForm = ({ section, onSaveSuccess, onCancel }: SectionFormProps) => {
   const [form, setForm] = useState<Section | null>(section);
   const [saving, setSaving] = useState(false);
   const [feedback, setFeedback] = useState<Feedback>(null);
@@ -85,71 +88,68 @@ const SectionForm = ({ section, onSaveSuccess }: SectionFormProps) => {
 
   if (!section || !form) {
     return (
-      <div className="p-4 w-full border-l h-screen text-gray-500">
-        Select a section on the left to edit it.
-      </div>
+      <FormPlaceholder
+        title="No section selected"
+        hint="Pick a section on the left, or add a new one."
+      />
     );
   }
 
   return (
-    <div className="p-4 w-full border-l h-full overflow-y-auto flex flex-col">
-      <div className="text-2xl pb-2">Edit Section</div>
+    <FormShell
+      title="Edit section"
+      subtitle={form.title}
+      feedback={feedback}
+      saving={saving}
+      onSave={handleSave}
+      onCancel={onCancel}
+      saveLabel="Save"
+    >
+      <InputField
+        label="Title"
+        id={"title_" + String(form.id)}
+        value={form.title ?? ""}
+        onChange={(val) => handleChange("title", val)}
+      />
+      <InputField
+        label="Subtitle"
+        id={"subtitle_" + String(form.id)}
+        value={form.subtitle ?? ""}
+        textarea={true}
+        onChange={(val) => handleChange("subtitle", val)}
+      />
+      <SectionTypeDropdown
+        value={form.section_type}
+        onChange={(val) => handleChange("section_type", val as Section["section_type"])}
+      />
 
-      {feedback && <FeedbackBar type={feedback.type} message={feedback.message} />}
-
-      <div>
-        <InputField
-          label="Title"
-          id={"title_" + String(form.id)}
-          value={form.title ?? ""}
-          onChange={(val) => handleChange("title", val)}
-        />
-        <InputField
-          label="Subtitle"
-          id={"subtitle_" + String(form.id)}
-          value={form.subtitle ?? ""}
-          textarea={true}
-          onChange={(val) => handleChange("subtitle", val)}
-        />
-        <SectionTypeDropdown
-          value={form.section_type}
-          onChange={(val) => handleChange("section_type", val as Section["section_type"])}
-        />
-
+      <div className="mt-2 border-t border-line pt-3">
         <Checkbox
-          label="Is Active?"
+          label="Show this section on the site"
           checked={form.is_active}
           onChange={(val) => handleChange("is_active", val)}
         />
-
-        {form.section_type === "hero" && (
-          <>
-            <InputField
-              label="Eyebrow"
-              id={"eyebrow_" + String(form.id)}
-              value={form.hero_detail?.eyebrow ?? ""}
-              onChange={(val) => handleHeroDetailChange("eyebrow", val)}
-            />
-            <ImageInput
-              label="Hero Image"
-              value={form.hero_detail?.image_url ?? ""}
-              previewSize={96}
-              onChange={(url) => handleHeroDetailChange("image_url", url)}
-            />
-          </>
-        )}
-
-        <div className="flex w-full justify-end py-4">
-          <button
-            className="border px-4 py-2 disabled:opacity-50"
-            disabled={saving}
-            onClick={handleSave}
-          >
-            {saving ? "Saving..." : "Save"}
-          </button>
-        </div>
       </div>
-    </div>
+
+      {/* Hero and metrics sections carry an optional eyebrow + image. */}
+      {["hero", "metrics"].includes(form.section_type) && (
+        <div className="mt-4 border-t border-line pt-4">
+          <InputField
+            label="Eyebrow"
+            id={"eyebrow_" + String(form.id)}
+            value={form.hero_detail?.eyebrow ?? ""}
+            placeholder="Small label above the heading"
+            onChange={(val) => handleHeroDetailChange("eyebrow", val)}
+          />
+          <ImageInput
+            label={form.section_type === "metrics" ? "Section image" : "Hero image"}
+            value={form.hero_detail?.image_url ?? ""}
+            previewSize={96}
+            onChange={(url) => handleHeroDetailChange("image_url", url)}
+          />
+        </div>
+      )}
+    </FormShell>
   );
 };
 

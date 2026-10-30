@@ -1,6 +1,7 @@
 interface FieldContactProps {
   label: string;
   id: string;
+  placeholder?: string;
   textarea?: boolean;
   className?: string;
 }
@@ -8,22 +9,33 @@ interface FieldContactProps {
 const FieldContact = ({
   label,
   id,
+  placeholder,
   textarea,
   className,
 }: FieldContactProps) => {
   return (
-    <div className="flex">
-      <label htmlFor={id}>{label}</label>
+    <div className="flex flex-col">
+      <label
+        htmlFor={id}
+        className="label"
+      >
+        {label}
+      </label>
       {textarea ? (
         <textarea
           id={id}
-          className={`border-b mx-2 w-full ${className}`}
+          name={id}
+          rows={5}
+          placeholder={placeholder}
+          className={`field resize-y ${className ?? ""}`}
         />
       ) : (
         <input
           type="text"
           id={id}
-          className={`border-b mx-2 w-full ${className}`}
+          name={id}
+          placeholder={placeholder}
+          className={`field ${className ?? ""}`}
         />
       )}
     </div>

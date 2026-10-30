@@ -1,6 +1,37 @@
-import { Link, useNavigate } from "react-router";
+import { Link, NavLink, useNavigate } from "react-router";
 import api from "../../api/axios";
 import { clearToken } from "../../api/token";
+import Icon from "../../components/Icon";
+import type { IconName } from "../../components/Icon";
+import Logo from "../../components/Logo";
+
+type NavItem = { to: string; label: string; icon: IconName; end?: boolean };
+
+const groups: { label?: string; items: NavItem[] }[] = [
+  {
+    items: [{ to: "/admin", label: "Dashboard", icon: "layout", end: true }],
+  },
+  {
+    label: "Website",
+    items: [{ to: "/admin/website", label: "Sections", icon: "layers" }],
+  },
+  {
+    label: "Content",
+    items: [{ to: "/admin/content", label: "Services & Work", icon: "image" }],
+  },
+  {
+    label: "Settings",
+    items: [{ to: "/admin/profile", label: "Business Info", icon: "user" }],
+  },
+];
+
+const linkClass = ({ isActive }: { isActive: boolean }) =>
+  [
+    "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+    isActive
+      ? "bg-primary text-white"
+      : "text-white/60 hover:bg-white/5 hover:text-white",
+  ].join(" ");
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -17,46 +48,62 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="border-r h-screen w-[240px] flex flex-col items-center p-4 bg-indigo-950 text-amber-50">
+    <aside className="flex shrink-0 items-center gap-3 border-b border-navy-soft bg-navy px-4 py-3 md:h-screen md:w-[248px] md:flex-col md:items-stretch md:gap-0 md:border-b-0 md:border-r md:px-4 md:py-5">
       <Link
         to={"/admin"}
-        className="flex text-2xl"
+        className="flex items-center gap-2.5 md:mb-6"
       >
-        MyBussAdmin
+        <Logo
+          name="MyBussAdmin"
+          size="sm"
+        />
+        <span className="hidden truncate font-semibold text-white md:inline">
+          MyBussAdmin
+        </span>
       </Link>
 
-      <nav className="mt-4 px-2 space-y-2">
-        <Link
-          to={"/admin"}
-          className="flex"
-        >
-          Dashboard
-        </Link>
-        <Link
-          to={"/admin/website"}
-          className="flex"
-        >
-          Website
-        </Link>
-        <Link
-          to={"/admin/content"}
-          className="flex"
-        >
-          Content
-        </Link>
-        <Link
-          to={"/admin/profile"}
-          className="flex"
-        >
-          Profile
-        </Link>
+      <nav className="flex flex-1 items-center gap-1 overflow-x-auto md:w-full md:flex-col md:items-stretch md:gap-0 md:overflow-visible">
+        {groups.map((group, i) => (
+          <div
+            key={group.label ?? i}
+            className="flex items-center gap-1 md:mb-4 md:block"
+          >
+            {group.label && (
+              <span
+                className="hidden px-3 pb-1.5 pt-3 text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-white/35 md:block"
+                aria-hidden="true"
+              >
+                {group.label}
+              </span>
+            )}
+            {group.items.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.end}
+                className={linkClass}
+                title={item.label}
+              >
+                <Icon
+                  name={item.icon}
+                  className="size-4 shrink-0"
+                />
+                <span className="whitespace-nowrap">{item.label}</span>
+              </NavLink>
+            ))}
+          </div>
+        ))}
       </nav>
 
       <button
-        className="mt-auto border border-amber-50 px-3 py-1 text-sm"
+        className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-white/60 transition-colors hover:bg-white/5 hover:text-white md:mt-auto"
         onClick={handleLogout}
       >
-        Logout
+        <Icon
+          name="arrow-up-right"
+          className="size-4 shrink-0"
+        />
+        <span className="whitespace-nowrap">Logout</span>
       </button>
     </aside>
   );

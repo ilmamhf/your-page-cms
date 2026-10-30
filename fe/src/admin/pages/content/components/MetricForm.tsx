@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { MetricItem, ContentsData } from "../../../../types/landing";
 import Checkbox from "../../../components/Checkbox";
-import FeedbackBar from "../../../components/FeedbackBar";
+import FormShell from "../../../components/FormShell";
 import InputField from "../../../components/InputField";
 import api from "../../../../api/axios";
 import { errorMessage } from "../../../../api/error";
@@ -12,13 +12,14 @@ interface MetricFormProps {
     updatedContent: ContentsData[K][number],
     contentType: K,
   ) => void;
+  onCancel: () => void;
 }
 
 type Feedback = { type: "success" | "error"; message: string } | null;
 
 // The parent keys this form by item id, so it remounts on selection change
 // and can initialize straight from props.
-const MetricForm = ({ metricItem, onSaveSuccess }: MetricFormProps) => {
+const MetricForm = ({ metricItem, onSaveSuccess, onCancel }: MetricFormProps) => {
   const [formData, setFormData] = useState<MetricItem | null>(metricItem);
   const [saving, setSaving] = useState(false);
   const [feedback, setFeedback] = useState<Feedback>(null);
@@ -58,46 +59,44 @@ const MetricForm = ({ metricItem, onSaveSuccess }: MetricFormProps) => {
   };
 
   return (
-    <div className="p-4 w-full border-l h-screen overflow-y-auto flex flex-col">
-      <div className="pb-3 text-2xl">Edit Metric</div>
-
-      {feedback && <FeedbackBar type={feedback.type} message={feedback.message} />}
-
+    <FormShell
+      title="Edit metric"
+      subtitle={formData?.label}
+      feedback={feedback}
+      saving={saving}
+      onSave={handleSave}
+      onCancel={onCancel}
+    >
       <InputField
-        label="Metric Name"
+        label="Label"
         id="metricName"
         value={formData?.label ?? ""}
         onChange={(val) => handleChange("label", val)}
       />
-      <InputField
-        label="Metric Value"
-        id="metricValue"
-        type="number"
-        value={formData?.value ?? ""}
-        onChange={(val) => handleChange("value", Number(val))}
-      />
-      <InputField
-        label="Suffix"
-        id="metricSuffix"
-        value={formData?.suffix ?? ""}
-        onChange={(val) => handleChange("suffix", val)}
-      />
-      <Checkbox
-        label="Is Active ?"
-        checked={formData?.is_active ?? false}
-        onChange={(val) => handleChange("is_active", val)}
-      />
-
-      <div className="flex w-full justify-end py-4">
-        <button
-          className="border px-4 py-2 disabled:opacity-50"
-          disabled={saving}
-          onClick={handleSave}
-        >
-          {saving ? "Saving..." : "Save"}
-        </button>
+      <div className="grid grid-cols-2 gap-3">
+        <InputField
+          label="Value"
+          id="metricValue"
+          type="number"
+          value={formData?.value ?? ""}
+          onChange={(val) => handleChange("value", Number(val))}
+        />
+        <InputField
+          label="Suffix"
+          id="metricSuffix"
+          placeholder="e.g. %, +, k"
+          value={formData?.suffix ?? ""}
+          onChange={(val) => handleChange("suffix", val)}
+        />
       </div>
-    </div>
+      <div className="mt-2 border-t border-line pt-3">
+        <Checkbox
+          label="Show this metric on the site"
+          checked={formData?.is_active ?? false}
+          onChange={(val) => handleChange("is_active", val)}
+        />
+      </div>
+    </FormShell>
   );
 };
 
