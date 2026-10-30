@@ -77,13 +77,9 @@ class SectionController extends Controller
             if (in_array($type, ['hero', 'metrics'], true)) {
                 $heroInput = $data['hero_detail'] ?? [];
 
-                // Explicit hero fields win; otherwise mirror the section's
-                // title/subtitle so the two stay in sync.
                 $heroData = [
                     'eyebrow' => $heroInput['eyebrow'] ?? null,
                     'image_url' => $heroInput['image_url'] ?? null,
-                    'hero_text' => $heroInput['hero_text'] ?? $section->title,
-                    'description' => $heroInput['description'] ?? $section->subtitle,
                 ];
 
                 $section->hero()->updateOrCreate(

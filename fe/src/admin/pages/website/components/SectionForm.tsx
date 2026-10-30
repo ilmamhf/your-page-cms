@@ -18,16 +18,7 @@ interface SectionFormProps {
 
 type Feedback = { type: "success" | "error"; message: string } | null;
 
-/** Get the display subtitle for the form shell. */
-function getFormSubtitle(form: Section | null): string {
-  if (!form) return "";
-  if (form.section_type === "hero" || form.section_type === "metrics") {
-    return form.hero_detail?.hero_text ?? "Hero section";
-  }
-  return form.title ?? "Section";
-}
-
-/** Determine if section type uses hero_detail for its main heading. */
+/** Determine if section type uses hero_detail for eyebrow + image. */
 function usesHeroDetail(sectionType: string): boolean {
   return sectionType === "hero" || sectionType === "metrics";
 }
@@ -56,8 +47,6 @@ const SectionForm = ({ section, onSaveSuccess, onCancel }: SectionFormProps) => 
           id: previous.hero_detail?.id ?? 0,
           section_id: previous.hero_detail?.section_id ?? previous.id,
           eyebrow: previous.hero_detail?.eyebrow ?? "",
-          hero_text: previous.hero_detail?.hero_text ?? "",
-          description: previous.hero_detail?.description ?? "",
           image_url: previous.hero_detail?.image_url ?? null,
           [field]: value,
         },
@@ -81,8 +70,6 @@ const SectionForm = ({ section, onSaveSuccess, onCancel }: SectionFormProps) => 
         is_active: form.is_active,
         hero_detail: {
           section_id: form.id,
-          hero_text: form.hero_detail?.hero_text ?? form.title,
-          description: form.hero_detail?.description ?? form.subtitle,
           eyebrow: form.hero_detail?.eyebrow,
           image_url: form.hero_detail?.image_url,
         },
@@ -112,39 +99,30 @@ const SectionForm = ({ section, onSaveSuccess, onCancel }: SectionFormProps) => 
   return (
     <FormShell
       title="Edit section"
-      subtitle={getFormSubtitle(form)}
+      subtitle={form.title ?? "Section"}
       feedback={feedback}
       saving={saving}
       onSave={handleSave}
       onCancel={onCancel}
       saveLabel="Save"
     >
-      {/* For hero/metrics: Heading field edits hero_detail.hero_text */}
-      {isHeroOrMetrics ? (
-        <InputField
-          label="Heading"
-          id={"hero_text_" + String(form.id)}
-          value={form.hero_detail?.hero_text ?? ""}
-          placeholder="Main heading text"
-          onChange={(val) => handleHeroDetailChange("hero_text", val)}
-        />
-      ) : (
-        <>
-          <InputField
-            label="Title"
-            id={"title_" + String(form.id)}
-            value={form.title ?? ""}
-            onChange={(val) => handleChange("title", val)}
-          />
-          <InputField
-            label="Subtitle"
-            id={"subtitle_" + String(form.id)}
-            value={form.subtitle ?? ""}
-            textarea={true}
-            onChange={(val) => handleChange("subtitle", val)}
-          />
-        </>
-      )}
+      {/* Title field for ALL section types */}
+      <InputField
+        label="Title"
+        id={"title_" + String(form.id)}
+        value={form.title ?? ""}
+        placeholder="Section title / heading"
+        onChange={(val) => handleChange("title", val)}
+      />
+      {/* Subtitle field for ALL section types */}
+      <InputField
+        label="Subtitle"
+        id={"subtitle_" + String(form.id)}
+        value={form.subtitle ?? ""}
+        textarea={true}
+        placeholder="Section subtitle / description"
+        onChange={(val) => handleChange("subtitle", val)}
+      />
 
       <SectionTypeDropdown
         value={form.section_type}

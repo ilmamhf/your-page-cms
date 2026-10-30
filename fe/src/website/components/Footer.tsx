@@ -1,6 +1,7 @@
 import type { PublicSocialMedia } from "../../types/landing";
 import Icon from "../../components/Icon";
 import Logo from "../../components/Logo";
+import { resolveImageUrl } from "../../utils/image";
 
 const quickLinks = [
   { href: "#home", label: "Home" },
@@ -62,7 +63,7 @@ const Footer = ({
                 >
                   {social.icon_url ? (
                     <img
-                      src={social.icon_url}
+                      src={resolveImageUrl(social.icon_url)}
                       alt=""
                       width={16}
                       height={16}

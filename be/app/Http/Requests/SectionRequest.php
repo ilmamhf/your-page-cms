@@ -25,7 +25,7 @@ class SectionRequest extends FormRequest
     {
         return [
             'page_id' => 'required|exists:pages,id',
-            'title' => 'required_if:section_type,hero|nullable|string',
+            'title' => 'nullable|string',
             'subtitle' => 'nullable|string',
             'section_type' => 'required|string',
             'order' => 'nullable|numeric',
@@ -34,9 +34,7 @@ class SectionRequest extends FormRequest
             // Validasi untuk nested object hero_detail
             'hero_detail' => 'nullable|array',
             'hero_detail.eyebrow' => 'nullable|string|max:255',
-            'hero_detail.hero_text' => 'nullable|string|max:255',
-            'hero_detail.description' => 'nullable|string',
-            'hero_detail.image_url' => 'nullable|url',
+            'hero_detail.image_url' => 'nullable|string',
         ];
     }
 

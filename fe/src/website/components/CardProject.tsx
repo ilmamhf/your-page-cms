@@ -1,5 +1,6 @@
 import type { PortofolioItem } from "../../types/landing";
 import Icon from "../../components/Icon";
+import { resolveImageUrl } from "../../utils/image";
 
 export interface CardProjectProps {
   project: PortofolioItem;
@@ -21,8 +22,8 @@ const CardProject = ({ project }: CardProjectProps) => {
       <div className="overflow-hidden rounded-xl border border-line bg-cloud flex-shrink-0">
         {project.image_url ? (
           <img
-            src={project.image_url}
-            alt={project.title}
+            src={resolveImageUrl(project.image_url)}
+            alt={`${project.title} project screenshot`}
             className="aspect-[4/3] w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
             onError={(e) => {
               e.currentTarget.style.display = 'none';
@@ -34,7 +35,7 @@ const CardProject = ({ project }: CardProjectProps) => {
           className={`aspect-[4/3] w-full flex items-center justify-center ${placeholderClass} ${project.image_url ? 'hidden' : ''}`}
           aria-hidden="true"
         >
-          <Icon name="image" className="size-10 text-muted" />
+          <Icon name="image" className="size-10 text-muted" aria-hidden="true" />
         </div>
       </div>
       <div className="mt-3.5 flex-1 flex flex-col">

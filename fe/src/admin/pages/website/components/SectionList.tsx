@@ -18,9 +18,9 @@ const SECTION_TYPES: { value: Section["section_type"]; label: string; descriptio
 
 /** Get the display name for a section in the sidebar. */
 function getSectionDisplayName(section: Section): string {
-  // For hero and metrics, the meaningful title is in hero_detail.hero_text
+  // For hero and metrics, the title is now the heading text
   if (section.section_type === "hero" || section.section_type === "metrics") {
-    return section.hero_detail?.hero_text ?? section.hero_detail?.eyebrow ?? "Untitled";
+    return section.title ?? section.hero_detail?.eyebrow ?? "Untitled";
   }
   // For services/portfolios without a title, show the type
   if (!section.title) {

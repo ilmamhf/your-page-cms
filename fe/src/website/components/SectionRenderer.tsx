@@ -44,8 +44,8 @@ const SectionRenderer = ({ section, isLead = false }: SectionRendererProps) => {
         <HeroSection1
           variant={isLead ? "lead" : "banner"}
           eyebrow={section.hero_detail?.eyebrow}
-          hero_text={section.hero_detail?.hero_text ?? section.title}
-          description={section.hero_detail?.description ?? section.subtitle ?? undefined}
+          hero_text={section.title}
+          description={section.subtitle ?? undefined}
           image_url={section.hero_detail?.image_url}
         />
       );

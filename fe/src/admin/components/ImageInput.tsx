@@ -79,7 +79,11 @@ const ImageInput = ({ label, value, onChange, previewSize = 64 }: ImageInputProp
             <button
               type="button"
               className="btn-quiet px-3 py-1.5 text-xs text-red-600 hover:text-red-700"
-              onClick={() => onChange("")}
+              onClick={() => {
+                if (window.confirm("Remove this image?")) {
+                  onChange("");
+                }
+              }}
             >
               <Icon
                 name="trash"

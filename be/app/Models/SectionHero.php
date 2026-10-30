@@ -13,8 +13,6 @@ class SectionHero extends Model
     protected $fillable = [
         'section_id',
         'eyebrow',
-        'hero_text',
-        'description',
         'image_url',
     ];
 

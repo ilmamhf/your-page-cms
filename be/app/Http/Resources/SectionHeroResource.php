@@ -18,8 +18,6 @@ class SectionHeroResource extends JsonResource
             'id' => $this->id,
             'section_id' => $this->section_id,
             'eyebrow' => $this->eyebrow,
-            'hero_text' => $this->hero_text,
-            'description' => $this->description,
             'image_url' => $this->image_url,
         ];
     }

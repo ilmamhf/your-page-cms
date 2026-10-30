@@ -22,8 +22,6 @@ export interface SectionHeroDetail {
   id?: number;
   section_id?: number;
   eyebrow: string;
-  hero_text: string;
-  description: string;
   image_url: string | null;
 }
 

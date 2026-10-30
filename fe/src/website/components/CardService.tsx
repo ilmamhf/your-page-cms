@@ -1,5 +1,6 @@
 import type { ServiceItem } from "../../types/landing";
 import Icon from "../../components/Icon";
+import { resolveImageUrl } from "../../utils/image";
 
 export interface CardServiceProps {
   service: ServiceItem;
@@ -16,7 +17,7 @@ const CardService = ({ service }: CardServiceProps) => {
       <div className="mb-4 text-primary" aria-hidden="true">
         {service.icon_url ? (
           <img
-            src={service.icon_url}
+            src={resolveImageUrl(service.icon_url)}
             alt=""
             className="size-8 object-contain"
             onError={(e) => {
@@ -25,7 +26,7 @@ const CardService = ({ service }: CardServiceProps) => {
             }}
           />
         ) : null}
-        <Icon name="layers" className={`size-8 ${service.icon_url ? 'hidden' : ''}`} />
+        <Icon name="layers" className={`size-8 ${service.icon_url ? 'hidden' : ''}`} aria-hidden="true" />
       </div>
       <h3 className="font-semibold text-ink">{service.title}</h3>
       <p className="mt-1.5 text-sm leading-relaxed text-mute">

@@ -1,3 +1,5 @@
+import { resolveImageUrl } from "../../utils/image";
+
 interface HeroSection1Props {
   /**
    * "lead" = the first hero on the page (full composition with actions);
@@ -45,8 +47,8 @@ const HeroSection1 = ({
             <figure className="md:col-span-5 self-start">
               <div className="overflow-hidden rounded-2xl border border-line bg-cloud aspect-[4/3] md:aspect-[5/4]">
                 <img
-                  src={image_url}
-                  alt=""
+                  src={resolveImageUrl(image_url)}
+                  alt={hero_text ? `${hero_text} illustration` : "Hero illustration"}
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -89,8 +91,8 @@ const HeroSection1 = ({
           <div className="md:col-span-5">
             <figure className="overflow-hidden rounded-2xl border border-line bg-cloud">
               <img
-                src={image_url}
-                alt=""
+                src={resolveImageUrl(image_url)}
+                alt={hero_text ? `${hero_text} illustration` : "Hero illustration"}
                 className="aspect-[4/3] w-full object-cover"
               />
             </figure>

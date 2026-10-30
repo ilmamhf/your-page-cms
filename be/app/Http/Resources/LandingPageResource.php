@@ -59,8 +59,8 @@ class LandingPageResource extends JsonResource
                             // Eyebrow + image for hero and metrics sections.
                             'hero_detail' => $section->hero ? [
                                 'eyebrow' => $section->hero->eyebrow,
-                                'hero_text' => $section->hero->hero_text,
-                                'description' => $section->hero->description,
+                                'hero_text' => $section->title,
+                                'description' => $section->subtitle,
                                 'image_url' => $section->hero->image_url,
                             ] : null,
 

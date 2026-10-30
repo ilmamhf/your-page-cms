@@ -1,5 +1,6 @@
 import type { MetricItem, Section } from "../../types/landing";
 import CardStats from "../components/CardStats";
+import { resolveImageUrl } from "../../utils/image";
 
 interface HeroSection3Props {
   section: Section;
@@ -38,8 +39,8 @@ const HeroSection3 = ({ section }: HeroSection3Props) => {
           {imageUrl && (
             <figure className="overflow-hidden rounded-xl md:col-span-5">
               <img
-                src={imageUrl}
-                alt=""
+                src={resolveImageUrl(imageUrl)}
+                alt={section.title ? `${section.title} illustration` : "Metrics section illustration"}
                 className="aspect-[4/3] w-full object-cover"
               />
             </figure>

@@ -45,6 +45,20 @@ class BusinessTypeAwareSeeder extends Seeder
                 'Work' => ['hero', 'portofolios'],
                 'Contact' => ['hero'],
             ],
+            'hero_images' => [
+                'Home' => 'template-images/hero/image1.jpg',
+                'About' => 'template-images/hero/image2.jpg',
+                'Services' => 'template-images/hero/image3.jpg',
+                'Work' => 'template-images/hero/image4.jpg',
+                'Contact' => 'template-images/hero/image5.jpg',
+            ],
+            'portfolio_images' => [
+                'template-images/portfolio/image1.jpg',
+                'template-images/portfolio/image2.jpg',
+                'template-images/portfolio/image3.jpg',
+                'template-images/portfolio/image4.jpg',
+                'template-images/portfolio/image5.jpg',
+            ],
         ],
         'creative' => [
             'name' => 'Studio Maven',
@@ -62,6 +76,20 @@ class BusinessTypeAwareSeeder extends Seeder
                 'Services' => ['hero', 'services'],
                 'Work' => ['hero', 'portofolios'],
                 'Contact' => ['hero'],
+            ],
+            'hero_images' => [
+                'Home' => 'template-images/hero/image2.jpg',
+                'About' => 'template-images/hero/image3.jpg',
+                'Services' => 'template-images/hero/image4.jpg',
+                'Work' => 'template-images/hero/image5.jpg',
+                'Contact' => 'template-images/hero/image6.jpg',
+            ],
+            'portfolio_images' => [
+                'template-images/portfolio/image2.jpg',
+                'template-images/portfolio/image3.jpg',
+                'template-images/portfolio/image4.jpg',
+                'template-images/portfolio/image5.jpg',
+                'template-images/portfolio/image6.jpg',
             ],
         ],
         'property' => [
@@ -81,6 +109,20 @@ class BusinessTypeAwareSeeder extends Seeder
                 'Listings' => ['hero', 'portofolios'],
                 'Contact' => ['hero'],
             ],
+            'hero_images' => [
+                'Home' => 'template-images/hero/image3.jpg',
+                'About' => 'template-images/hero/image4.jpg',
+                'Services' => 'template-images/hero/image5.jpg',
+                'Listings' => 'template-images/hero/image6.jpg',
+                'Contact' => 'template-images/hero/image1.jpg',
+            ],
+            'portfolio_images' => [
+                'template-images/portfolio/image3.jpg',
+                'template-images/portfolio/image4.jpg',
+                'template-images/portfolio/image5.jpg',
+                'template-images/portfolio/image6.jpg',
+                'template-images/portfolio/image1.jpg',
+            ],
         ],
         'engineering' => [
             'name' => 'Apex Engineering Group',
@@ -97,6 +139,20 @@ class BusinessTypeAwareSeeder extends Seeder
                 'Services' => ['hero', 'services'],
                 'Projects' => ['hero', 'portofolios'],
                 'Contact' => ['hero'],
+            ],
+            'hero_images' => [
+                'Home' => 'template-images/hero/image4.jpg',
+                'About' => 'template-images/hero/image5.jpg',
+                'Services' => 'template-images/hero/image6.jpg',
+                'Projects' => 'template-images/hero/image1.jpg',
+                'Contact' => 'template-images/hero/image2.jpg',
+            ],
+            'portfolio_images' => [
+                'template-images/portfolio/image4.jpg',
+                'template-images/portfolio/image5.jpg',
+                'template-images/portfolio/image6.jpg',
+                'template-images/portfolio/image1.jpg',
+                'template-images/portfolio/image2.jpg',
             ],
         ],
         'small_business' => [
@@ -115,6 +171,20 @@ class BusinessTypeAwareSeeder extends Seeder
                 'Services' => ['hero', 'services'],
                 'Results' => ['hero', 'portofolios'],
                 'Contact' => ['hero'],
+            ],
+            'hero_images' => [
+                'Home' => 'template-images/hero/image5.jpg',
+                'About' => 'template-images/hero/image6.jpg',
+                'Services' => 'template-images/hero/image1.jpg',
+                'Results' => 'template-images/hero/image2.jpg',
+                'Contact' => 'template-images/hero/image3.jpg',
+            ],
+            'portfolio_images' => [
+                'template-images/portfolio/image5.jpg',
+                'template-images/portfolio/image6.jpg',
+                'template-images/portfolio/image1.jpg',
+                'template-images/portfolio/image2.jpg',
+                'template-images/portfolio/image3.jpg',
             ],
         ],
     ];
@@ -182,7 +252,7 @@ class BusinessTypeAwareSeeder extends Seeder
                 $section = Section::create([
                     'page_id' => $page->id,
                     'title' => $this->getSectionTitle($sectionType, $pageName),
-                    'subtitle' => $this->getSectionSubtitle($sectionType),
+                    'subtitle' => $this->getSectionSubtitle($sectionType, $pageName),
                     'section_type' => $sectionType,
                     'order' => $sectionOrder++,
                     'is_active' => true,
@@ -190,12 +260,11 @@ class BusinessTypeAwareSeeder extends Seeder
 
                 // Create hero detail for hero and metrics sections
                 if (in_array($sectionType, ['hero', 'metrics'])) {
+                    $heroImage = $config['hero_images'][$pageName] ?? null;
                     SectionHero::create([
                         'section_id' => $section->id,
                         'eyebrow' => $this->getHeroEyebrow($sectionType, $pageName),
-                        'hero_text' => $this->getHeroText($sectionType, $pageName),
-                        'description' => $this->getHeroDescription($sectionType, $pageName),
-                        'image_url' => null,
+                        'image_url' => $heroImage,
                     ]);
                 }
             }
@@ -207,7 +276,13 @@ class BusinessTypeAwareSeeder extends Seeder
 
         // 7. Portfolio (5 items)
         PortofolioFactory::setBusinessType($this->currentBusinessType);
-        Portofolio::factory()->count(5)->create();
+        $portfolioImages = $config['portfolio_images'] ?? [];
+        foreach ($portfolioImages as $order => $image) {
+            Portofolio::factory()->create([
+                'image_url' => $image,
+                'order' => $order,
+            ]);
+        }
 
         // 8. Metrics (4 items)
         MetricFactory::setBusinessType($this->currentBusinessType);
@@ -218,23 +293,24 @@ class BusinessTypeAwareSeeder extends Seeder
 
     private function getSectionTitle(string $sectionType, string $pageName): ?string
     {
-        if ($sectionType !== 'hero') {
-            return match ($sectionType) {
-                'services' => 'Our Services',
-                'portofolios' => 'Selected Work',
-                'metrics' => 'By the Numbers',
-                default => null,
-            };
+        if ($sectionType === 'hero' || $sectionType === 'metrics') {
+            return $this->getHeroText($sectionType, $pageName);
         }
-        return null;
+        return match ($sectionType) {
+            'services' => 'Our Services',
+            'portofolios' => 'Selected Work',
+            default => null,
+        };
     }
 
-    private function getSectionSubtitle(string $sectionType): ?string
+    private function getSectionSubtitle(string $sectionType, string $pageName = ''): ?string
     {
+        if ($sectionType === 'hero' || $sectionType === 'metrics') {
+            return $this->getHeroDescription($sectionType, $pageName);
+        }
         return match ($sectionType) {
             'services' => 'Capabilities that deliver measurable outcomes',
             'portofolios' => 'A curated selection of our recent work',
-            'metrics' => 'Results that speak for themselves',
             default => null,
         };
     }
