@@ -18,11 +18,9 @@ const SECTION_TYPES: { value: Section["section_type"]; label: string; descriptio
 
 /** Get the display name for a section in the sidebar. */
 function getSectionDisplayName(section: Section): string {
-  // For hero and metrics, the title is now the heading text
   if (section.section_type === "hero" || section.section_type === "metrics") {
     return section.title ?? section.hero_detail?.eyebrow ?? "Untitled";
   }
-  // For services/portfolios without a title, show the type
   if (!section.title) {
     return section.section_type === "services" ? "Services" : "Portfolio";
   }
@@ -47,20 +45,14 @@ const SectionList = ({
       </div>
 
       {pages.map((page: Page) => (
-        <div
-          className="panel mb-4 overflow-hidden"
-          key={page.id}
-        >
+        <div className="panel mb-4 overflow-hidden" key={page.id}>
           <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
             <span className="font-semibold">{page.name}</span>
             <button
               className="btn-primary px-3 py-1.5 text-xs"
               onClick={() => setAddMenuOpen({ pageId: page.id })}
             >
-              <Icon
-                name="plus"
-                className="size-3.5"
-              />
+              <Icon name="plus" className="size-3.5" />
               Add section
             </button>
           </div>
@@ -93,10 +85,10 @@ const SectionList = ({
             </div>
           )}
 
-          {/* column headings (desktop) */}
-          <div className="hidden grid-cols-[1fr_96px_84px] gap-3 border-b border-line bg-app px-4 py-2 text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-mute md:grid">
+          {/* Column headings (desktop) */}
+          <div className="hidden grid grid-cols-[1fr_80px_48px] gap-3 border-b border-line bg-app px-4 py-2 text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-mute md:grid">
             <span>Section</span>
-            <span>Status</span>
+            <span className="text-center">Status</span>
             <span className="text-right">Actions</span>
           </div>
 
@@ -106,11 +98,12 @@ const SectionList = ({
 
           {page.sections.map((section: Section) => (
             <div
-              className="grid grid-cols-[1fr_auto] items-center gap-3 border-b border-line px-4 py-3 last:border-b-0 hover:bg-app/60 md:grid-cols-[1fr_96px_84px]"
+              className="grid grid-cols-[1fr_80px_48px] gap-3 items-center border-b border-line px-4 py-3 last:border-b-0 hover:bg-app/60 transition-colors"
               key={section.id}
             >
+              {/* Section name + type - clickable row */}
               <button
-                className="min-w-0 truncate text-left transition-colors hover:text-primary"
+                className="min-w-0 truncate text-left transition-colors hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-md -mx-2 px-2 py-1"
                 onClick={() => onSelect(section)}
               >
                 <span className="block truncate text-sm font-medium text-ink">
@@ -121,32 +114,26 @@ const SectionList = ({
                 </span>
               </button>
 
-              <span className="hidden md:block">
+              {/* Status badge - centered, visible on all screens */}
+              <span className="flex justify-center">
                 <span className={section.is_active ? "badge badge-live" : "badge badge-draft"}>
-                  {section.is_active ? "Published" : "Draft"}
+                  {section.is_active ? "Live" : "Draft"}
                 </span>
               </span>
 
-              <div className="flex items-center justify-end gap-1">
-                <button
-                  className="btn-quiet px-2 py-1.5 text-xs font-semibold text-primary hover:bg-primary-soft hover:text-primary-deep"
-                  onClick={() => onSelect(section)}
-                >
-                  Edit
-                </button>
+              {/* Actions - right aligned, only delete needed */}
+              <div className="flex justify-end">
                 <button
                   aria-label={`Delete ${getSectionDisplayName(section)}`}
-                  className="btn-quiet px-2 py-1.5 text-mute hover:bg-red-50 hover:text-red-600"
-                  onClick={() => {
+                  className="btn-quiet p-1.5 text-mute hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
                     if (confirm("Delete this section?")) {
                       onDeleteSection(section.id);
                     }
                   }}
                 >
-                  <Icon
-                    name="trash"
-                    className="size-4"
-                  />
+                  <Icon name="trash" className="size-4" />
                 </button>
               </div>
             </div>

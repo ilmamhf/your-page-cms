@@ -39,22 +39,16 @@ const ContentGroup = <T extends SectionItem>({
   <div className="panel mb-5 overflow-hidden">
     <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
       <span className="font-semibold">{title}</span>
-      <button
-        className="btn-primary px-3 py-1.5 text-xs"
-        onClick={() => onAdd(type)}
-      >
-        <Icon
-          name="plus"
-          className="size-3.5"
-        />
+      <button className="btn-primary px-3 py-1.5 text-xs" onClick={() => onAdd(type)}>
+        <Icon name="plus" className="size-3.5" />
         Add
       </button>
     </div>
 
-    {/* column headings (desktop) */}
-    <div className="hidden grid-cols-[1fr_96px_84px] gap-3 border-b border-line bg-app px-4 py-2 text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-mute md:grid">
+    {/* Column headings (desktop) */}
+    <div className="hidden grid grid-cols-[1fr_80px_48px] gap-3 border-b border-line bg-app px-4 py-2 text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-mute md:grid">
       <span>Name</span>
-      <span>Status</span>
+      <span className="text-center">Status</span>
       <span className="text-right">Actions</span>
     </div>
 
@@ -64,42 +58,37 @@ const ContentGroup = <T extends SectionItem>({
 
     {items.map((item) => (
       <div
-        className="grid grid-cols-[1fr_auto] items-center gap-3 border-b border-line px-4 py-3 last:border-b-0 hover:bg-app/60 md:grid-cols-[1fr_96px_84px]"
+        className="grid grid-cols-[1fr_80px_48px] gap-3 items-center border-b border-line px-4 py-3 last:border-b-0 hover:bg-app/60 transition-colors"
         key={item.id}
       >
+        {/* Name - clickable row */}
         <button
-          className="min-w-0 truncate text-left text-sm font-medium text-ink transition-colors hover:text-primary"
+          className="min-w-0 truncate text-left transition-colors hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-md -mx-2 px-2 py-1"
           onClick={() => onSelect(item, type)}
         >
           {label(item)}
         </button>
 
-        <span className="hidden md:block">
+        {/* Status badge - centered, visible on all screens */}
+        <span className="flex justify-center">
           <span className={item.is_active ? "badge badge-live" : "badge badge-draft"}>
-            {item.is_active ? "Published" : "Draft"}
+            {item.is_active ? "Live" : "Draft"}
           </span>
         </span>
 
-        <div className="flex items-center justify-end gap-1">
-          <button
-            className="btn-quiet px-2 py-1.5 text-xs font-semibold text-primary hover:bg-primary-soft hover:text-primary-deep"
-            onClick={() => onSelect(item, type)}
-          >
-            Edit
-          </button>
+        {/* Actions - right aligned, only delete needed */}
+        <div className="flex justify-end">
           <button
             aria-label={`Delete ${label(item)}`}
-            className="btn-quiet px-2 py-1.5 text-mute hover:bg-red-50 hover:text-red-600"
-            onClick={() => {
+            className="btn-quiet p-1.5 text-mute hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors"
+            onClick={(e) => {
+              e.stopPropagation();
               if (confirm("Delete this item?")) {
                 onDelete(type, item.id);
               }
             }}
           >
-            <Icon
-              name="trash"
-              className="size-4"
-            />
+            <Icon name="trash" className="size-4" />
           </button>
         </div>
       </div>

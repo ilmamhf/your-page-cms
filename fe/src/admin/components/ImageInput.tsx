@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { uploadImage } from "../../api/upload";
 import { errorMessage } from "../../api/error";
+import { resolveImageUrl } from "../../utils/image";
 import Icon from "../../components/Icon";
 
 interface ImageInputProps {
@@ -44,7 +45,7 @@ const ImageInput = ({ label, value, onChange, previewSize = 64 }: ImageInputProp
       <div className="flex items-center gap-3">
         {value ? (
           <img
-            src={value}
+            src={resolveImageUrl(value)}
             alt={label}
             style={{ width: previewSize, height: previewSize }}
             className="shrink-0 rounded-lg border border-line bg-cloud object-cover"

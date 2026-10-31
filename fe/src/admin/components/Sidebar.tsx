@@ -54,11 +54,11 @@ const Sidebar = () => {
         className="flex items-center gap-2.5 md:mb-6"
       >
         <Logo
-          name="MyBussAdmin"
+          name="Admin CMS"
           size="sm"
         />
         <span className="hidden truncate font-semibold text-white md:inline">
-          MyBussAdmin
+          Admin CMS
         </span>
       </Link>
 
